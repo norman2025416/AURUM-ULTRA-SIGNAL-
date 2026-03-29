@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>AURUM ULTRA — Intelligence Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0c0f;--bg2:#10141a;--bg3:#181d26;--bg4:#1e2530;
+  --border:#1e2530;--border2:#2a3340;
+  --gold:#d4a844;--gold2:#f0c060;--gold-dim:#7a5e1e;--gold-bg:rgba(212,168,68,0.08);
+  --green:#22c55e;--green-bg:rgba(34,197,94,0.1);
+  --red:#ef4444;--red-bg:rgba(239,68,68,0.1);
+  --cyan:#22d3ee;--purple:#a78bfa;--orange:#fb923c;
+  --muted:#4a5568;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --radius:12px;--tab-h:60px;--header-h:54px;
+}
+html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;height:100%;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100dvh;max-width:520px;margin:0 auto;position:relative}
+@media(min-width:900px){
+  #app{max-width:100%}
+  #desktop-nav{display:flex!important}
+  #tabs{display:none!important}
+  #main .tab-panel.active{max-width:980px;margin:0 auto}
+}
+/* HEADER */
+#header{height:var(--header-h);background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 14px;flex-shrink:0;z-index:20}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--gold),var(--gold-dim));border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:#000}
+.logo-text{font-weight:800;font-size:14px;letter-spacing:.5px}
+.logo-sub{font-size:9px;color:var(--text2);font-family:'Space Mono',monospace;margin-top:1px}
+.header-right{display:flex;align-items:center;gap:8px}
+.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,197,94,.5)}50%{opacity:.8;box-shadow:0 0 0 5px rgba(34,197,94,0)}}
+.live-txt{font-size:11px;color:var(--green);font-family:'Space Mono',monospace;font-weight:700}
+.price-badge{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold2);padding:4px 9px;background:var(--gold-bg);border:1px solid var(--gold-dim);border-radius:7px}
+/* DESKTOP NAV */
+#desktop-nav{display:none;background:var(--bg2);border-bottom:1px solid var(--border);padding:0 16px;gap:0;overflow-x:auto;flex-shrink:0}
+.dnav-btn{display:flex;align-items:center;gap:6px;padding:10px 13px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text2);font-family:'Syne',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:-1px;white-space:nowrap}
+.dnav-btn:hover{color:var(--text)}
+.dnav-btn.active{border-bottom-color:var(--gold);color:var(--gold2)}
+.dnav-btn svg{width:14px;height:14px}
+/* MAIN */
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.tab-panel{display:none;flex:1;overflow-y:auto;padding:10px;flex-direction:column;gap:9px}
+.tab-panel.active{display:flex}
+/* BOTTOM TABS */
+#tabs{height:var(--tab-h);background:var(--bg2);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);flex-shrink:0}
+.tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--text3);font-family:'Syne',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:color .2s;padding:6px 2px;text-transform:uppercase;position:relative}
+.tab-btn svg{width:18px;height:18px}
+.tab-btn.active{color:var(--gold)}
+.tab-btn.active svg{filter:drop-shadow(0 0 4px var(--gold))}
+/* CARDS */
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-header{padding:10px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.card-title{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)}
+.card-body{padding:12px 14px}
+/* SESSION BAR */
+.session-bar{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px}
+.session-bar::-webkit-scrollbar{display:none}
+.sess-chip{flex-shrink:0;padding:5px 11px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;border:1px solid var(--border2);background:var(--bg3);color:var(--muted);cursor:pointer;transition:all .2s}
+.sess-chip.active{background:var(--gold-bg);border-color:var(--gold-dim);color:var(--gold2)}
+/* ACCURACY STRIP */
+.acc-strip{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.acc-cell{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;text-align:center}
+.acc-cell-val{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-bottom:2px}
+.acc-cell-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px}
+/* OVERLAYS ACTIVE */
+.overlay-row{display:flex;gap:5px;flex-wrap:wrap}
+/* BULL/BEAR BAR */
+.bullbear-bar-wrap{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 14px}
+.bullbear-bar-track{height:10px;background:var(--bg4);border-radius:5px;overflow:hidden;margin:8px 0 6px}
+.bullbear-bar-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--green),#16a34a);transition:width .6s}
+.bullbear-labels{display:flex;justify-content:space-between}
+/* TRADINGVIEW CONTAINER */
+#tv-container{position:relative;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+#tv-widget{width:100%;height:100%;border:none}
+/* SIGNAL OVERLAY ON CHART */
+#signal-overlay{position:absolute;top:8px;left:8px;z-index:10;pointer-events:none;display:flex;flex-direction:column;gap:5px}
+.sig-overlay-card{background:rgba(10,12,15,0.88);border:1px solid rgba(212,168,68,0.4);border-radius:8px;padding:6px 10px;backdrop-filter:blur(4px);min-width:160px}
+.sig-overlay-card.buy{border-color:rgba(34,197,94,0.5)}
+.sig-overlay-card.sell{border-color:rgba(239,68,68,0.5)}
+.sig-ov-dir{font-size:13px;font-weight:800;font-family:'Space Mono',monospace;margin-bottom:3px}
+.sig-ov-dir.buy{color:var(--green)}
+.sig-ov-dir.sell{color:var(--red)}
+.sig-ov-row{font-size:10px;font-family:'Space Mono',monospace;color:var(--text2);display:flex;justify-content:space-between;gap:8px;line-height:1.7}
+.sig-ov-row span:last-child{color:var(--text);font-weight:700}
+.sig-timer{background:rgba(212,168,68,0.12);border:1px solid rgba(212,168,68,0.3);border-radius:6px;padding:4px 10px;text-align:center}
+.sig-timer-val{font-family:'Space Mono',monospace;font-size:13px;font-weight:700;color:var(--gold2)}
+.sig-timer-lbl{font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
+/* TF SWITCHER */
+.tf-bar{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px}
+.tf-bar::-webkit-scrollbar{display:none}
+.tf-chip{flex-shrink:0;padding:4px 10px;border-radius:6px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;transition:all .2s}
+.tf-chip.active{background:var(--gold-bg);border-color:var(--gold-dim);color:var(--gold2)}
+/* SIGNAL CARD */
+.signal-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .3s}
+.signal-card.buy{border-color:rgba(34,197,94,.35)}
+.signal-card.sell{border-color:rgba(239,68,68,.35)}
+.signal-header{padding:12px 14px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border)}
+.signal-badge{font-size:22px;font-weight:800;letter-spacing:1px}
+.signal-badge.buy{color:var(--green)}
+.signal-badge.sell{color:var(--red)}
+.signal-badge.scan{color:var(--gold)}
+.signal-arrow{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.buy .signal-arrow{background:var(--green-bg)}
+.sell .signal-arrow{background:var(--red-bg)}
+.scan .signal-arrow{background:var(--gold-bg)}
+.signal-meta{display:flex;flex-direction:column;align-items:flex-end;gap:2px}
+.signal-time{font-family:'Space Mono',monospace;font-size:11px;color:var(--text2)}
+.signal-session{font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 7px;border-radius:5px;background:var(--bg3)}
+.signal-body{padding:10px 14px;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.sig-stat{display:flex;flex-direction:column;gap:2px}
+.sig-stat-label{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px}
+.sig-stat-val{font-size:15px;font-weight:700;font-family:'Space Mono',monospace}
+.sig-stat-val.green{color:var(--green)}
+.sig-stat-val.red{color:var(--red)}
+.sig-stat-val.gold{color:var(--gold2)}
+.sig-stat-val.cyan{color:var(--cyan)}
+/* CONFLUENCE */
+.votes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 14px;border-top:1px solid var(--border)}
+.vote-chip{background:var(--bg3);border-radius:8px;padding:6px 8px;display:flex;justify-content:space-between;align-items:center}
+.vote-chip-name{font-size:10px;color:var(--text2);font-family:'Space Mono',monospace}
+.vote-chip-val{font-size:13px;font-weight:700;font-family:'Space Mono',monospace}
+.vote-chip-val.up{color:var(--green)}
+.vote-chip-val.down{color:var(--red)}
+.vote-chip-val.flat{color:var(--muted)}
+/* CONF BAR */
+.conf-bar{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin:0 14px 10px}
+.conf-fill{height:100%;border-radius:2px;transition:width .4s}
+.conf-fill.buy{background:linear-gradient(90deg,#16a34a,var(--green))}
+.conf-fill.sell{background:linear-gradient(90deg,#b91c1c,var(--red))}
+.conf-fill.scan{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
+/* REASON PANEL */
+.reason-panel{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-family:'Space Mono',monospace;font-size:10px;line-height:1.9;color:var(--text2)}
+.r-row{display:flex;align-items:flex-start;gap:6px}
+.r-icon{color:var(--gold);flex-shrink:0;margin-top:1px}
+.r-val{color:var(--text)}
+/* SOURCES */
+.source-card{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:flex-start;gap:10px}
+.source-avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
+.source-info{flex:1;min-width:0}
+.source-name{font-size:12px;font-weight:700;margin-bottom:2px;display:flex;align-items:center;gap:5px}
+.verified-badge{color:var(--cyan);font-size:11px}
+.source-handle{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace}
+.source-signal{margin-top:5px;font-size:11px;line-height:1.5;color:var(--text2)}
+.source-dir{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:700;font-family:'Space Mono',monospace}
+.source-dir.buy{background:var(--green-bg);color:var(--green)}
+.source-dir.sell{background:var(--red-bg);color:var(--red)}
+.source-dir.neutral{background:var(--bg3);color:var(--text3)}
+.agreement-bar{margin-top:6px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.agreement-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green),var(--cyan));transition:width .5s}
+/* HISTORY */
+.history-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.hist-dir{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.hist-dir.buy{background:var(--green-bg);color:var(--green)}
+.hist-dir.sell{background:var(--red-bg);color:var(--red)}
+.hist-info{flex:1;min-width:0}
+.hist-main{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px}
+.hist-signal{font-size:12px;font-weight:700}
+.hist-pnl{font-family:'Space Mono',monospace;font-size:12px;font-weight:700}
+.hist-pnl.win{color:var(--green)}
+.hist-pnl.loss{color:var(--red)}
+.hist-sub{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.hist-meta{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace}
+.hist-source{font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(167,139,250,.1);color:var(--purple);font-family:'Space Mono',monospace}
+.hist-timing{font-size:10px;color:var(--cyan);font-family:'Space Mono',monospace}
+.hist-tag{font-size:10px;padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-weight:700}
+.hist-tag.tp{background:rgba(34,197,94,.1);color:var(--green)}
+.hist-tag.guard{background:rgba(212,168,68,.1);color:var(--gold)}
+.hist-tag.sl{background:rgba(239,68,68,.1);color:var(--red)}
+/* GOLD PRICE HISTORY TABLE */
+.gold-hist-table{width:100%;border-collapse:collapse;font-family:'Space Mono',monospace;font-size:11px}
+.gold-hist-table th{padding:6px 8px;text-align:right;font-size:9px;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-weight:700}
+.gold-hist-table th:first-child{text-align:left}
+.gold-hist-table td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--border);color:var(--text2);font-size:11px}
+.gold-hist-table td:first-child{text-align:left;color:var(--text)}
+.gold-hist-table tr:last-child td{border-bottom:none}
+.gold-hist-table .chg-pos{color:var(--green)}
+.gold-hist-table .chg-neg{color:var(--red)}
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat-box{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.stat-box-val{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;margin-bottom:4px}
+.stat-box-label{font-size:10px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase}
+.stat-box-val.green{color:var(--green)}
+.stat-box-val.gold{color:var(--gold2)}
+.stat-box-val.red{color:var(--red)}
+.stat-box-val.cyan{color:var(--cyan)}
+.stat-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+.stat-row:last-child{border:none}
+.stat-label{font-size:12px;color:var(--text2)}
+.stat-val{font-family:'Space Mono',monospace;font-size:13px;font-weight:700}
+.stat-val.green{color:var(--green)}
+.stat-val.gold{color:var(--gold2)}
+.stat-val.red{color:var(--red)}
+.stat-val.cyan{color:var(--cyan)}
+/* TIMING BARS */
+.timing-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.timing-bar-label{font-size:10px;color:var(--text2);width:62px;flex-shrink:0}
+.timing-bar-track{flex:1;height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.timing-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),#0891b2);border-radius:3px}
+.timing-bar-val{font-size:10px;font-family:'Space Mono',monospace;color:var(--cyan);width:28px;text-align:right;flex-shrink:0}
+/* NEWS */
+.news-item{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.news-header{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.news-impact{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.news-impact.high{background:var(--red);box-shadow:0 0 6px var(--red)}
+.news-impact.med{background:var(--orange);box-shadow:0 0 6px var(--orange)}
+.news-impact.low{background:var(--green)}
+.news-title{font-size:12px;font-weight:700;line-height:1.4;flex:1}
+.news-time{font-family:'Space Mono',monospace;font-size:10px;color:var(--text3);white-space:nowrap;flex-shrink:0}
+.news-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.news-source-link{font-size:10px;color:var(--cyan);text-decoration:none;font-family:'Space Mono',monospace}
+.news-source-link:hover{text-decoration:underline}
+.news-tag{font-size:10px;padding:2px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-weight:700}
+.news-tag.high{background:rgba(239,68,68,.1);color:var(--red)}
+.news-tag.med{background:rgba(251,146,60,.1);color:var(--orange)}
+.news-tag.low{background:rgba(34,197,94,.1);color:var(--green)}
+.news-preview{font-size:11px;color:var(--text2);line-height:1.5}
+.news-market-call{font-size:10px;font-family:'Space Mono',monospace;color:var(--gold);background:var(--gold-bg);border-radius:5px;padding:3px 8px;display:inline-block;margin-top:2px}
+/* CAMERA / AI */
+.camera-upload-zone{display:block;background:var(--bg3);border:2px dashed var(--border2);border-radius:12px;overflow:hidden;cursor:pointer;position:relative;min-height:160px;transition:border-color .2s}
+.camera-upload-zone:hover,.camera-upload-zone.drag{border-color:var(--gold)}
+.camera-preview{width:100%;max-height:220px;object-fit:cover;display:none}
+#cu-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 16px;gap:8px}
+.ai-loading{display:none;align-items:center;justify-content:center;gap:8px;padding:16px;color:var(--text2);font-size:12px}
+.ai-loading.show{display:flex}
+.spinner{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-result{display:none;flex-direction:column;gap:10px}
+.ai-result.show{display:flex}
+.ai-hero{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--bg3);border-radius:10px}
+.ai-hero-dir{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0}
+.ai-hero-dir.bull{background:var(--green-bg);color:var(--green)}
+.ai-hero-dir.bear{background:var(--red-bg);color:var(--red)}
+.ai-hero-dir.neutral{background:var(--bg4);color:var(--text2)}
+.ai-hero-val{font-size:20px;font-weight:800;font-family:'Space Mono',monospace}
+.ai-hero-val.bull{color:var(--green)}
+.ai-hero-val.bear{color:var(--red)}
+.ai-hero-val.neutral{color:var(--text2)}
+.ai-strength-bar{height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin:4px 0}
+.ai-strength-fill{height:100%;background:linear-gradient(90deg,var(--gold-dim),var(--gold));border-radius:2px;transition:width .4s}
+.ai-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ai-cell{background:var(--bg3);border-radius:8px;padding:8px 10px}
+.ai-cell-label{font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px}
+.ai-cell-val{font-family:'Space Mono',monospace;font-size:13px;font-weight:700}
+.ai-tag{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;margin:2px}
+.ai-tag.bull{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.ai-tag.bear{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,.3)}
+.ai-tag.neutral,.ai-tag.guard-tag{background:var(--bg4);color:var(--text2);border:1px solid var(--border2)}
+.ai-tag.source{background:rgba(167,139,250,.1);color:var(--purple);border:1px solid rgba(167,139,250,.3)}
+/* FILTER / SECTION */
+.filter-bar{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;flex-shrink:0}
+.filter-bar::-webkit-scrollbar{display:none}
+.filter-chip{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:700;border:1px solid var(--border2);background:var(--bg3);color:var(--text2);cursor:pointer;white-space:nowrap;transition:all .2s}
+.filter-chip.active{background:var(--gold-bg);color:var(--gold2);border-color:var(--gold-dim)}
+.section-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);padding:2px 0}
+/* BADGE */
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;border-radius:8px;background:var(--red);color:#fff;font-size:8px;font-weight:700;padding:0 3px;font-family:'Space Mono',monospace;position:absolute;top:5px;right:5px}
+/* SLIDE ANIMATION */
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tab-panel.active>*{animation:slideUp .2s ease forwards}
+.tab-panel.active>*:nth-child(2){animation-delay:.04s}
+.tab-panel.active>*:nth-child(3){animation-delay:.08s}
+.tab-panel.active>*:nth-child(4){animation-delay:.12s}
+.tab-panel.active>*:nth-child(5){animation-delay:.16s}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- HEADER -->
+<header id="header">
+  <div class="logo">
+    <div class="logo-mark">AU</div>
+    <div>
+      <div class="logo-text">AURUM ULTRA</div>
+      <div class="logo-sub">v10.9.1 · XAUUSDm · M1</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="live-dot"></div>
+    <span class="live-txt">LIVE</span>
+    <div class="price-badge" id="hdr-price">$3,312.40</div>
+  </div>
+</header>
+
+<!-- DESKTOP NAV -->
+<nav id="desktop-nav">
+  <button class="dnav-btn" onclick="switchTab('camera')" id="dnav-camera">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>AI Scan
+  </button>
+  <button class="dnav-btn active" onclick="switchTab('chart')" id="dnav-chart">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Chart
+  </button>
+  <button class="dnav-btn" onclick="switchTab('signal')" id="dnav-signal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Signal
+  </button>
+  <button class="dnav-btn" onclick="switchTab('history')" id="dnav-history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>History
+  </button>
+  <button class="dnav-btn" onclick="switchTab('stats')" id="dnav-stats">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stats
+  </button>
+  <button class="dnav-btn" onclick="switchTab('news')" id="dnav-news">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4-4V6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>News <span id="dnav-news-badge" style="background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;font-family:'Space Mono',monospace;font-weight:700">3</span>
+  </button>
+</nav>
+
+<div id="main">
+
+<!-- ══ CAMERA / AI SCAN ══ -->
+<div class="tab-panel" id="panel-camera">
+  <label class="camera-upload-zone" id="ai-drop" for="ai-file-input">
+    <input type="file" id="ai-file-input" accept="image/*" capture="environment" style="display:none" onchange="handleAIUpload(event)">
+    <img id="camera-preview" class="camera-preview" alt="Chart preview">
+    <div id="cu-placeholder">
+      <div style="font-size:36px">📸</div>
+      <div style="font-size:13px;font-weight:700">Upload or take a chart photo</div>
+      <div style="font-size:11px;color:var(--text3);text-align:center">Gold · Silver · Forex · Indices · Crypto</div>
+    </div>
+  </label>
+  <div style="display:flex;gap:8px">
+    <label for="ai-file-input" style="flex:1;padding:10px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700">📁 Upload file</label>
+    <label for="ai-camera-input" style="flex:1;padding:10px;background:var(--gold-bg);border:1px solid var(--gold-dim);border-radius:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;color:var(--gold2)">📷 Use camera</label>
+    <input type="file" id="ai-camera-input" accept="image/*" capture="environment" style="display:none" onchange="handleAIUpload(event)">
+  </div>
+  <div class="ai-loading" id="ai-loading"><div class="spinner"></div><span>Analysing chart with AI…</span></div>
+  <div class="ai-result" id="ai-result">
+    <div class="ai-hero">
+      <div class="ai-hero-dir bull" id="ai-dir-box">↑</div>
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+          <div class="ai-hero-val bull" id="ai-dir-txt">BUY</div>
+          <div style="font-size:11px;color:var(--text2)" id="ai-trend-txt">Bullish trend detected</div>
+        </div>
+        <div class="ai-strength-bar"><div class="ai-strength-fill" id="ai-str-bar" style="width:82%"></div></div>
+        <div style="display:flex;justify-content:space-between;font-size:10px;margin-top:2px">
+          <span style="color:var(--text3)">Confidence</span><span id="ai-str-pct" style="color:var(--gold2)">82%</span>
+        </div>
+      </div>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-cell"><div class="ai-cell-label">Support</div><div class="ai-cell-val green" id="ai-support">—</div></div>
+      <div class="ai-cell"><div class="ai-cell-label">Resistance</div><div class="ai-cell-val red" id="ai-resist">—</div></div>
+      <div class="ai-cell"><div class="ai-cell-label">TP Target</div><div class="ai-cell-val cyan" id="ai-tp">—</div></div>
+      <div class="ai-cell"><div class="ai-cell-label">Guard</div><div class="ai-cell-val gold" id="ai-guard">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Detected Overlays</span></div>
+      <div class="card-body" style="display:flex;flex-wrap:wrap;gap:4px" id="ai-overlays"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">AI Analysis</span></div>
+      <div class="card-body">
+        <div style="font-size:12px;line-height:1.7;color:var(--text)" id="ai-summary"></div>
+        <div id="ai-risks" style="display:flex;flex-direction:column;gap:4px;margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CHART ══ -->
+<div class="tab-panel active" id="panel-chart">
+
+  <!-- Session bar -->
+  <div class="card" style="padding:10px 14px">
+    <div class="session-bar">
+      <div class="sess-chip" id="sess-asian" onclick="setSession('ASIAN',this)">Asian</div>
+      <div class="sess-chip active" id="sess-london" onclick="setSession('LONDON',this)">London</div>
+      <div class="sess-chip" id="sess-ny" onclick="setSession('NY',this)">New York</div>
+      <div class="sess-chip" id="sess-night" onclick="setSession('NIGHT',this)">Night</div>
+    </div>
+  </div>
+
+  <!-- Accuracy strip -->
+  <div class="acc-strip">
+    <div class="acc-cell"><div class="acc-cell-val green" id="acc-pct">68%</div><div class="acc-cell-label">Accuracy</div></div>
+    <div class="acc-cell"><div class="acc-cell-val green" id="acc-valid">168</div><div class="acc-cell-label">Valid Sigs</div></div>
+    <div class="acc-cell"><div class="acc-cell-val red" id="acc-invalid">79</div><div class="acc-cell-label">Invalid Sigs</div></div>
+  </div>
+
+  <!-- Overlays active -->
+  <div class="card" style="padding:10px 14px">
+    <div class="card-title" style="margin-bottom:8px">Overlays Active</div>
+    <div class="overlay-row">
+      <span class="ai-tag bull">EMA 20/50/200</span>
+      <span class="ai-tag bull">Fib 0.382</span>
+      <span class="ai-tag bull">OB Zone</span>
+      <span class="ai-tag bull">FVG</span>
+      <span class="ai-tag guard-tag">NY 9:30</span>
+      <span class="ai-tag bull">Trendline</span>
+    </div>
+  </div>
+
+  <!-- Bull/Bear Market Overview Bar -->
+  <div class="bullbear-bar-wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
+      <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Market Bias</span>
+      <span style="font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)" id="bb-session-lbl">LONDON SESSION</span>
+    </div>
+    <div class="bullbear-bar-track"><div class="bullbear-bar-fill" id="bb-fill" style="width:65%"></div></div>
+    <div class="bullbear-labels">
+      <span style="font-size:11px;font-weight:700;color:var(--green);font-family:'Space Mono',monospace"><span id="bb-bull-pct">65%</span> Bullish</span>
+      <span style="font-size:11px;font-weight:700;color:var(--red);font-family:'Space Mono',monospace">Bearish <span id="bb-bear-pct">35%</span></span>
+    </div>
+  </div>
+
+  <!-- TF switcher -->
+  <div class="tf-bar">
+    <div class="tf-chip active" onclick="switchTF('1',this)">1m</div>
+    <div class="tf-chip" onclick="switchTF('5',this)">5m</div>
+    <div class="tf-chip" onclick="switchTF('15',this)">15m</div>
+    <div class="tf-chip" onclick="switchTF('60',this)">1H</div>
+    <div class="tf-chip" onclick="switchTF('240',this)">4H</div>
+    <div class="tf-chip" onclick="switchTF('D',this)">1D</div>
+    <div class="tf-chip" onclick="switchTF('W',this)">1W</div>
+  </div>
+
+  <!-- TradingView chart with signal overlay -->
+  <div id="tv-container" style="position:relative;height:340px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+    <!-- Signal overlay (positioned over TradingView iframe) -->
+    <div id="signal-overlay" style="position:absolute;top:8px;left:8px;z-index:10;pointer-events:none;display:flex;flex-direction:column;gap:5px">
+      <div class="sig-overlay-card buy" id="sig-ov-card">
+        <div class="sig-ov-dir buy" id="sig-ov-dir">▲ BUY SIGNAL</div>
+        <div class="sig-ov-row"><span>Entry</span><span id="sig-ov-entry">$3,312.40</span></div>
+        <div class="sig-ov-row"><span>TP1</span><span id="sig-ov-tp" style="color:var(--cyan)">$3,318.40</span></div>
+        <div class="sig-ov-row"><span>SL</span><span id="sig-ov-sl" style="color:var(--red)">$3,309.40</span></div>
+        <div class="sig-ov-row"><span>Guard</span><span id="sig-ov-guard" style="color:var(--gold)">$0.30</span></div>
+        <div class="sig-ov-row"><span>Overlays</span><span id="sig-ov-overlays" style="font-size:9px;color:var(--purple)">EMA·Fib·OB</span></div>
+      </div>
+      <div class="sig-timer" id="sig-timer">
+        <div class="sig-timer-val" id="sig-timer-val">2:47</div>
+        <div class="sig-timer-lbl">Signal valid</div>
+      </div>
+    </div>
+    <!-- TradingView widget — must have explicit pixel height on inner div -->
+    <div id="tv-widget-container" style="width:100%;height:340px"></div>
+  </div>
+
+  <!-- Market overview below chart -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Market Overview</span>
+      <span id="chart-session" style="font-size:11px;font-family:'Space Mono',monospace;color:var(--gold)">LONDON</span>
+    </div>
+    <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+      <div class="sig-stat"><div class="sig-stat-label">TREND</div><div class="sig-stat-val green" id="ov-trend">BULL</div></div>
+      <div class="sig-stat"><div class="sig-stat-label">ATR REGIME</div><div class="sig-stat-val gold" id="ov-atr">MEDIUM</div></div>
+      <div class="sig-stat"><div class="sig-stat-label">COOLDOWN</div><div class="sig-stat-val cyan" id="ov-cd">60s</div></div>
+      <div class="sig-stat"><div class="sig-stat-label">DAY TRADES</div><div class="sig-stat-val" id="ov-day">12/60</div></div>
+      <div class="sig-stat"><div class="sig-stat-label">SPREAD</div><div class="sig-stat-val" id="ov-spread">$0.42</div></div>
+      <div class="sig-stat"><div class="sig-stat-label">GUARD</div><div class="sig-stat-val gold" id="ov-guard">$0.30</div></div>
+    </div>
+  </div>
+
+</div><!-- /panel-chart -->
+
+<!-- ══ SIGNAL ══ -->
+<div class="tab-panel" id="panel-signal">
+
+  <!-- WIDE SIGNAL PANEL — matches Market Bias design language -->
+  <div class="bullbear-bar-wrap" id="main-signal-card" style="border:1px solid var(--border2);padding:0;overflow:hidden;border-radius:12px;background:var(--bg2)">
+
+    <!-- Header row -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="signal-arrow" id="sig-arrow" style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--green-bg)">↑</div>
+        <div>
+          <div class="signal-badge buy" id="sig-dir" style="font-size:18px;font-weight:800;letter-spacing:1px">▲ BUY</div>
+          <div style="font-size:10px;color:var(--text2);font-family:'Space Mono',monospace;margin-top:1px" id="sig-price">@ 3312.40</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+        <div class="signal-time" id="sig-time" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text2)">14:32:05</div>
+        <div class="signal-session" id="sig-session" style="font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:5px;background:var(--bg3);color:var(--gold)">LONDON</div>
+      </div>
+    </div>
+
+    <!-- Confidence bar -->
+    <div class="conf-bar" style="margin:8px 14px 0"><div class="conf-fill buy" id="conf-fill" style="width:83%"></div></div>
+    <div style="display:flex;justify-content:space-between;padding:3px 14px 0;font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">
+      <span>STRENGTH</span><span id="sig-conf" style="color:var(--green);font-weight:700">83%</span>
+    </div>
+
+    <!-- Key stats row — full width like bull/bear labels -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border-top:1px solid var(--border);margin-top:8px">
+      <div style="padding:10px 14px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">GUARD</div>
+        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-guard">$0.30</div>
+      </div>
+      <div style="padding:10px 14px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">TP1</div>
+        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-tp">$3318.40</div>
+      </div>
+      <div style="padding:10px 14px;border-right:1px solid var(--border)">
+        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">SL</div>
+        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl">$3309.40</div>
+      </div>
+      <div style="padding:10px 14px">
+        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">PEAK PnL</div>
+        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--green)" id="sig-peak">$1.24</div>
+      </div>
+    </div>
+
+    <!-- Timer bar — full width, same style as bull/bear bar -->
+    <div style="padding:10px 14px;border-top:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+        <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Signal Valid</span>
+        <span style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--gold2)" id="sig-timer-val2">2:47</span>
+      </div>
+      <div style="height:6px;background:var(--bg4);border-radius:3px;overflow:hidden">
+        <div id="sig-timer-bar" style="height:100%;width:92%;border-radius:3px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width 1s linear"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:4px">
+        <span>0:00</span><span>EXPIRES</span><span>3:00</span>
+      </div>
+    </div>
+
+    <!-- Vote chips — full width row -->
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1px solid var(--border)">
+      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">EMA</div><div class="vote-chip-val up" id="v-ema" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">RSI</div><div class="vote-chip-val up" id="v-rsi" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">MACD</div><div class="vote-chip-val flat" id="v-macd" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">—</div></div>
+      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">BB</div><div class="vote-chip-val up" id="v-bb" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">ATR</div><div class="vote-chip-val up" id="v-atr-v" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:7px 6px;text-align:center"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">MOM</div><div class="vote-chip-val up" id="v-mom" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+    </div>
+
+  </div><!-- /wide signal panel -->
+
+  <div class="section-label">Signal Reason Panel</div>
+  <div class="reason-panel" id="reason-panel">
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Session: LONDON_STRICT</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Signal: Buy @ 3312.40 — Strength: 83%</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">EMA confluence ▲ bull stack</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Swing low confirmed (higher-low formed)</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Fib 0.382 retracement aligned</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">ATR buffer 0.2 (London strict)</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-tp1">Targeting TP1</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-guard">Guard tier: 70-89% → $0.30</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-cd">Cooldown = 60s [MED ATR | LDN]</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-tc">Trades today: day 12/60  night 3/10</span></div>
+  </div>
+
+  <div class="section-label">Credible Sources — Aligned Signals</div>
+  <div id="sources-list" style="display:flex;flex-direction:column;gap:8px"></div>
+</div>
+
+<!-- ══ HISTORY ══ -->
+<div class="tab-panel" id="panel-history">
+  <!-- Updated filters: removed Buy/Sell/Guard, kept Wins/Losses/TP Hit -->
+  <div class="filter-bar" id="hist-filter">
+    <div class="filter-chip active" onclick="filterHistory('all',this)">All Signals</div>
+    <div class="filter-chip" onclick="filterHistory('win',this)">Wins</div>
+    <div class="filter-chip" onclick="filterHistory('loss',this)">Losses</div>
+    <div class="filter-chip" onclick="filterHistory('tp',this)">TP Hit</div>
+  </div>
+  <div id="history-list" style="display:flex;flex-direction:column;gap:8px"></div>
+
+  <!-- Gold Price History section -->
+  <div class="section-label" style="margin-top:4px">Gold Price History — XAU/USD</div>
+
+  <!-- Date range selector for gold history -->
+  <div class="filter-bar" id="gold-range-filter">
+    <div class="filter-chip active" onclick="setGoldRange('day',this)">Day</div>
+    <div class="filter-chip" onclick="setGoldRange('week',this)">Week</div>
+    <div class="filter-chip" onclick="setGoldRange('month',this)">Month</div>
+  </div>
+
+  <!-- Gold history TradingView mini chart — REPLACED with Gold Summary Panel -->
+  <div class="card" style="overflow:hidden">
+    <div id="gold-summary-panel" style="padding:12px 14px">
+      <!-- populated by renderGoldSummary() -->
+    </div>
+  </div>
+
+  <!-- OHLC table -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">OHLC Data</span>
+      <span id="gold-range-label" style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace">Daily</span>
+    </div>
+    <div class="card-body" style="padding:0 0 4px">
+      <table class="gold-hist-table">
+        <thead>
+          <tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Chg%</th></tr>
+        </thead>
+        <tbody id="gold-ohlc-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="tab-panel" id="panel-stats">
+  <div class="stat-grid">
+    <div class="stat-box"><div class="stat-box-val green" id="st-wr">68%</div><div class="stat-box-label">Win Rate</div></div>
+    <div class="stat-box"><div class="stat-box-val gold" id="st-pf">1.74</div><div class="stat-box-label">Profit Factor</div></div>
+    <div class="stat-box"><div class="stat-box-val cyan" id="st-total">247</div><div class="stat-box-label">Total Trades</div></div>
+    <div class="stat-box"><div class="stat-box-val green" id="st-net">+$84.20</div><div class="stat-box-label">Net P&amp;L</div></div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Session Breakdown</span></div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:0">
+      <div class="stat-row"><span class="stat-label">🇬🇧 London strict</span><span class="stat-val green">72% WR · 148 trades</span></div>
+      <div class="stat-row"><span class="stat-label">🇺🇸 NY flexible</span><span class="stat-val gold">64% WR · 86 trades</span></div>
+      <div class="stat-row"><span class="stat-label">🌙 Night mode</span><span class="stat-val cyan">58% WR · 13 trades</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">⏱ TP Timing Analysis</span><span style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace">Avg time signal → TP</span></div>
+    <div class="card-body">
+      <div class="timing-bar-row"><span class="timing-bar-label">London</span><div class="timing-bar-track"><div class="timing-bar-fill" style="width:38%"></div></div><span class="timing-bar-val">11m</span></div>
+      <div class="timing-bar-row"><span class="timing-bar-label">New York</span><div class="timing-bar-track"><div class="timing-bar-fill" style="width:55%"></div></div><span class="timing-bar-val">16m</span></div>
+      <div class="timing-bar-row"><span class="timing-bar-label">Night</span><div class="timing-bar-track"><div class="timing-bar-fill" style="width:80%"></div></div><span class="timing-bar-val">24m</span></div>
+      <div class="timing-bar-row"><span class="timing-bar-label">Overlap</span><div class="timing-bar-track"><div class="timing-bar-fill" style="width:28%"></div></div><span class="timing-bar-val">8m</span></div>
+      <div style="height:1px;background:var(--border);margin:6px 0"></div>
+      <div class="stat-row" style="padding:4px 0"><span class="stat-label">Overall avg time to TP</span><span class="stat-val cyan">14m 20s</span></div>
+      <div class="stat-row" style="padding:4px 0"><span class="stat-label">Fastest TP hit</span><span class="stat-val green">1m 45s (London 91%)</span></div>
+      <div class="stat-row" style="padding:4px 0;border:none"><span class="stat-label">Signals never reaching TP</span><span class="stat-val red">32% (guard/SL)</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">Guard Analysis</span></div>
+    <div class="card-body" style="display:flex;flex-direction:column;gap:0">
+      <div class="stat-row"><span class="stat-label">TP1 hit before guard</span><span class="stat-val green">142 trades</span></div>
+      <div class="stat-row"><span class="stat-label">Guard triggered (profit saved)</span><span class="stat-val gold">67 trades</span></div>
+      <div class="stat-row"><span class="stat-label">SL hit</span><span class="stat-val red">38 trades</span></div>
+      <div class="stat-row"><span class="stat-label">Avg peak profit</span><span class="stat-val green">$2.84</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ NEWS ══ -->
+<div class="tab-panel" id="panel-news">
+  <div class="filter-bar">
+    <div class="filter-chip active" onclick="filterNews('all',this)">All</div>
+    <div class="filter-chip" onclick="filterNews('high',this)">🔴 High Impact</div>
+    <div class="filter-chip" onclick="filterNews('med',this)">🟠 Medium</div>
+    <div class="filter-chip" onclick="filterNews('gold',this)">Gold Related</div>
+    <div class="filter-chip" onclick="filterNews('upcoming',this)">Upcoming</div>
+  </div>
+  <div class="section-label">Upcoming Events — Impact on Gold / XAU</div>
+  <div id="news-list" style="display:flex;flex-direction:column;gap:8px"></div>
+  <div class="section-label" style="margin-top:4px">Live Market Commentary</div>
+  <div class="card">
+    <div class="card-body" style="padding:10px 12px">
+      <div style="font-size:11px;color:var(--text2);line-height:1.7">Gold consolidating above $3,300 support ahead of US Core PCE release. Fed speakers remain hawkish but market pricing in 2 cuts by year-end. Dollar softening provides tailwind for XAU. Watch 3,290 as key support — break below could extend to 3,260.</div>
+      <div style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:8px">Sources: Reuters · Bloomberg · Kitco · FXStreet · Forbes</div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<!-- BOTTOM TABS — 6 tabs -->
+<nav id="tabs">
+  <button class="tab-btn" onclick="switchTab('camera')" id="tab-camera">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>AI
+  </button>
+  <button class="tab-btn active" onclick="switchTab('chart')" id="tab-chart">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Chart
+  </button>
+  <button class="tab-btn" onclick="switchTab('signal')" id="tab-signal">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Signal
+  </button>
+  <button class="tab-btn" onclick="switchTab('history')" id="tab-history">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>History
+  </button>
+  <button class="tab-btn" onclick="switchTab('stats')" id="tab-stats">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Stats
+  </button>
+  <button class="tab-btn" onclick="switchTab('news')" id="tab-news">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4-4V6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
+    News<span class="badge">3</span>
+  </button>
+</nav>
+
+</div><!-- /app -->
+
+<script>
+// ── TAB SWITCHING ──────────────────────────────────────────────────
+function switchTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn,.dnav-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  const tb=document.getElementById('tab-'+name);
+  const db=document.getElementById('dnav-'+name);
+  if(tb) tb.classList.add('active');
+  if(db) db.classList.add('active');
+  if(name==='history'){renderGoldOHLC();renderGoldSummary();}
+}
+
+// ── TRADINGVIEW WIDGET ─────────────────────────────────────────────
+let currentTF='1';
+function loadTVWidget(tf){
+  const container=document.getElementById('tv-widget-container');
+  container.innerHTML='';
+  const script=document.createElement('script');
+  script.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+  script.async=true;
+  script.innerHTML=JSON.stringify({
+    autosize:true,
+    symbol:'OANDA:XAUUSD',
+    interval:tf,
+    timezone:'Africa/Johannesburg',
+    theme:'dark',
+    style:'1',
+    locale:'en',
+    toolbar_bg:'#10141a',
+    enable_publishing:false,
+    hide_top_toolbar:false,
+    hide_legend:false,
+    save_image:false,
+    calendar:false,
+    hide_volume:false,
+    support_host:'https://www.tradingview.com',
+    container_id:'tv-widget-container',
+    studies:['MASimple@tv-basicstudies','MASimple@tv-basicstudies','RSI@tv-basicstudies'],
+    overrides:{
+      'mainSeriesProperties.candleStyle.upColor':'#22c55e',
+      'mainSeriesProperties.candleStyle.downColor':'#ef4444',
+      'mainSeriesProperties.candleStyle.borderUpColor':'#22c55e',
+      'mainSeriesProperties.candleStyle.borderDownColor':'#ef4444',
+      'mainSeriesProperties.candleStyle.wickUpColor':'#22c55e',
+      'mainSeriesProperties.candleStyle.wickDownColor':'#ef4444',
+      'paneProperties.background':'#10141a',
+      'paneProperties.backgroundType':'solid',
+    }
+  });
+  container.appendChild(script);
+}
+
+function switchTF(tf,el){
+  currentTF=tf;
+  document.querySelectorAll('.tf-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  loadTVWidget(tf);
+}
+
+// Gold history TradingView mini-chart
+function loadGoldHistChart(period){
+  const container=document.getElementById('gold-hist-chart');
+  container.innerHTML='';
+  const intervalMap={day:'D',week:'W',month:'M'};
+  const script=document.createElement('script');
+  script.src='https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js';
+  script.async=true;
+  script.innerHTML=JSON.stringify({
+    symbol:'OANDA:XAUUSD',
+    width:'100%',
+    height:'100%',
+    locale:'en',
+    dateRange:'12M',
+    colorTheme:'dark',
+    trendLineColor:'#d4a844',
+    underLineColor:'rgba(212,168,68,0.06)',
+    isTransparent:true,
+    autosize:true,
+    largeChartUrl:''
+  });
+  container.appendChild(script);
+}
+
+// ── SIGNAL VALIDITY TIMER ──────────────────────────────────────────
+let sigTimerSecs=180; // 3 minutes
+let sigTimerInterval=null;
+function startSignalTimer(){
+  clearInterval(sigTimerInterval);
+  sigTimerSecs=180;
+  sigTimerInterval=setInterval(()=>{
+    sigTimerSecs--;
+    if(sigTimerSecs<=0){
+      sigTimerSecs=180;
+      rotateSignal();
+    }
+    const m=Math.floor(sigTimerSecs/60);
+    const s=sigTimerSecs%60;
+    const tStr=m+':'+(s<10?'0':'')+s;
+    // overlay timer
+    const el=document.getElementById('sig-timer-val');
+    if(el) el.textContent=tStr;
+    // wide panel timer
+    const el2=document.getElementById('sig-timer-val2');
+    if(el2) el2.textContent=tStr;
+    // wide panel progress bar
+    const bar=document.getElementById('sig-timer-bar');
+    if(bar) bar.style.width=Math.round((sigTimerSecs/180)*100)+'%';
+    // colour flash
+    const timerEl=document.getElementById('sig-timer');
+    const isUrgent=sigTimerSecs<=30;
+    if(timerEl) timerEl.style.borderColor=isUrgent?'rgba(239,68,68,.5)':'rgba(212,168,68,.3)';
+    if(el) el.style.color=isUrgent?'var(--red)':'var(--gold2)';
+    if(el2) el2.style.color=isUrgent?'var(--red)':'var(--gold2)';
+    if(bar) bar.style.background=isUrgent?'linear-gradient(90deg,#b91c1c,var(--red))':'linear-gradient(90deg,var(--gold-dim),var(--gold))';
+  },1000);
+}
+
+function rotateSignal(){
+  sigIdx=(sigIdx+1)%SIGNALS.length;
+  currentSig={...SIGNALS[sigIdx]};
+  updateSignalPanel(currentSig);
+  updateSignalOverlay(currentSig);
+}
+
+function updateSignalOverlay(s){
+  const card=document.getElementById('sig-ov-card');
+  if(!card) return;
+  card.className='sig-overlay-card '+s.dir;
+  const dir=document.getElementById('sig-ov-dir');
+  dir.className='sig-ov-dir '+s.dir;
+  dir.textContent=(s.dir==='buy'?'▲ BUY SIGNAL':'▼ SELL SIGNAL');
+  document.getElementById('sig-ov-entry').textContent='$'+s.price.toFixed(2);
+  document.getElementById('sig-ov-tp').textContent='$'+s.tp.toFixed(2);
+  document.getElementById('sig-ov-sl').textContent='$'+(s.dir==='buy'?(s.price-3).toFixed(2):(s.price+3).toFixed(2));
+  document.getElementById('sig-ov-guard').textContent='$'+s.guard.toFixed(2);
+  document.getElementById('sig-ov-overlays').textContent=s.overlays||'EMA·Fib·OB';
+}
+
+// ── DATA ───────────────────────────────────────────────────────────
+const SIGNALS=[
+  {dir:'buy',conf:83,price:3312.40,tp:3318.40,guard:0.30,peak:1.24,session:'LONDON',time:'14:32:05',tp1:false,overlays:'EMA·Fib·OB'},
+  {dir:'sell',conf:91,price:3298.20,tp:3292.20,guard:0.40,peak:2.10,session:'NY',time:'15:47:22',tp1:true,overlays:'EMA·RSI·FVG'},
+  {dir:'buy',conf:67,price:3305.80,tp:3311.80,guard:0.20,peak:0.80,session:'OVERLAP',time:'13:12:41',tp1:false,overlays:'Fib·Trendline'},
+  {dir:'sell',conf:78,price:3320.50,tp:3314.50,guard:0.30,peak:1.60,session:'LONDON',time:'11:05:30',tp1:false,overlays:'EMA·OB·MACD'},
+];
+let currentSig={...SIGNALS[0]};
+let sigIdx=0;
+
+const HISTORY=[
+  {dir:'buy',entry:3285.40,exit:3291.20,pnl:5.80,result:'win',tag:'tp',session:'LONDON',conf:88,time:'10:14',source:'Kitco',tpTime:'8m 22s',accurate:true},
+  {dir:'sell',entry:3302.10,exit:3297.80,pnl:4.30,result:'win',tag:'tp',session:'NY',conf:91,time:'13:52',source:'Bloomberg',tpTime:'6m 55s',accurate:true},
+  {dir:'buy',entry:3298.60,exit:3296.10,pnl:-2.50,result:'loss',tag:'sl',session:'LONDON',conf:72,time:'09:34',source:null,tpTime:'—',accurate:false},
+  {dir:'buy',entry:3290.20,exit:3293.80,pnl:3.60,result:'win',tag:'guard',session:'OVERLAP',conf:78,time:'14:22',source:'ForexFactory',tpTime:'11m 12s',accurate:true},
+  {dir:'sell',entry:3315.50,exit:3310.20,pnl:5.30,result:'win',tag:'tp',session:'NY',conf:86,time:'16:05',source:'Reuters',tpTime:'9m 40s',accurate:true},
+  {dir:'buy',entry:3308.00,exit:3305.80,pnl:-2.20,result:'loss',tag:'sl',session:'LONDON',conf:70,time:'08:48',source:null,tpTime:'—',accurate:false},
+  {dir:'buy',entry:3295.10,exit:3298.40,pnl:3.30,result:'win',tag:'guard',session:'NY',conf:80,time:'17:30',source:'Reuters',tpTime:'11m 12s',accurate:true},
+  {dir:'sell',entry:3322.40,exit:3318.20,pnl:4.20,result:'win',tag:'tp',session:'LONDON',conf:93,time:'11:15',source:'GoldTelegraph',tpTime:'6m 55s',accurate:true},
+];
+let histFilter='all';
+
+// Gold OHLC data (simulated - real data would come from a price API)
+const GOLD_OHLC={
+  day:[
+    {date:'29 Mar',open:3298.10,high:3328.40,low:3290.50,close:3312.40,chg:0.44},
+    {date:'28 Mar',open:3276.80,high:3302.60,low:3272.10,close:3298.10,chg:0.65},
+    {date:'27 Mar',open:3255.40,high:3284.20,low:3250.80,close:3276.80,chg:0.65},
+    {date:'26 Mar',open:3240.10,high:3262.80,low:3236.40,close:3255.40,chg:0.47},
+    {date:'25 Mar',open:3228.60,high:3248.90,low:3222.30,close:3240.10,chg:0.36},
+    {date:'24 Mar',open:3198.20,high:3235.60,low:3194.80,close:3228.60,chg:0.95},
+  ],
+  week:[
+    {date:'Wk 24 Mar',open:3198.20,high:3328.40,low:3190.60,close:3312.40,chg:3.57},
+    {date:'Wk 17 Mar',open:3124.50,high:3205.80,low:3118.20,close:3198.20,chg:2.36},
+    {date:'Wk 10 Mar',open:3082.40,high:3132.60,low:3076.90,close:3124.50,chg:1.37},
+    {date:'Wk 03 Mar',open:3044.80,high:3095.20,low:3040.10,close:3082.40,chg:1.24},
+  ],
+  month:[
+    {date:'Mar 2026',open:3104.20,high:3328.40,low:3098.60,close:3312.40,chg:6.70},
+    {date:'Feb 2026',open:2942.80,high:3115.60,low:2938.40,close:3104.20,chg:5.49},
+    {date:'Jan 2026',open:2642.10,high:2960.40,low:2638.20,close:2942.80,chg:11.38},
+    {date:'Dec 2025',open:2624.50,high:2670.80,low:2584.20,close:2642.10,chg:0.67},
+    {date:'Nov 2025',open:2748.40,high:2792.20,low:2538.80,close:2624.50,chg:-4.51},
+  ]
+};
+let goldRange='day';
+
+const SOURCES=[
+  {name:'Kitco News',handle:'@KitcoNews',avatar:'KN',color:'#d97706',dir:'buy',signal:'Gold bullish above $3,300. EMA20 crossed above EMA50 on H1. Fib 0.382 acting as support. Target $3,340.',conf:88,agreement:78,verified:true,url:'https://www.kitco.com/news/'},
+  {name:'Bloomberg Markets',handle:'@markets',avatar:'BB',color:'#1d4ed8',dir:'buy',signal:'XAU/USD maintaining uptrend. Dollar weakness + soft CPI. OB zone at $3,295 holding as support. Bull continuation.',conf:82,agreement:72,verified:true,url:'https://www.bloomberg.com/markets/commodities'},
+  {name:'FXStreet Gold',handle:'@FXStreet',avatar:'FX',color:'#7c3aed',dir:'neutral',signal:'Gold in consolidation. Fib 0.382 at key pivot. Need break above 3,320 or below 3,290 for directional conviction.',conf:60,agreement:45,verified:true,url:'https://www.fxstreet.com/rates-charts/commodities/gold'},
+  {name:'Gold Telegraph',handle:'@GoldTelegraph_',avatar:'GT',color:'#d4a844',dir:'buy',signal:'Central bank buying + geopolitical demand. RSI holding above 55 — bullish. Dips toward $3,290 are buy ops.',conf:85,agreement:81,verified:false,url:'https://goldtelegraph.com'},
+  {name:'Reuters Commodities',handle:'@Reuters',avatar:'RE',color:'#dc2626',dir:'buy',signal:'COMEX futures holding gains. ETF inflows accelerating. Trendline support at $3,295. Institutional positioning: long.',conf:79,agreement:70,verified:true,url:'https://www.reuters.com/markets/commodities/'},
+];
+
+const NEWS_ITEMS=[
+  {title:'US Core PCE Price Index (MoM)',time:'15:30 GMT TODAY',impact:'high',gold_call:'⬆️ If below forecast → gold bullish',preview:'Expected 0.3%. Lower reading = less Fed hawkishness = gold up.',source:'Investing.com',url:'https://www.investing.com/economic-calendar/',goldTag:true,upcoming:true},
+  {title:'Fed Chair Powell Speech',time:'17:00 GMT TODAY',impact:'high',gold_call:'⬆️ Dovish tone = gold spike likely',preview:'Market watching for forward guidance on rate cuts. Any hint of easing pushes XAU higher.',source:'FedReserve.gov',url:'https://www.federalreserve.gov/newsevents/',goldTag:true,upcoming:true},
+  {title:'US ISM Manufacturing PMI',time:'15:00 GMT TODAY',impact:'med',gold_call:'⬇️ Strong reading = dollar bid = gold pressure',preview:'Below 50 = contraction = risk-off = gold support. Above 50 = dollar bid.',source:'ForexFactory',url:'https://www.forexfactory.com/calendar',goldTag:true,upcoming:true},
+  {title:'FOMC Minutes Released',time:'19:00 GMT TODAY',impact:'high',gold_call:'Directional — watch hawkish vs dovish tone',preview:'Markets looking for pivot language to confirm rate cut trajectory.',source:'FedReserve.gov',url:'https://www.federalreserve.gov/newsevents/pressreleases/',goldTag:true,upcoming:false},
+  {title:'Germany Unemployment Rate',time:'08:55 GMT TOMORROW',impact:'low',gold_call:'Indirect — EUR/USD cross effect on gold',preview:'Weak reading may weigh on EUR, indirectly supporting gold via USD dynamics.',source:'Investing.com',url:'https://www.investing.com/economic-calendar/',goldTag:false,upcoming:true},
+  {title:'US Non-Farm Payrolls',time:'15:30 GMT FRIDAY',impact:'high',gold_call:'⬇️ Strong NFP = gold sell-off risk',preview:'Most important data point of the week. Miss vs. beat dramatically shifts gold direction.',source:'BLS.gov',url:'https://www.bls.gov/schedule/news_release/empsit.htm',goldTag:true,upcoming:true},
+];
+let newsFilter='all';
+
+// ── RENDER HISTORY ─────────────────────────────────────────────────
+function renderHistory(){
+  const list=document.getElementById('history-list');
+  let items=HISTORY;
+  if(histFilter!=='all') items=HISTORY.filter(h=>{
+    if(histFilter==='win') return h.result==='win';
+    if(histFilter==='loss') return h.result==='loss';
+    if(histFilter==='tp') return h.tag==='tp';
+    return true;
+  });
+  list.innerHTML=items.map(h=>`
+    <div class="history-item">
+      <div class="hist-dir ${h.dir}">${h.dir==='buy'?'↑':'↓'}</div>
+      <div class="hist-info">
+        <div class="hist-main">
+          <span class="hist-signal">${h.dir.toUpperCase()} ${h.entry.toFixed(2)} → ${h.exit.toFixed(2)}</span>
+          <span class="hist-pnl ${h.result}">${h.pnl>0?'+':''}$${h.pnl.toFixed(2)}</span>
+        </div>
+        <div class="hist-sub">
+          <span class="hist-meta">${h.time} · ${h.session} · ${h.conf}%</span>
+          <span class="hist-tag ${h.tag}">${h.tag==='tp'?'TP HIT':h.tag==='guard'?'GUARD':h.tag.toUpperCase()}</span>
+          ${h.tpTime!=='—'?`<span class="hist-timing">⏱${h.tpTime}</span>`:''}
+          ${h.accurate?'<span style="font-size:9px;color:var(--green)">✓</span>':'<span style="font-size:9px;color:var(--red)">✗</span>'}
+          ${h.source?`<span class="hist-source">${h.source}</span>`:''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function filterHistory(f,el){
+  histFilter=f;
+  document.querySelectorAll('#hist-filter .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderHistory();
+}
+
+// ── GOLD OHLC ──────────────────────────────────────────────────────
+function setGoldRange(r,el){
+  goldRange=r;
+  document.querySelectorAll('#gold-range-filter .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('gold-range-label').textContent=r==='day'?'Daily':r==='week'?'Weekly':'Monthly';
+  renderGoldOHLC();
+  renderGoldSummary();
+}
+
+function renderGoldSummary(){
+  const rows=GOLD_OHLC[goldRange]||[];
+  if(!rows.length) return;
+  const panel=document.getElementById('gold-summary-panel');
+  if(!panel) return;
+  // compute summary stats from the dataset
+  const latest=rows[0];
+  const oldest=rows[rows.length-1];
+  const periodHigh=Math.max(...rows.map(r=>r.high));
+  const periodLow=Math.min(...rows.map(r=>r.low));
+  const totalChg=((latest.close-oldest.open)/oldest.open*100);
+  const direction=totalChg>=0?'rose':'fell';
+  const dirColor=totalChg>=0?'var(--green)':'var(--red)';
+  const dirIcon=totalChg>=0?'▲':'▼';
+  const periodLabel=goldRange==='day'?'this week':goldRange==='week'?'this month':'year to date';
+  const periodName=goldRange==='day'?'Daily':goldRange==='week'?'Weekly':'Monthly';
+  // biggest single move
+  let bigMove=0,bigDate='';
+  rows.forEach(r=>{if(Math.abs(r.chg)>Math.abs(bigMove)){bigMove=r.chg;bigDate=r.date;}});
+  const avgClose=(rows.reduce((s,r)=>s+r.close,0)/rows.length);
+  const volatility=(periodHigh-periodLow).toFixed(2);
+
+  panel.innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Gold ${periodName} Summary</span>
+      <span style="font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)">XAU/USD</span>
+    </div>
+    <!-- Headline sentence -->
+    <div style="font-family:'Space Mono',monospace;font-size:12px;line-height:1.7;color:var(--text);margin-bottom:10px;padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid ${dirColor}">
+      Gold <span style="color:${dirColor};font-weight:700">${direction} ${Math.abs(totalChg).toFixed(2)}%</span> ${periodLabel} — from
+      <span style="color:var(--text)">$${oldest.open.toFixed(2)}</span> to
+      <span style="color:${dirColor};font-weight:700">$${latest.close.toFixed(2)}</span>
+      <span style="font-size:11px;color:${dirColor};font-weight:700"> ${dirIcon}</span>
+    </div>
+    <!-- 4-stat grid -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Period High</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green)">$${periodHigh.toFixed(2)}</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Period Low</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--red)">$${periodLow.toFixed(2)}</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Avg Close</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold2)">$${avgClose.toFixed(2)}</div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
+        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Volatility Range</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--cyan)">$${volatility}</div>
+      </div>
+    </div>
+    <!-- Biggest move note -->
+    <div style="margin-top:8px;font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)">
+      Biggest move: <span style="color:${bigMove>=0?'var(--green)':'var(--red)'};font-weight:700">${bigMove>=0?'+':''}${bigMove.toFixed(2)}%</span> on <span style="color:var(--text)">${bigDate}</span>
+    </div>
+  `;
+}
+
+function renderGoldOHLC(){
+  const rows=GOLD_OHLC[goldRange]||[];
+  document.getElementById('gold-ohlc-body').innerHTML=rows.map(r=>`
+    <tr>
+      <td>${r.date}</td>
+      <td>${r.open.toFixed(2)}</td>
+      <td style="color:var(--green)">${r.high.toFixed(2)}</td>
+      <td style="color:var(--red)">${r.low.toFixed(2)}</td>
+      <td>${r.close.toFixed(2)}</td>
+      <td class="${r.chg>=0?'chg-pos':'chg-neg'}">${r.chg>=0?'+':''}${r.chg.toFixed(2)}%</td>
+    </tr>`).join('');
+}
+
+// ── RENDER SOURCES ─────────────────────────────────────────────────
+function renderSources(){
+  document.getElementById('sources-list').innerHTML=SOURCES.map(s=>`
+    <div class="source-card">
+      <div class="source-avatar" style="background:${s.color}22;color:${s.color};border:1px solid ${s.color}44">${s.avatar}</div>
+      <div class="source-info">
+        <div class="source-name">
+          ${s.name}${s.verified?'<span class="verified-badge">✓</span>':''}
+          <span style="margin-left:auto"><span class="source-dir ${s.dir}">${s.dir.toUpperCase()}</span></span>
+        </div>
+        <div class="source-handle">${s.handle}</div>
+        <div class="source-signal">${s.signal}</div>
+        <div class="agreement-bar"><div class="agreement-fill" style="width:${s.agreement}%"></div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+          <span style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace">${s.agreement}% alignment</span>
+          <a href="${s.url}" target="_blank" rel="noopener" style="font-size:10px;color:var(--cyan);text-decoration:none;font-family:'Space Mono',monospace">View →</a>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+// ── RENDER NEWS ────────────────────────────────────────────────────
+function renderNews(){
+  const list=document.getElementById('news-list');
+  let items=NEWS_ITEMS;
+  if(newsFilter==='high') items=NEWS_ITEMS.filter(n=>n.impact==='high');
+  else if(newsFilter==='med') items=NEWS_ITEMS.filter(n=>n.impact==='med');
+  else if(newsFilter==='gold') items=NEWS_ITEMS.filter(n=>n.goldTag);
+  else if(newsFilter==='upcoming') items=NEWS_ITEMS.filter(n=>n.upcoming);
+  list.innerHTML=items.map(n=>`
+    <div class="news-item">
+      <div class="news-header">
+        <div class="news-impact ${n.impact}"></div>
+        <div class="news-title">${n.title}</div>
+        <div class="news-time">${n.time}</div>
+      </div>
+      <div class="news-meta">
+        <span class="news-tag ${n.impact}">${n.impact.toUpperCase()} IMPACT</span>
+        ${n.goldTag?'<span class="news-tag" style="background:rgba(212,168,68,.1);color:var(--gold)">GOLD</span>':''}
+        <a class="news-source-link" href="${n.url}" target="_blank" rel="noopener">${n.source} ↗</a>
+      </div>
+      <div class="news-preview">${n.preview}</div>
+      ${n.gold_call?`<div class="news-market-call">${n.gold_call}</div>`:''}`).join('</div>');
+}
+
+function filterNews(f,el){
+  newsFilter=f;
+  document.querySelectorAll('#panel-news .filter-bar .filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  renderNews();
+}
+
+// ── SESSION BAR ────────────────────────────────────────────────────
+function setSession(name,el){
+  document.querySelectorAll('.sess-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('chart-session').textContent=name;
+  document.getElementById('bb-session-lbl').textContent=name+' SESSION';
+  // Update bull/bear bias per session
+  const biases={ASIAN:{bull:52,bear:48},LONDON:{bull:65,bear:35},NY:{bull:58,bear:42},NIGHT:{bull:50,bear:50}};
+  const b=biases[name]||biases.LONDON;
+  document.getElementById('bb-fill').style.width=b.bull+'%';
+  document.getElementById('bb-bull-pct').textContent=b.bull+'%';
+  document.getElementById('bb-bear-pct').textContent=b.bear+'%';
+}
+
+// ── UPDATE SIGNAL PANEL ────────────────────────────────────────────
+function updateSignalPanel(s){
+  const card=document.getElementById('main-signal-card');
+  if(card) card.className='bullbear-bar-wrap '+(s.dir==='buy'?'buy':s.dir==='sell'?'sell':'scan');
+  const sigDir=document.getElementById('sig-dir');
+  if(sigDir){sigDir.className='signal-badge '+s.dir;sigDir.textContent=(s.dir==='buy'?'▲ BUY':s.dir==='sell'?'▼ SELL':'◉ SCAN');}
+  const sigArrow=document.getElementById('sig-arrow');
+  if(sigArrow){
+    sigArrow.textContent=(s.dir==='buy'?'↑':s.dir==='sell'?'↓':'~');
+    sigArrow.style.background=s.dir==='buy'?'var(--green-bg)':s.dir==='sell'?'var(--red-bg)':'var(--gold-bg)';
+  }
+  const priceEl=document.getElementById('sig-price');if(priceEl) priceEl.textContent='@ '+s.price.toFixed(2);
+  const timeEl=document.getElementById('sig-time');if(timeEl) timeEl.textContent=s.time;
+  const sessEl=document.getElementById('sig-session');if(sessEl) sessEl.textContent=s.session;
+  const confEl=document.getElementById('sig-conf');
+  if(confEl){confEl.textContent=s.conf+'%';}
+  const guardEl=document.getElementById('sig-guard');if(guardEl) guardEl.textContent='$'+s.guard.toFixed(2);
+  const tpEl=document.getElementById('sig-tp');if(tpEl) tpEl.textContent=s.tp>0?'$'+s.tp.toFixed(2):'—';
+  const peakEl=document.getElementById('sig-peak');if(peakEl) peakEl.textContent=s.peak>0?'$'+s.peak.toFixed(2):'$0.00';
+  // SL value
+  const slVal=(s.dir==='buy')?(s.price-3).toFixed(2):(s.price+3).toFixed(2);
+  const slEl=document.getElementById('sig-sl');if(slEl) slEl.textContent='$'+slVal;
+  const fill=document.getElementById('conf-fill');
+  if(fill){fill.style.width=s.conf+'%';fill.className='conf-fill '+s.dir;}
+  document.getElementById('rp-tp1').textContent=s.tp1?'TP1 reached — guard locked $0.10':'Targeting TP1';
+  const guardStr=s.tp1?'post-TP strict':s.conf>=90?'>=90%':s.conf>=70?'70-89%':'<70%';
+  document.getElementById('rp-guard').textContent='Guard tier: '+guardStr+' → $'+s.guard.toFixed(2);
+  const cdSec=s.session==='LONDON'?60:s.session==='NY'?45:90;
+  document.getElementById('rp-cd').textContent='Cooldown = '+cdSec+'s [MED ATR | '+s.session.substring(0,3)+']';
+  document.getElementById('ov-guard').textContent='$'+s.guard.toFixed(2);
+}
+
+// ── AI CHART ANALYSIS ──────────────────────────────────────────────
+async function handleAIUpload(event){
+  const file=event.target.files[0];
+  if(!file) return;
+  const preview=document.getElementById('camera-preview');
+  const placeholder=document.getElementById('cu-placeholder');
+  preview.src=URL.createObjectURL(file);
+  preview.style.display='block';
+  placeholder.style.display='none';
+  document.getElementById('ai-loading').classList.add('show');
+  document.getElementById('ai-result').classList.remove('show');
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    const b64=e.target.result.split(',')[1];
+    const mtype=file.type||'image/jpeg';
+    try{
+      const resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({
+          model:'claude-sonnet-4-20250514',
+          max_tokens:1000,
+          messages:[{role:'user',content:[
+            {type:'image',source:{type:'base64',media_type:mtype,data:b64}},
+            {type:'text',text:`You are an expert trading chart analyst specialised in gold (XAU/USD) but capable of analysing any symbol. Analyse this chart screenshot carefully and respond ONLY with a JSON object — no markdown, no preamble.\n\nJSON fields required:\n{\n  "symbol": "detected or assumed symbol e.g. XAUUSD",\n  "trend": "Bullish | Bearish | Ranging",\n  "direction": "BUY | SELL | WAIT",\n  "strength": number 0-100,\n  "support": "price level as string e.g. 3290.00",\n  "resistance": "price level as string",\n  "tp": "estimated take-profit price as string",\n  "guard": "recommended pullback guard as string e.g. $0.30",\n  "overlays": ["array of detected indicators/overlays e.g. EMA confluence, Fib 0.382, OB zone, FVG, RSI oversold, MACD crossover, Trendline support"],\n  "risks": ["array of 2-3 key risk factors"],\n  "summary": "2 sentence analysis summary"\n}`}
+          ]}]})
+      });
+      const data=await resp.json();
+      const txt=data.content.map(b=>b.text||'').join('');
+      let parsed;
+      try{parsed=JSON.parse(txt.replace(/```json|```/g,'').trim());}catch{parsed=null;}
+      showAIResult(parsed,txt);
+    }catch(err){
+      showAIResult(null,'Connection error. Please check your API key or try again.');
+    }
+    document.getElementById('ai-loading').classList.remove('show');
+  };
+  reader.readAsDataURL(file);
+}
+
+function showAIResult(parsed,raw){
+  const el=document.getElementById('ai-result');
+  el.classList.add('show');
+  if(parsed){
+    const dc=parsed.direction==='BUY'?'bull':parsed.direction==='SELL'?'bear':'neutral';
+    const dirIcon=parsed.direction==='BUY'?'↑':parsed.direction==='SELL'?'↓':'~';
+    document.getElementById('ai-dir-box').className='ai-hero-dir '+dc;
+    document.getElementById('ai-dir-box').textContent=dirIcon;
+    document.getElementById('ai-dir-txt').className='ai-hero-val '+dc;
+    document.getElementById('ai-dir-txt').textContent=parsed.direction||'WAIT';
+    document.getElementById('ai-trend-txt').textContent=(parsed.trend||'')+(parsed.symbol?' · '+parsed.symbol:'');
+    const str=parsed.strength||0;
+    document.getElementById('ai-str-bar').style.width=str+'%';
+    document.getElementById('ai-str-pct').textContent=str+'%';
+    document.getElementById('ai-support').textContent=parsed.support||'—';
+    document.getElementById('ai-resist').textContent=parsed.resistance||'—';
+    document.getElementById('ai-tp').textContent=parsed.tp||'—';
+    document.getElementById('ai-guard').textContent=parsed.guard||'—';
+    document.getElementById('ai-overlays').innerHTML=(parsed.overlays||[]).map(o=>`<span class="ai-tag source">${o}</span>`).join('')||'<span style="font-size:11px;color:var(--text3)">No overlays detected</span>';
+    document.getElementById('ai-summary').textContent=parsed.summary||'';
+    document.getElementById('ai-risks').innerHTML=(parsed.risks||[]).map(r=>`<div style="font-size:11px;color:var(--orange);display:flex;align-items:flex-start;gap:5px"><span>⚠</span><span>${r}</span></div>`).join('');
+  } else {
+    document.getElementById('ai-dir-box').textContent='?';
+    document.getElementById('ai-dir-txt').textContent='WAIT';
+    document.getElementById('ai-trend-txt').textContent='Unable to parse';
+    document.getElementById('ai-summary').textContent=raw||'No response received.';
+    document.getElementById('ai-overlays').innerHTML='';
+    document.getElementById('ai-risks').innerHTML='';
+  }
+}
+
+// Drag & drop
+const dropZone=document.getElementById('ai-drop');
+dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag');});
+dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag'));
+dropZone.addEventListener('drop',e=>{
+  e.preventDefault();dropZone.classList.remove('drag');
+  const file=e.dataTransfer.files[0];
+  if(file&&file.type.startsWith('image/')) handleAIUpload({target:{files:[file]}});
+});
+
+// ── LIVE TICK ──────────────────────────────────────────────────────
+let livePrice=3312.40;
+function tick(){
+  livePrice+=(Math.random()-.48)*.4;
+  const ps='$'+livePrice.toFixed(2);
+  document.getElementById('hdr-price').textContent=ps;
+  document.getElementById('sig-price').textContent='@ '+livePrice.toFixed(2);
+  document.getElementById('sig-ov-entry').textContent='$'+livePrice.toFixed(2);
+  currentSig.price=livePrice;
+}
+
+function animateVotes(){
+  const ids=['v-ema','v-rsi','v-macd','v-bb','v-atr-v','v-mom'];
+  const states=[{v:'▲',c:'up'},{v:'▼',c:'down'},{v:'—',c:'flat'}];
+  const w=[0,0,0,0,0,1,1,2];
+  ids.forEach(id=>{
+    if(Math.random()<.07){
+      const s=states[w[Math.floor(Math.random()*w.length)]];
+      const el=document.getElementById(id);
+      if(el){el.textContent=s.v;el.className='vote-chip-val '+s.c;}
+    }
+  });
+}
+
+// ── INIT ───────────────────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  renderHistory();
+  renderSources();
+  renderNews();
+  renderGoldOHLC();
+  renderGoldSummary();
+  updateSignalPanel(currentSig);
+  updateSignalOverlay(currentSig);
+
+  // Load TradingView widget
+  loadTVWidget('1');
+
+  // Signal validity timer
+  startSignalTimer();
+
+  setInterval(tick,1200);
+  setInterval(animateVotes,900);
+});
+</script>
+</body>
+</html>
