@@ -397,16 +397,16 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
     </div>
   </div>
 
-  <!-- Bull/Bear Market Overview Bar -->
-  <div class="bullbear-bar-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px">
-      <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Market Bias</span>
-      <span style="font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)" id="bb-session-lbl">LONDON SESSION</span>
+  <!-- Bull/Bear Market Overview Bar — COMPACT -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:7px 12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Market Bias</span>
+      <span style="font-size:9px;font-family:'Space Mono',monospace;color:var(--text3)" id="bb-session-lbl">LONDON SESSION</span>
     </div>
-    <div class="bullbear-bar-track"><div class="bullbear-bar-fill" id="bb-fill" style="width:65%"></div></div>
-    <div class="bullbear-labels">
-      <span style="font-size:11px;font-weight:700;color:var(--green);font-family:'Space Mono',monospace"><span id="bb-bull-pct">65%</span> Bullish</span>
-      <span style="font-size:11px;font-weight:700;color:var(--red);font-family:'Space Mono',monospace">Bearish <span id="bb-bear-pct">35%</span></span>
+    <div style="height:7px;background:var(--bg4);border-radius:4px;overflow:hidden;margin-bottom:4px"><div style="height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),#16a34a);transition:width .6s;width:65%" id="bb-fill"></div></div>
+    <div style="display:flex;justify-content:space-between">
+      <span style="font-size:10px;font-weight:700;color:var(--green);font-family:'Space Mono',monospace"><span id="bb-bull-pct">65%</span> Bullish</span>
+      <span style="font-size:10px;font-weight:700;color:var(--red);font-family:'Space Mono',monospace">Bearish <span id="bb-bear-pct">35%</span></span>
     </div>
   </div>
 
@@ -421,25 +421,44 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
     <div class="tf-chip" onclick="switchTF('W',this)">1W</div>
   </div>
 
-  <!-- TradingView chart with signal overlay -->
-  <div id="tv-container" style="position:relative;height:340px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
-    <!-- Signal overlay (positioned over TradingView iframe) -->
-    <div id="signal-overlay" style="position:absolute;top:8px;left:8px;z-index:10;pointer-events:none;display:flex;flex-direction:column;gap:5px">
-      <div class="sig-overlay-card buy" id="sig-ov-card">
-        <div class="sig-ov-dir buy" id="sig-ov-dir">▲ BUY SIGNAL</div>
-        <div class="sig-ov-row"><span>Entry</span><span id="sig-ov-entry">$3,312.40</span></div>
-        <div class="sig-ov-row"><span>TP1</span><span id="sig-ov-tp" style="color:var(--cyan)">$3,318.40</span></div>
-        <div class="sig-ov-row"><span>SL</span><span id="sig-ov-sl" style="color:var(--red)">$3,309.40</span></div>
-        <div class="sig-ov-row"><span>Guard</span><span id="sig-ov-guard" style="color:var(--gold)">$0.30</span></div>
-        <div class="sig-ov-row"><span>Overlays</span><span id="sig-ov-overlays" style="font-size:9px;color:var(--purple)">EMA·Fib·OB</span></div>
+  <!-- TradingView chart — NO overlay covering it -->
+  <div id="tv-container" style="position:relative;height:300px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+    <div id="tv-widget-container" style="width:100%;height:300px"></div>
+  </div>
+
+  <!-- SIGNAL BAR — slim horizontal bar BELOW chart, same style as Market Bias -->
+  <div id="sig-bar-wrap" style="background:var(--bg2);border:1px solid rgba(239,68,68,.4);border-radius:10px;padding:7px 12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+      <span style="font-size:13px;font-weight:800;font-family:'Space Mono',monospace;color:var(--red)" id="sig-ov-dir">▼ SELL SIGNAL</span>
+      <span style="font-size:9px;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-timer-val">2:47</span>
+    </div>
+    <!-- slim progress bar (timer) -->
+    <div style="height:4px;background:var(--bg4);border-radius:2px;overflow:hidden;margin-bottom:5px">
+      <div id="sig-timer-bar" style="height:100%;width:92%;border-radius:2px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width 1s linear"></div>
+    </div>
+    <!-- 5-column stats row -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0">
+      <div style="text-align:center">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">ENTRY</div>
+        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--text)" id="sig-ov-entry">$3312.40</div>
       </div>
-      <div class="sig-timer" id="sig-timer">
-        <div class="sig-timer-val" id="sig-timer-val">2:47</div>
-        <div class="sig-timer-lbl">Signal valid</div>
+      <div style="text-align:center">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">TP1</div>
+        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-ov-tp">$3318.40</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">SL</div>
+        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-ov-sl">$3309.40</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">GUARD</div>
+        <div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-ov-guard">$0.30</div>
+      </div>
+      <div style="text-align:center">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">OVL</div>
+        <div style="font-size:10px;font-weight:700;font-family:'Space Mono',monospace;color:var(--purple)" id="sig-ov-overlays">EMA·Fib</div>
       </div>
     </div>
-    <!-- TradingView widget — must have explicit pixel height on inner div -->
-    <div id="tv-widget-container" style="width:100%;height:340px"></div>
   </div>
 
   <!-- Market overview below chart -->
@@ -463,82 +482,78 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 <!-- ══ SIGNAL ══ -->
 <div class="tab-panel" id="panel-signal">
 
-  <!-- WIDE SIGNAL PANEL — matches Market Bias design language -->
-  <div class="bullbear-bar-wrap" id="main-signal-card" style="border:1px solid var(--border2);padding:0;overflow:hidden;border-radius:12px;background:var(--bg2)">
+  <!-- WIDE SIGNAL PANEL — Market Bias style, slim horizontal -->
+  <div id="main-signal-card" style="background:var(--bg2);border:1px solid rgba(239,68,68,.35);border-radius:12px;overflow:hidden">
 
-    <!-- Header row -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid var(--border)">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div class="signal-arrow" id="sig-arrow" style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--green-bg)">↑</div>
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:9px">
+        <div id="sig-arrow" style="width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--green-bg)">↑</div>
         <div>
-          <div class="signal-badge buy" id="sig-dir" style="font-size:18px;font-weight:800;letter-spacing:1px">▲ BUY</div>
-          <div style="font-size:10px;color:var(--text2);font-family:'Space Mono',monospace;margin-top:1px" id="sig-price">@ 3312.40</div>
+          <div class="signal-badge buy" id="sig-dir" style="font-size:16px;font-weight:800">▲ BUY</div>
+          <div style="font-size:10px;color:var(--text2);font-family:'Space Mono',monospace" id="sig-price">@ 3312.40</div>
         </div>
       </div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
-        <div class="signal-time" id="sig-time" style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text2)">14:32:05</div>
-        <div class="signal-session" id="sig-session" style="font-size:10px;font-weight:700;letter-spacing:.5px;padding:2px 8px;border-radius:5px;background:var(--bg3);color:var(--gold)">LONDON</div>
+      <div style="text-align:right">
+        <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text2)" id="sig-time">14:32:05</div>
+        <div style="font-size:10px;font-weight:700;padding:1px 7px;border-radius:5px;background:var(--bg3);display:inline-block;margin-top:2px" id="sig-session">LONDON</div>
       </div>
     </div>
 
-    <!-- Confidence bar -->
-    <div class="conf-bar" style="margin:8px 14px 0"><div class="conf-fill buy" id="conf-fill" style="width:83%"></div></div>
-    <div style="display:flex;justify-content:space-between;padding:3px 14px 0;font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">
-      <span>STRENGTH</span><span id="sig-conf" style="color:var(--green);font-weight:700">83%</span>
+    <!-- Strength bar -->
+    <div style="padding:6px 14px 0">
+      <div style="height:4px;background:var(--bg4);border-radius:2px;overflow:hidden"><div class="conf-fill buy" id="conf-fill" style="width:83%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:2px"><span>STRENGTH</span><span id="sig-conf" style="color:var(--green)">83%</span></div>
     </div>
 
-    <!-- Key stats row — full width like bull/bear labels -->
-    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:0;border-top:1px solid var(--border);margin-top:8px">
-      <div style="padding:10px 14px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">GUARD</div>
-        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-guard">$0.30</div>
+    <!-- 4 stats row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;border-top:1px solid var(--border);margin-top:6px">
+      <div style="padding:8px 10px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">GUARD</div>
+        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-guard">$0.30</div>
       </div>
-      <div style="padding:10px 14px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">TP1</div>
-        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-tp">$3318.40</div>
+      <div style="padding:8px 10px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">TP1</div>
+        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-tp">$3318.40</div>
       </div>
-      <div style="padding:10px 14px;border-right:1px solid var(--border)">
-        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">SL</div>
-        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl">$3309.40</div>
+      <div style="padding:8px 10px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">SL</div>
+        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl">$3309.40</div>
       </div>
-      <div style="padding:10px 14px">
-        <div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;letter-spacing:.5px;margin-bottom:3px">PEAK PnL</div>
-        <div style="font-size:15px;font-weight:700;font-family:'Space Mono',monospace;color:var(--green)" id="sig-peak">$1.24</div>
+      <div style="padding:8px 10px">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">PEAK</div>
+        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--green)" id="sig-peak">$1.24</div>
       </div>
     </div>
 
-    <!-- Timer bar — full width, same style as bull/bear bar -->
-    <div style="padding:10px 14px;border-top:1px solid var(--border)">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-        <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Signal Valid</span>
-        <span style="font-family:'Space Mono',monospace;font-size:18px;font-weight:700;color:var(--gold2)" id="sig-timer-val2">2:47</span>
+    <!-- Timer bar — same as Market Bias -->
+    <div style="padding:7px 14px;border-top:1px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+        <span style="font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Signal Valid</span>
+        <span style="font-family:'Space Mono',monospace;font-size:16px;font-weight:700;color:var(--gold2)" id="sig-timer-val2">2:47</span>
       </div>
       <div style="height:6px;background:var(--bg4);border-radius:3px;overflow:hidden">
         <div id="sig-timer-bar" style="height:100%;width:92%;border-radius:3px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width 1s linear"></div>
       </div>
-      <div style="display:flex;justify-content:space-between;font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;margin-top:4px">
-        <span>0:00</span><span>EXPIRES</span><span>3:00</span>
-      </div>
     </div>
 
-    <!-- Vote chips — full width row -->
-    <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:0;border-top:1px solid var(--border)">
-      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">EMA</div><div class="vote-chip-val up" id="v-ema" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
-      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">RSI</div><div class="vote-chip-val up" id="v-rsi" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
-      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">MACD</div><div class="vote-chip-val flat" id="v-macd" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">—</div></div>
-      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">BB</div><div class="vote-chip-val up" id="v-bb" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
-      <div style="padding:7px 6px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">ATR</div><div class="vote-chip-val up" id="v-atr-v" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
-      <div style="padding:7px 6px;text-align:center"><div style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace">MOM</div><div class="vote-chip-val up" id="v-mom" style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+    <!-- Vote row — full width -->
+    <div style="display:grid;grid-template-columns:repeat(6,1fr);border-top:1px solid var(--border)">
+      <div style="padding:6px 4px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">EMA</div><div class="vote-chip-val up" id="v-ema" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:6px 4px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">RSI</div><div class="vote-chip-val up" id="v-rsi" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:6px 4px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">MACD</div><div class="vote-chip-val flat" id="v-macd" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace">—</div></div>
+      <div style="padding:6px 4px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">BB</div><div class="vote-chip-val up" id="v-bb" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:6px 4px;text-align:center;border-right:1px solid var(--border)"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">ATR</div><div class="vote-chip-val up" id="v-atr-v" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
+      <div style="padding:6px 4px;text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">MOM</div><div class="vote-chip-val up" id="v-mom" style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace">▲</div></div>
     </div>
 
-  </div><!-- /wide signal panel -->
+  </div><!-- /signal panel -->
 
   <div class="section-label">Signal Reason Panel</div>
   <div class="reason-panel" id="reason-panel">
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Session: LONDON_STRICT</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Signal: Buy @ 3312.40 — Strength: 83%</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">EMA confluence ▲ bull stack</span></div>
-    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Swing low confirmed (higher-low formed)</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Fib 0.382 retracement aligned</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">ATR buffer 0.2 (London strict)</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-tp1">Targeting TP1</span></div>
@@ -553,40 +568,75 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 
 <!-- ══ HISTORY ══ -->
 <div class="tab-panel" id="panel-history">
-  <!-- Updated filters: removed Buy/Sell/Guard, kept Wins/Losses/TP Hit -->
   <div class="filter-bar" id="hist-filter">
     <div class="filter-chip active" onclick="filterHistory('all',this)">All Signals</div>
     <div class="filter-chip" onclick="filterHistory('win',this)">Wins</div>
     <div class="filter-chip" onclick="filterHistory('loss',this)">Losses</div>
     <div class="filter-chip" onclick="filterHistory('tp',this)">TP Hit</div>
+    <div class="filter-chip" onclick="openGoldPage()" style="background:rgba(212,168,68,.12);border-color:var(--gold-dim);color:var(--gold2)">Gold Price ▶</div>
   </div>
   <div id="history-list" style="display:flex;flex-direction:column;gap:8px"></div>
+</div>
 
-  <!-- Gold Price History section -->
-  <div class="section-label" style="margin-top:4px">Gold Price History — XAU/USD</div>
+<!-- ══ GOLD PRICE PAGE (hidden sub-page) ══ -->
+<div class="tab-panel" id="panel-gold">
+  <div style="display:flex;align-items:center;gap:10px;padding:2px 0">
+    <button onclick="closeGoldPage()" style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text2);font-size:12px;font-weight:700;padding:6px 12px;cursor:pointer">← Back</button>
+    <span style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Gold Price History — XAU/USD</span>
+  </div>
 
-  <!-- Date range selector for gold history -->
+  <!-- Period selector -->
   <div class="filter-bar" id="gold-range-filter">
     <div class="filter-chip active" onclick="setGoldRange('day',this)">Day</div>
     <div class="filter-chip" onclick="setGoldRange('week',this)">Week</div>
     <div class="filter-chip" onclick="setGoldRange('month',this)">Month</div>
   </div>
 
-  <!-- Gold history TradingView mini chart — REPLACED with Gold Summary Panel -->
-  <div class="card" style="overflow:hidden">
-    <div id="gold-summary-panel" style="padding:12px 14px">
-      <!-- populated by renderGoldSummary() -->
+  <!-- Summary panel — compact 2x2 grid so all 4 are visible -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden">
+    <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)" id="gold-summary-title">Gold Daily Summary</span>
+      <span style="font-size:9px;font-family:'Space Mono',monospace;color:var(--text3)">XAU/USD</span>
+    </div>
+    <!-- Headline -->
+    <div style="padding:8px 12px;border-bottom:1px solid var(--border)">
+      <div id="gold-headline" style="font-family:'Space Mono',monospace;font-size:11px;line-height:1.7;color:var(--text);padding:8px 10px;background:var(--bg3);border-radius:8px;border-left:3px solid var(--green)">
+        Loading...
+      </div>
+    </div>
+    <!-- 4 stats — 2x2 grid all visible -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+      <div style="padding:8px 12px;border-right:1px solid var(--border);border-bottom:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Period High</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green)" id="g-high">—</div>
+      </div>
+      <div style="padding:8px 12px;border-bottom:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Period Low</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--red)" id="g-low">—</div>
+      </div>
+      <div style="padding:8px 12px;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Avg Close</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold2)" id="g-avg">—</div>
+      </div>
+      <div style="padding:8px 12px">
+        <div style="font-size:8px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Volatility Range</div>
+        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--cyan)" id="g-vol">—</div>
+      </div>
+    </div>
+    <!-- Biggest move -->
+    <div style="padding:6px 12px;border-top:1px solid var(--border)">
+      <div id="g-bigmove" style="font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)">—</div>
     </div>
   </div>
 
-  <!-- OHLC table -->
+  <!-- OHLC Data — fully visible, no overlap -->
   <div class="card">
     <div class="card-header">
       <span class="card-title">OHLC Data</span>
       <span id="gold-range-label" style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace">Daily</span>
     </div>
-    <div class="card-body" style="padding:0 0 4px">
-      <table class="gold-hist-table">
+    <div style="overflow-x:auto">
+      <table class="gold-hist-table" style="min-width:320px">
         <thead>
           <tr><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Chg%</th></tr>
         </thead>
@@ -693,7 +743,18 @@ function switchTab(name){
   const db=document.getElementById('dnav-'+name);
   if(tb) tb.classList.add('active');
   if(db) db.classList.add('active');
-  if(name==='history'){renderGoldOHLC();renderGoldSummary();}
+  if(name==='history') renderHistory();
+}
+
+function openGoldPage(){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-gold').classList.add('active');
+  renderGoldOHLC();
+  renderGoldSummary();
+}
+
+function closeGoldPage(){
+  switchTab('history');
 }
 
 // ── TRADINGVIEW WIDGET ─────────────────────────────────────────────
@@ -768,37 +829,47 @@ function loadGoldHistChart(period){
 }
 
 // ── SIGNAL VALIDITY TIMER ──────────────────────────────────────────
-let sigTimerSecs=180; // 3 minutes
+let sigTimerSecs=180;
 let sigTimerInterval=null;
 function startSignalTimer(){
   clearInterval(sigTimerInterval);
   sigTimerSecs=180;
   sigTimerInterval=setInterval(()=>{
     sigTimerSecs--;
-    if(sigTimerSecs<=0){
-      sigTimerSecs=180;
-      rotateSignal();
-    }
-    const m=Math.floor(sigTimerSecs/60);
-    const s=sigTimerSecs%60;
+    if(sigTimerSecs<=0){sigTimerSecs=180;rotateSignal();}
+    const m=Math.floor(sigTimerSecs/60),s=sigTimerSecs%60;
     const tStr=m+':'+(s<10?'0':'')+s;
-    // overlay timer
-    const el=document.getElementById('sig-timer-val');
-    if(el) el.textContent=tStr;
-    // wide panel timer
-    const el2=document.getElementById('sig-timer-val2');
-    if(el2) el2.textContent=tStr;
-    // wide panel progress bar
-    const bar=document.getElementById('sig-timer-bar');
-    if(bar) bar.style.width=Math.round((sigTimerSecs/180)*100)+'%';
-    // colour flash
-    const timerEl=document.getElementById('sig-timer');
-    const isUrgent=sigTimerSecs<=30;
-    if(timerEl) timerEl.style.borderColor=isUrgent?'rgba(239,68,68,.5)':'rgba(212,168,68,.3)';
-    if(el) el.style.color=isUrgent?'var(--red)':'var(--gold2)';
-    if(el2) el2.style.color=isUrgent?'var(--red)':'var(--gold2)';
-    if(bar) bar.style.background=isUrgent?'linear-gradient(90deg,#b91c1c,var(--red))':'linear-gradient(90deg,var(--gold-dim),var(--gold))';
+    const pct=Math.round((sigTimerSecs/180)*100)+'%';
+    const urgent=sigTimerSecs<=30;
+    const tc=urgent?'var(--red)':'var(--gold2)';
+    const bc=urgent?'linear-gradient(90deg,#b91c1c,var(--red))':'linear-gradient(90deg,var(--gold-dim),var(--gold))';
+    // chart bar timer (below chart)
+    const tv=document.getElementById('sig-timer-val'); if(tv){tv.textContent=tStr;tv.style.color=tc;}
+    // signal tab timer
+    const tv2=document.getElementById('sig-timer-val2'); if(tv2){tv2.textContent=tStr;tv2.style.color=tc;}
+    // both timer bars
+    ['sig-timer-bar'].forEach(id=>{const e=document.getElementById(id);if(e){e.style.width=pct;e.style.background=bc;}});
+    // chart bar border color
+    const bw=document.getElementById('sig-bar-wrap');
+    if(bw) bw.style.borderColor=urgent?'rgba(239,68,68,.7)':'rgba(239,68,68,.4)';
   },1000);
+}
+
+function updateSignalOverlay(s){
+  const dir=document.getElementById('sig-ov-dir');
+  if(dir){
+    dir.textContent=(s.dir==='buy'?'▲ BUY SIGNAL':'▼ SELL SIGNAL');
+    dir.style.color=s.dir==='buy'?'var(--green)':'var(--red)';
+  }
+  const bw=document.getElementById('sig-bar-wrap');
+  if(bw) bw.style.borderColor=s.dir==='buy'?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)';
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('sig-ov-entry','$'+s.price.toFixed(2));
+  set('sig-ov-tp','$'+s.tp.toFixed(2));
+  const slV=(s.dir==='buy')?(s.price-3).toFixed(2):(s.price+3).toFixed(2);
+  set('sig-ov-sl','$'+slV);
+  set('sig-ov-guard','$'+s.guard.toFixed(2));
+  set('sig-ov-overlays',s.overlays||'EMA·Fib·OB');
 }
 
 function rotateSignal(){
@@ -808,18 +879,31 @@ function rotateSignal(){
   updateSignalOverlay(currentSig);
 }
 
-function updateSignalOverlay(s){
-  const card=document.getElementById('sig-ov-card');
-  if(!card) return;
-  card.className='sig-overlay-card '+s.dir;
-  const dir=document.getElementById('sig-ov-dir');
-  dir.className='sig-ov-dir '+s.dir;
-  dir.textContent=(s.dir==='buy'?'▲ BUY SIGNAL':'▼ SELL SIGNAL');
-  document.getElementById('sig-ov-entry').textContent='$'+s.price.toFixed(2);
-  document.getElementById('sig-ov-tp').textContent='$'+s.tp.toFixed(2);
-  document.getElementById('sig-ov-sl').textContent='$'+(s.dir==='buy'?(s.price-3).toFixed(2):(s.price+3).toFixed(2));
-  document.getElementById('sig-ov-guard').textContent='$'+s.guard.toFixed(2);
-  document.getElementById('sig-ov-overlays').textContent=s.overlays||'EMA·Fib·OB';
+function updateSignalPanel(s){
+  const card=document.getElementById('main-signal-card');
+  if(card) card.style.borderColor=s.dir==='buy'?'rgba(34,197,94,.35)':'rgba(239,68,68,.35)';
+  const sd=document.getElementById('sig-dir');
+  if(sd){sd.className='signal-badge '+s.dir;sd.textContent=(s.dir==='buy'?'▲ BUY':s.dir==='sell'?'▼ SELL':'◉ SCAN');}
+  const sa=document.getElementById('sig-arrow');
+  if(sa){sa.textContent=(s.dir==='buy'?'↑':s.dir==='sell'?'↓':'~');sa.style.background=s.dir==='buy'?'var(--green-bg)':s.dir==='sell'?'var(--red-bg)':'var(--gold-bg)';}
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('sig-price','@ '+s.price.toFixed(2));
+  set('sig-time',s.time);
+  set('sig-session',s.session);
+  set('sig-conf',s.conf+'%');
+  set('sig-guard','$'+s.guard.toFixed(2));
+  set('sig-tp',s.tp>0?'$'+s.tp.toFixed(2):'—');
+  set('sig-peak',s.peak>0?'$'+s.peak.toFixed(2):'$0.00');
+  const slVal=(s.dir==='buy')?(s.price-3).toFixed(2):(s.price+3).toFixed(2);
+  set('sig-sl','$'+slVal);
+  const fill=document.getElementById('conf-fill');
+  if(fill){fill.style.width=s.conf+'%';fill.className='conf-fill '+s.dir;}
+  set('rp-tp1',s.tp1?'TP1 reached — guard locked $0.10':'Targeting TP1');
+  const guardStr=s.tp1?'post-TP strict':s.conf>=90?'>=90%':s.conf>=70?'70-89%':'<70%';
+  set('rp-guard','Guard tier: '+guardStr+' → $'+s.guard.toFixed(2));
+  const cdSec=s.session==='LONDON'?60:s.session==='NY'?45:90;
+  set('rp-cd','Cooldown = '+cdSec+'s [MED ATR | '+s.session.substring(0,3)+']');
+  const ovG=document.getElementById('ov-guard');if(ovG)ovG.textContent='$'+s.guard.toFixed(2);
 }
 
 // ── DATA ───────────────────────────────────────────────────────────
@@ -937,11 +1021,7 @@ function setGoldRange(r,el){
 function renderGoldSummary(){
   const rows=GOLD_OHLC[goldRange]||[];
   if(!rows.length) return;
-  const panel=document.getElementById('gold-summary-panel');
-  if(!panel) return;
-  // compute summary stats from the dataset
-  const latest=rows[0];
-  const oldest=rows[rows.length-1];
+  const latest=rows[0], oldest=rows[rows.length-1];
   const periodHigh=Math.max(...rows.map(r=>r.high));
   const periodLow=Math.min(...rows.map(r=>r.low));
   const totalChg=((latest.close-oldest.open)/oldest.open*100);
@@ -950,48 +1030,25 @@ function renderGoldSummary(){
   const dirIcon=totalChg>=0?'▲':'▼';
   const periodLabel=goldRange==='day'?'this week':goldRange==='week'?'this month':'year to date';
   const periodName=goldRange==='day'?'Daily':goldRange==='week'?'Weekly':'Monthly';
-  // biggest single move
   let bigMove=0,bigDate='';
   rows.forEach(r=>{if(Math.abs(r.chg)>Math.abs(bigMove)){bigMove=r.chg;bigDate=r.date;}});
-  const avgClose=(rows.reduce((s,r)=>s+r.close,0)/rows.length);
+  const avgClose=(rows.reduce((s,r)=>s+r.close,0)/rows.length).toFixed(2);
   const volatility=(periodHigh-periodLow).toFixed(2);
 
-  panel.innerHTML=`
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">Gold ${periodName} Summary</span>
-      <span style="font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)">XAU/USD</span>
-    </div>
-    <!-- Headline sentence -->
-    <div style="font-family:'Space Mono',monospace;font-size:12px;line-height:1.7;color:var(--text);margin-bottom:10px;padding:10px 12px;background:var(--bg3);border-radius:8px;border-left:3px solid ${dirColor}">
-      Gold <span style="color:${dirColor};font-weight:700">${direction} ${Math.abs(totalChg).toFixed(2)}%</span> ${periodLabel} — from
-      <span style="color:var(--text)">$${oldest.open.toFixed(2)}</span> to
-      <span style="color:${dirColor};font-weight:700">$${latest.close.toFixed(2)}</span>
-      <span style="font-size:11px;color:${dirColor};font-weight:700"> ${dirIcon}</span>
-    </div>
-    <!-- 4-stat grid -->
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Period High</div>
-        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--green)">$${periodHigh.toFixed(2)}</div>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Period Low</div>
-        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--red)">$${periodLow.toFixed(2)}</div>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Avg Close</div>
-        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--gold2)">$${avgClose.toFixed(2)}</div>
-      </div>
-      <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 10px">
-        <div style="font-size:9px;color:var(--text3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:3px">Volatility Range</div>
-        <div style="font-family:'Space Mono',monospace;font-size:14px;font-weight:700;color:var(--cyan)">$${volatility}</div>
-      </div>
-    </div>
-    <!-- Biggest move note -->
-    <div style="margin-top:8px;font-size:10px;font-family:'Space Mono',monospace;color:var(--text3)">
-      Biggest move: <span style="color:${bigMove>=0?'var(--green)':'var(--red)'};font-weight:700">${bigMove>=0?'+':''}${bigMove.toFixed(2)}%</span> on <span style="color:var(--text)">${bigDate}</span>
-    </div>
-  `;
+  const titleEl=document.getElementById('gold-summary-title');
+  if(titleEl) titleEl.textContent='Gold '+periodName+' Summary';
+  const hlEl=document.getElementById('gold-headline');
+  if(hlEl){
+    hlEl.style.borderLeftColor=dirColor;
+    hlEl.innerHTML=`Gold <span style="color:${dirColor};font-weight:700">${direction} ${Math.abs(totalChg).toFixed(2)}%</span> ${periodLabel} — from $${oldest.open.toFixed(2)} to <span style="color:${dirColor};font-weight:700">$${latest.close.toFixed(2)}</span> <span style="color:${dirColor}">${dirIcon}</span>`;
+  }
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('g-high','$'+periodHigh.toFixed(2));
+  set('g-low','$'+periodLow.toFixed(2));
+  set('g-avg','$'+avgClose);
+  set('g-vol','$'+volatility);
+  const bmEl=document.getElementById('g-bigmove');
+  if(bmEl) bmEl.innerHTML=`Biggest move: <span style="color:${bigMove>=0?'var(--green)':'var(--red)'};font-weight:700">${bigMove>=0?'+':''}${bigMove.toFixed(2)}%</span> on <span style="color:var(--text)">${bigDate}</span>`;
 }
 
 function renderGoldOHLC(){
@@ -1071,38 +1128,6 @@ function setSession(name,el){
   document.getElementById('bb-fill').style.width=b.bull+'%';
   document.getElementById('bb-bull-pct').textContent=b.bull+'%';
   document.getElementById('bb-bear-pct').textContent=b.bear+'%';
-}
-
-// ── UPDATE SIGNAL PANEL ────────────────────────────────────────────
-function updateSignalPanel(s){
-  const card=document.getElementById('main-signal-card');
-  if(card) card.className='bullbear-bar-wrap '+(s.dir==='buy'?'buy':s.dir==='sell'?'sell':'scan');
-  const sigDir=document.getElementById('sig-dir');
-  if(sigDir){sigDir.className='signal-badge '+s.dir;sigDir.textContent=(s.dir==='buy'?'▲ BUY':s.dir==='sell'?'▼ SELL':'◉ SCAN');}
-  const sigArrow=document.getElementById('sig-arrow');
-  if(sigArrow){
-    sigArrow.textContent=(s.dir==='buy'?'↑':s.dir==='sell'?'↓':'~');
-    sigArrow.style.background=s.dir==='buy'?'var(--green-bg)':s.dir==='sell'?'var(--red-bg)':'var(--gold-bg)';
-  }
-  const priceEl=document.getElementById('sig-price');if(priceEl) priceEl.textContent='@ '+s.price.toFixed(2);
-  const timeEl=document.getElementById('sig-time');if(timeEl) timeEl.textContent=s.time;
-  const sessEl=document.getElementById('sig-session');if(sessEl) sessEl.textContent=s.session;
-  const confEl=document.getElementById('sig-conf');
-  if(confEl){confEl.textContent=s.conf+'%';}
-  const guardEl=document.getElementById('sig-guard');if(guardEl) guardEl.textContent='$'+s.guard.toFixed(2);
-  const tpEl=document.getElementById('sig-tp');if(tpEl) tpEl.textContent=s.tp>0?'$'+s.tp.toFixed(2):'—';
-  const peakEl=document.getElementById('sig-peak');if(peakEl) peakEl.textContent=s.peak>0?'$'+s.peak.toFixed(2):'$0.00';
-  // SL value
-  const slVal=(s.dir==='buy')?(s.price-3).toFixed(2):(s.price+3).toFixed(2);
-  const slEl=document.getElementById('sig-sl');if(slEl) slEl.textContent='$'+slVal;
-  const fill=document.getElementById('conf-fill');
-  if(fill){fill.style.width=s.conf+'%';fill.className='conf-fill '+s.dir;}
-  document.getElementById('rp-tp1').textContent=s.tp1?'TP1 reached — guard locked $0.10':'Targeting TP1';
-  const guardStr=s.tp1?'post-TP strict':s.conf>=90?'>=90%':s.conf>=70?'70-89%':'<70%';
-  document.getElementById('rp-guard').textContent='Guard tier: '+guardStr+' → $'+s.guard.toFixed(2);
-  const cdSec=s.session==='LONDON'?60:s.session==='NY'?45:90;
-  document.getElementById('rp-cd').textContent='Cooldown = '+cdSec+'s [MED ATR | '+s.session.substring(0,3)+']';
-  document.getElementById('ov-guard').textContent='$'+s.guard.toFixed(2);
 }
 
 // ── AI CHART ANALYSIS ──────────────────────────────────────────────
@@ -1191,9 +1216,10 @@ let livePrice=3312.40;
 function tick(){
   livePrice+=(Math.random()-.48)*.4;
   const ps='$'+livePrice.toFixed(2);
-  document.getElementById('hdr-price').textContent=ps;
-  document.getElementById('sig-price').textContent='@ '+livePrice.toFixed(2);
-  document.getElementById('sig-ov-entry').textContent='$'+livePrice.toFixed(2);
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('hdr-price',ps);
+  set('sig-price','@ '+livePrice.toFixed(2));
+  set('sig-ov-entry','$'+livePrice.toFixed(2));
   currentSig.price=livePrice;
 }
 
@@ -1219,13 +1245,8 @@ window.addEventListener('load',()=>{
   renderGoldSummary();
   updateSignalPanel(currentSig);
   updateSignalOverlay(currentSig);
-
-  // Load TradingView widget
   loadTVWidget('1');
-
-  // Signal validity timer
   startSignalTimer();
-
   setInterval(tick,1200);
   setInterval(animateVotes,900);
 });
