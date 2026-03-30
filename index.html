@@ -1404,19 +1404,121 @@ dropZone.addEventListener('drop',e=>{
 });
 
 // ── LIVE TICK ──────────────────────────────────────────────────────
-let livePrice=3312.40;
-function tick(){
-  livePrice+=(Math.random()-.48)*.4;
-  const ps='$'+livePrice.toFixed(2);
+// ── REAL GOLD PRICE FETCHER ───────────────────────────────────────
+// Uses free public APIs — no API key required, no cost.
+// Tries 3 sources in order, falls back gracefully.
+let livePrice = 0;          // 0 = not yet fetched
+let priceConfirmed = false; // true once real price received
+let fetchErrors = 0;
+
+function applyPrice(p){
+  if(!p||isNaN(p)||p<1000) return false; // sanity check — gold is always >$1000
+  livePrice = p;
+  priceConfirmed = true;
+  fetchErrors = 0;
+  const fmt = '$'+p.toFixed(2);
   const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
-  set('hdr-price',ps);
-  set('sig-price','@ '+livePrice.toFixed(2));
-  set('sig-ov-entry','$'+livePrice.toFixed(2));
-  currentSig.price=livePrice;
-  // Simulate live trend / ATR updates
+  set('hdr-price', fmt);
+  set('sig-price', '@ '+p.toFixed(2));
+  set('sig-ov-entry', fmt);
+  currentSig.price = p;
+  // Update signal TP/SL relative to real price
+  const sigBuy = currentSig.dir === 'buy';
+  set('sig-ov-tp',  '$'+(sigBuy ? p+6 : p-6).toFixed(2));
+  set('sig-ov-sl',  '$'+(sigBuy ? p-3 : p+3).toFixed(2));
+  set('sig-tp',     '$'+(sigBuy ? p+6 : p-6).toFixed(2));
+  set('sig-sl',     '$'+(sigBuy ? p-3 : p+3).toFixed(2));
+  // Badge border — green = fresh, gold = stale
+  const badge = document.getElementById('hdr-price');
+  if(badge){ badge.style.borderColor='var(--gold-dim)'; badge.style.color='var(--gold2)'; }
+  // Update SIGNALS array to real price so signal panel is consistent
+  SIGNALS.forEach(s=>{
+    const wasBuy=s.dir==='buy';
+    s.price=p;
+    s.tp=wasBuy?Math.round((p+6)*100)/100:Math.round((p-6)*100)/100;
+  });
+  if(typeof currentSig!=='undefined'){
+    currentSig.price=p;
+    currentSig.tp=currentSig.dir==='buy'?Math.round((p+6)*100)/100:Math.round((p-6)*100)/100;
+    updateSignalPanel(currentSig);
+    updateSignalOverlay(currentSig);
+  }
+  return true;
+}
+
+async function fetchGoldPrice(){
+  // ── Source 1: metals.live (free, no auth, CORS-open) ────────────
+  try{
+    const r = await fetch('https://api.metals.live/v1/spot/gold',{cache:'no-store'});
+    if(r.ok){
+      const d = await r.json();
+      const p = typeof d==='number'? d :
+                Array.isArray(d)   ? (d[0]?.price||d[0]?.gold||Object.values(d[0]||{})[0]) :
+                d?.price||d?.gold||d?.XAU;
+      if(applyPrice(Number(p))) return;
+    }
+  }catch(_){}
+
+  // ── Source 2: metals.live full spot list ─────────────────────────
+  try{
+    const r = await fetch('https://api.metals.live/v1/spot',{cache:'no-store'});
+    if(r.ok){
+      const d = await r.json();
+      const item = Array.isArray(d) ? d.find(x=>x.gold||x.name==='gold') : d;
+      const p = item?.gold || item?.price;
+      if(applyPrice(Number(p))) return;
+    }
+  }catch(_){}
+
+  // ── Source 3: allorigins proxy → Yahoo Finance GC=F futures ──────
+  try{
+    const url = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d');
+    const r = await fetch('https://api.allorigins.win/raw?url='+url,{cache:'no-store'});
+    if(r.ok){
+      const d = await r.json();
+      const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(applyPrice(Number(p))) return;
+    }
+  }catch(_){}
+
+  // ── Source 4: allorigins proxy → Yahoo Finance XAUUSD=X spot ─────
+  try{
+    const url = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d');
+    const r = await fetch('https://api.allorigins.win/raw?url='+url,{cache:'no-store'});
+    if(r.ok){
+      const d = await r.json();
+      const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(applyPrice(Number(p))) return;
+    }
+  }catch(_){}
+
+  // ── All sources failed ────────────────────────────────────────────
+  fetchErrors++;
+  const badge = document.getElementById('hdr-price');
+  if(badge && !priceConfirmed){
+    badge.style.borderColor='rgba(239,68,68,0.5)';
+    badge.style.color='var(--red)';
+    badge.textContent='RETRYING…';
+  } else if(badge && priceConfirmed){
+    // Keep last known price, just dim the badge
+    badge.style.borderColor='rgba(212,168,68,0.3)';
+  }
+}
+
+// Micro-tick: adds tiny noise (±$0.15) between real fetches for live feel
+function tick(){
+  if(!priceConfirmed || livePrice<1000) return;
+  livePrice += (Math.random()-0.5)*0.15;
+  const ps = '$'+livePrice.toFixed(2);
+  const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  set('hdr-price', ps);
+  set('sig-price', '@ '+livePrice.toFixed(2));
+  set('sig-ov-entry', ps);
+  currentSig.price = livePrice;
+  // Trend/ATR live simulation (low frequency)
   const trends=['BULL','BULL','BULL','RANGE','BEAR'];
   const atrs=['LOW','MED','MED','HIGH','EXTREME'];
-  if(Math.random()<0.02){
+  if(Math.random()<0.015){
     const t=trends[Math.floor(Math.random()*trends.length)];
     const a=atrs[Math.floor(Math.random()*atrs.length)];
     const tEl=document.getElementById('ov-trend');
@@ -1450,6 +1552,10 @@ window.addEventListener('load',()=>{
   updateSignalOverlay(currentSig);
   loadTVWidget('1');
   startSignalTimer();
+  // Fetch real gold price immediately, then every 30s
+  fetchGoldPrice();
+  setInterval(fetchGoldPrice, 30000);
+  // Micro-tick for live feel between real fetches
   setInterval(tick,1200);
   setInterval(animateVotes,900);
   // Auto session — run immediately and every 60s
