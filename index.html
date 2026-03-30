@@ -288,7 +288,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
   <div class="header-right">
     <div class="live-dot"></div>
     <span class="live-txt">LIVE</span>
-    <div class="price-badge" id="hdr-price">$3,312.40</div>
+    <div class="price-badge" id="hdr-price">Loading…</div>
   </div>
 </header>
 
@@ -459,9 +459,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
       <div id="sig-timer-bar" style="height:100%;width:92%;border-radius:2px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width 1s linear"></div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:0">
-      <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">ENTRY</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--text)" id="sig-ov-entry">$3312.40</div></div>
-      <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">TP1</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-ov-tp">$3318.40</div></div>
-      <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">SL</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-ov-sl">$3309.40</div></div>
+      <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">ENTRY</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--text)" id="sig-ov-entry">—</div></div>
+      <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">TP1</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-ov-tp">—</div></div>
+      <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">SL</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-ov-sl">—</div></div>
       <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">GUARD</div><div style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-ov-guard">$0.30</div></div>
       <div style="text-align:center"><div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace">OVL</div><div style="font-size:10px;font-weight:700;font-family:'Space Mono',monospace;color:var(--purple)" id="sig-ov-overlays">EMA·Fib</div></div>
     </div>
@@ -481,7 +481,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
         <div id="sig-arrow" style="width:32px;height:32px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--green-bg)">↑</div>
         <div>
           <div class="signal-badge buy" id="sig-dir" style="font-size:16px;font-weight:800">▲ BUY</div>
-          <div style="font-size:10px;color:var(--text2);font-family:'Space Mono',monospace" id="sig-price">@ 3312.40</div>
+          <div style="font-size:10px;color:var(--text2);font-family:'Space Mono',monospace" id="sig-price">@ —</div>
         </div>
       </div>
       <div style="text-align:right">
@@ -504,11 +504,11 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
       </div>
       <div style="padding:8px 10px;border-right:1px solid var(--border)">
         <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">TP1</div>
-        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-tp">$3318.40</div>
+        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-tp">—</div>
       </div>
       <div style="padding:8px 10px;border-right:1px solid var(--border)">
         <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">SL</div>
-        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl">$3309.40</div>
+        <div style="font-size:14px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl">—</div>
       </div>
       <div style="padding:8px 10px">
         <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">PEAK</div>
@@ -864,18 +864,23 @@ function startSignalTimer(){
 }
 
 function updateSignalOverlay(s){
+  // Always use livePrice if confirmed, fall back to s.price
+  const p = (priceConfirmed && livePrice>1000) ? livePrice : s.price;
+  const isBuy = s.dir==='buy';
+  const tp  = isBuy ? p+6  : p-6;
+  const sl  = isBuy ? p-3  : p+3;
+
   const dir=document.getElementById('sig-ov-dir');
   if(dir){
-    dir.textContent=(s.dir==='buy'?'▲ BUY SIGNAL':'▼ SELL SIGNAL');
-    dir.style.color=s.dir==='buy'?'var(--green)':'var(--red)';
+    dir.textContent=(isBuy?'▲ BUY SIGNAL':'▼ SELL SIGNAL');
+    dir.style.color=isBuy?'var(--green)':'var(--red)';
   }
   const bw=document.getElementById('sig-bar-wrap');
-  if(bw) bw.style.borderColor=s.dir==='buy'?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)';
+  if(bw) bw.style.borderColor=isBuy?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)';
   const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
-  set('sig-ov-entry','$'+s.price.toFixed(2));
-  set('sig-ov-tp','$'+s.tp.toFixed(2));
-  const slV=(s.dir==='buy')?(s.price-3).toFixed(2):(s.price+3).toFixed(2);
-  set('sig-ov-sl','$'+slV);
+  set('sig-ov-entry','$'+p.toFixed(2));
+  set('sig-ov-tp',   '$'+tp.toFixed(2));
+  set('sig-ov-sl',   '$'+sl.toFixed(2));
   set('sig-ov-guard','$'+s.guard.toFixed(2));
   set('sig-ov-overlays',s.overlays||'EMA·Fib·OB');
 }
@@ -895,15 +900,18 @@ function updateSignalPanel(s){
   const sa=document.getElementById('sig-arrow');
   if(sa){sa.textContent=(s.dir==='buy'?'↑':s.dir==='sell'?'↓':'~');sa.style.background=s.dir==='buy'?'var(--green-bg)':s.dir==='sell'?'var(--red-bg)':'var(--gold-bg)';}
   const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
-  set('sig-price','@ '+s.price.toFixed(2));
+  // Always use livePrice when confirmed — never show stale hardcoded price
+  const _p = (priceConfirmed && livePrice>1000) ? livePrice : s.price;
+  const _tp = s.dir==='buy' ? _p+6 : _p-6;
+  const _sl = s.dir==='buy' ? _p-3 : _p+3;
+  set('sig-price','@ '+_p.toFixed(2));
   set('sig-time',s.time);
   set('sig-session',s.session);
   set('sig-conf',s.conf+'%');
   set('sig-guard','$'+s.guard.toFixed(2));
-  set('sig-tp',s.tp>0?'$'+s.tp.toFixed(2):'—');
+  set('sig-tp','$'+_tp.toFixed(2));
   set('sig-peak',s.peak>0?'$'+s.peak.toFixed(2):'$0.00');
-  const slVal=(s.dir==='buy')?(s.price-3).toFixed(2):(s.price+3).toFixed(2);
-  set('sig-sl','$'+slVal);
+  set('sig-sl','$'+_sl.toFixed(2));
   const fill=document.getElementById('conf-fill');
   if(fill){fill.style.width=s.conf+'%';fill.className='conf-fill '+s.dir;}
   set('rp-tp1',s.tp1?'TP1 reached — guard locked $0.10':'Targeting TP1');
@@ -1447,61 +1455,82 @@ function applyPrice(p){
 }
 
 async function fetchGoldPrice(){
-  // ── Source 1: metals.live (free, no auth, CORS-open) ────────────
+  // Helper: try a fetch with timeout
+  async function tryFetch(url, opts={}, timeoutMs=5000){
+    const ctrl = new AbortController();
+    const timer = setTimeout(()=>ctrl.abort(), timeoutMs);
+    try{
+      const r = await fetch(url, {...opts, signal:ctrl.signal, cache:'no-store'});
+      clearTimeout(timer);
+      return r;
+    }catch(e){ clearTimeout(timer); throw e; }
+  }
+
+  // ── Source 1: metals.live /v1/spot — returns [{gold:price,...}]
   try{
-    const r = await fetch('https://api.metals.live/v1/spot/gold',{cache:'no-store'});
+    const r = await tryFetch('https://api.metals.live/v1/spot');
     if(r.ok){
       const d = await r.json();
-      const p = typeof d==='number'? d :
-                Array.isArray(d)   ? (d[0]?.price||d[0]?.gold||Object.values(d[0]||{})[0]) :
-                d?.price||d?.gold||d?.XAU;
-      if(applyPrice(Number(p))) return;
+      // Response is array: [{gold: 3314.5, silver: 32.1, ...}]
+      const raw = Array.isArray(d) ? d[0] : d;
+      const p = raw?.gold || raw?.XAU || raw?.price;
+      if(applyPrice(Number(p))){ console.log('Gold price: metals.live $'+Number(p).toFixed(2)); return; }
     }
-  }catch(_){}
+  }catch(e){ console.warn('Source1 fail:',e.message); }
 
-  // ── Source 2: metals.live full spot list ─────────────────────────
+  // ── Source 2: corsproxy.io → Yahoo Finance GC=F (gold futures) ──
   try{
-    const r = await fetch('https://api.metals.live/v1/spot',{cache:'no-store'});
-    if(r.ok){
-      const d = await r.json();
-      const item = Array.isArray(d) ? d.find(x=>x.gold||x.name==='gold') : d;
-      const p = item?.gold || item?.price;
-      if(applyPrice(Number(p))) return;
-    }
-  }catch(_){}
-
-  // ── Source 3: allorigins proxy → Yahoo Finance GC=F futures ──────
-  try{
-    const url = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d');
-    const r = await fetch('https://api.allorigins.win/raw?url='+url,{cache:'no-store'});
-    if(r.ok){
-      const d = await r.json();
-      const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if(applyPrice(Number(p))) return;
-    }
-  }catch(_){}
-
-  // ── Source 4: allorigins proxy → Yahoo Finance XAUUSD=X spot ─────
-  try{
-    const url = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d');
-    const r = await fetch('https://api.allorigins.win/raw?url='+url,{cache:'no-store'});
+    const target = 'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d';
+    const r = await tryFetch('https://corsproxy.io/?'+encodeURIComponent(target));
     if(r.ok){
       const d = await r.json();
       const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if(applyPrice(Number(p))) return;
+      if(applyPrice(Number(p))){ console.log('Gold price: Yahoo GC=F $'+Number(p).toFixed(2)); return; }
     }
-  }catch(_){}
+  }catch(e){ console.warn('Source2 fail:',e.message); }
 
-  // ── All sources failed ────────────────────────────────────────────
+  // ── Source 3: allorigins → Yahoo Finance XAUUSD=X ───────────────
+  try{
+    const target = 'https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d';
+    const r = await tryFetch('https://api.allorigins.win/raw?url='+encodeURIComponent(target));
+    if(r.ok){
+      const d = await r.json();
+      const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(applyPrice(Number(p))){ console.log('Gold price: Yahoo XAUUSD $'+Number(p).toFixed(2)); return; }
+    }
+  }catch(e){ console.warn('Source3 fail:',e.message); }
+
+  // ── Source 4: corsproxy.io → Yahoo XAUUSD=X ─────────────────────
+  try{
+    const target = 'https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d';
+    const r = await tryFetch('https://corsproxy.io/?'+encodeURIComponent(target));
+    if(r.ok){
+      const d = await r.json();
+      const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
+      if(applyPrice(Number(p))){ console.log('Gold price: corsproxy XAUUSD $'+Number(p).toFixed(2)); return; }
+    }
+  }catch(e){ console.warn('Source4 fail:',e.message); }
+
+  // ── Source 5: goldprice.org via allorigins ───────────────────────
+  try{
+    const target = 'https://data-asg.goldprice.org/dbXRates/USD';
+    const r = await tryFetch('https://api.allorigins.win/raw?url='+encodeURIComponent(target));
+    if(r.ok){
+      const d = await r.json();
+      // Response: {items:[{xauPrice:3314.5,...}]}
+      const p = d?.items?.[0]?.xauPrice || d?.xauPrice;
+      if(applyPrice(Number(p))){ console.log('Gold price: goldprice.org $'+Number(p).toFixed(2)); return; }
+    }
+  }catch(e){ console.warn('Source5 fail:',e.message); }
+
+  // ── All sources failed ───────────────────────────────────────────
   fetchErrors++;
+  console.warn('All gold price sources failed. Attempt #'+fetchErrors);
   const badge = document.getElementById('hdr-price');
   if(badge && !priceConfirmed){
     badge.style.borderColor='rgba(239,68,68,0.5)';
-    badge.style.color='var(--red)';
-    badge.textContent='RETRYING…';
-  } else if(badge && priceConfirmed){
-    // Keep last known price, just dim the badge
-    badge.style.borderColor='rgba(212,168,68,0.3)';
+    badge.style.color='var(--text2)';
+    badge.textContent='NO FEED';
   }
 }
 
@@ -1515,6 +1544,15 @@ function tick(){
   set('sig-price', '@ '+livePrice.toFixed(2));
   set('sig-ov-entry', ps);
   currentSig.price = livePrice;
+  // Keep signal bar in sync with live price every tick
+  const _isBuy = currentSig.dir==='buy';
+  const _tp2 = livePrice+(_isBuy?6:-6);
+  const _sl2 = livePrice+(_isBuy?-3:3);
+  const setQ=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
+  setQ('sig-ov-tp',   '$'+_tp2.toFixed(2));
+  setQ('sig-ov-sl',   '$'+_sl2.toFixed(2));
+  setQ('sig-tp',      '$'+_tp2.toFixed(2));
+  setQ('sig-sl',      '$'+_sl2.toFixed(2));
   // Trend/ATR live simulation (low frequency)
   const trends=['BULL','BULL','BULL','RANGE','BEAR'];
   const atrs=['LOW','MED','MED','HIGH','EXTREME'];
