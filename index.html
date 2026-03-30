@@ -543,9 +543,10 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
   <div class="reason-panel" id="reason-panel">
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Session: LONDON_STRICT</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Signal: Buy @ 3312.40 — Strength: 83%</span></div>
-    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">EMA confluence ▲ bull stack</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-ema">EMA confluence — computing…</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val">Fib 0.382 retracement aligned</span></div>
-    <div class="r-row"><span class="r-icon">◈</span><span class="r-val">ATR buffer 0.2 (London strict)</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-atr">ATR — computing…</span></div>
+    <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-rsi">RSI(14) — computing…</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-tp1">Targeting TP1</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-guard">Guard tier: 70-89% → $0.30</span></div>
     <div class="r-row"><span class="r-icon">◈</span><span class="r-val" id="rp-cd">Cooldown = 60s [MED ATR | LDN]</span></div>
@@ -886,10 +887,15 @@ function updateSignalOverlay(s){
 }
 
 function rotateSignal(){
-  sigIdx=(sigIdx+1)%SIGNALS.length;
-  currentSig={...SIGNALS[sigIdx]};
-  updateSignalPanel(currentSig);
-  updateSignalOverlay(currentSig);
+  // Re-apply last computed signal with updated live price
+  if(lastOHLC) {
+    const sig=computeSignal(lastOHLC);
+    if(sig) applyComputedSignal(sig);
+  } else {
+    // Fallback until OHLC loads
+    updateSignalPanel(currentSig);
+    updateSignalOverlay(currentSig);
+  }
 }
 
 function updateSignalPanel(s){
@@ -917,21 +923,341 @@ function updateSignalPanel(s){
   set('rp-tp1',s.tp1?'TP1 reached — guard locked $0.10':'Targeting TP1');
   const guardStr=s.tp1?'post-TP strict':s.conf>=90?'>=90%':s.conf>=70?'70-89%':'<70%';
   set('rp-guard','Guard tier: '+guardStr+' → $'+s.guard.toFixed(2));
-  const cdSec=s.session==='LONDON'?60:s.session==='NY'?45:90;
-  set('rp-cd','Cooldown = '+cdSec+'s [MED ATR | '+s.session.substring(0,3)+']');
+  const cdSec=s.cooldown||(s.session==='LONDON'?60:s.session==='NY'?45:90);
+  set('rp-cd','Cooldown = '+cdSec+'s ['+(s.atrRegime||'MED')+' ATR | '+s.session.substring(0,3)+']');
+  // Update EMA and ATR reason rows if signal has details
+  if(s.ema){
+    const e=s.ema;
+    const eStr='EMA20='+e.e20?.toFixed(1)+' EMA50='+e.e50?.toFixed(1)+' Stack: '+(e.e20>e.e50&&e.e50>e.e200?'▲ BULL':e.e20<e.e50&&e.e50<e.e200?'▼ BEAR':'MIXED');
+    const rpEma=document.getElementById('rp-ema'); if(rpEma) rpEma.textContent=eStr;
+  }
+  if(s.atr){
+    const rpAtr=document.getElementById('rp-atr');
+    if(rpAtr) rpAtr.textContent='ATR(14)=$'+s.atr.toFixed(2)+' | TP dist=$'+(s.atr*0.40).toFixed(2)+' | SL dist=$'+(s.atr*0.25).toFixed(2);
+  }
+  if(s.rsi){
+    const rpRsi=document.getElementById('rp-rsi');
+    if(rpRsi){
+      const rs=s.rsi.toFixed(1);
+      const zone=s.rsi>70?'OVERBOUGHT⚠':s.rsi<30?'OVERSOLD✓':s.rsi>50?'Bullish zone':'Bearish zone';
+      rpRsi.textContent='RSI(14)='+rs+' — '+zone;
+    }
+  }
   const ovG=document.getElementById('ov-guard');if(ovG)ovG.textContent='$'+s.guard.toFixed(2);
 }
 
-// ── DATA ───────────────────────────────────────────────────────────
-const SIGNALS=[
-  {dir:'buy',conf:83,price:3312.40,tp:3318.40,guard:0.30,peak:1.24,session:'LONDON',time:'14:32:05',tp1:false,overlays:'EMA·Fib·OB'},
-  {dir:'sell',conf:91,price:3298.20,tp:3292.20,guard:0.40,peak:2.10,session:'NY',time:'15:47:22',tp1:true,overlays:'EMA·RSI·FVG'},
-  {dir:'buy',conf:67,price:3305.80,tp:3311.80,guard:0.20,peak:0.80,session:'OVERLAP',time:'13:12:41',tp1:false,overlays:'Fib·Trendline'},
-  {dir:'sell',conf:78,price:3320.50,tp:3314.50,guard:0.30,peak:1.60,session:'LONDON',time:'11:05:30',tp1:false,overlays:'EMA·OB·MACD'},
-];
-let currentSig={...SIGNALS[0]};
-let sigIdx=0;
+// ══════════════════════════════════════════════════════════════════
+// AURUM ULTRA — REAL 6-VOTE CONFLUENCE SIGNAL ENGINE
+// Implements strategy document Section 4 exactly.
+// Uses H1 OHLC data fetched from free APIs (no key required).
+// ══════════════════════════════════════════════════════════════════
 
+// Live signal state
+let currentSig = {dir:'scan',conf:0,price:0,tp:0,sl:0,guard:0.30,peak:0,
+                  session:'SCANNING',time:'--:--:--',tp1:false,overlays:'—',
+                  atr:0, votes:{ema:0,rsi:0,macd:0,bb:0,atrV:0,mom:0}};
+let sigIdx=0;
+// Signal history log (ring buffer, max 50)
+let SIG_LOG=[];
+
+// ── INDICATOR MATH ─────────────────────────────────────────────────
+function calcEMA(closes, period){
+  const k=2/(period+1);
+  let ema=closes.slice(0,period).reduce((a,b)=>a+b)/period;
+  const result=[ema];
+  for(let i=period;i<closes.length;i++){ema=closes[i]*k+ema*(1-k);result.push(ema);}
+  return result;
+}
+
+function calcRSI(closes,period=14){
+  let gains=0,losses=0;
+  for(let i=1;i<=period;i++){
+    const d=closes[i]-closes[i-1];
+    if(d>0)gains+=d; else losses+=Math.abs(d);
+  }
+  let avgG=gains/period,avgL=losses/period;
+  const rsi=[100-(100/(1+avgG/avgL))];
+  for(let i=period+1;i<closes.length;i++){
+    const d=closes[i]-closes[i-1];
+    const g=d>0?d:0,l=d<0?Math.abs(d):0;
+    avgG=(avgG*(period-1)+g)/period;
+    avgL=(avgL*(period-1)+l)/period;
+    rsi.push(avgL===0?100:100-(100/(1+avgG/avgL)));
+  }
+  return rsi;
+}
+
+function calcMACD(closes,fast=12,slow=26,sig=9){
+  const emaF=calcEMA(closes,fast);
+  const emaS=calcEMA(closes,slow);
+  const offset=slow-fast;
+  const macdLine=emaF.slice(offset).map((v,i)=>v-emaS[i]);
+  const sigLine=calcEMA(macdLine,sig);
+  return {macdLine,sigLine};
+}
+
+function calcBB(closes,period=20,mult=2){
+  const result=[];
+  for(let i=period-1;i<closes.length;i++){
+    const slice=closes.slice(i-period+1,i+1);
+    const mean=slice.reduce((a,b)=>a+b)/period;
+    const sd=Math.sqrt(slice.map(v=>(v-mean)**2).reduce((a,b)=>a+b)/period);
+    result.push({upper:mean+mult*sd,lower:mean-mult*sd,mid:mean,sd});
+  }
+  return result;
+}
+
+function calcATR(highs,lows,closes,period=14){
+  const tr=[highs[0]-lows[0]];
+  for(let i=1;i<closes.length;i++)
+    tr.push(Math.max(highs[i]-lows[i],Math.abs(highs[i]-closes[i-1]),Math.abs(lows[i]-closes[i-1])));
+  const atr=[tr.slice(0,period).reduce((a,b)=>a+b)/period];
+  for(let i=period;i<tr.length;i++) atr.push((atr[atr.length-1]*(period-1)+tr[i])/period);
+  return atr;
+}
+
+// ── 6-VOTE CONFLUENCE ENGINE (Section 4 of strategy doc) ───────────
+function computeSignal(ohlc){
+  // ohlc = [{o,h,l,c,t}] chronological, H1 bars
+  if(!ohlc||ohlc.length<220) return null;
+
+  const closes = ohlc.map(b=>b.c);
+  const highs  = ohlc.map(b=>b.h);
+  const lows   = ohlc.map(b=>b.l);
+
+  // Compute indicators — use last available values
+  const ema20  = calcEMA(closes,20);
+  const ema50  = calcEMA(closes,50);
+  const ema200 = calcEMA(closes,200);
+  const rsi14  = calcRSI(closes,14);
+  const {macdLine,sigLine} = calcMACD(closes,12,26,9);
+  const bb     = calcBB(closes,20,2);
+  const atr14  = calcATR(highs,lows,closes,14);
+
+  // Latest values (index -1 = most recent)
+  const cl1=closes[closes.length-1], cl2=closes[closes.length-2];
+  const e20=ema20[ema20.length-1],   e50=ema50[ema50.length-1],   e200=ema200[ema200.length-1];
+  const rsi=rsi14[rsi14.length-1];
+  const macd=macdLine[macdLine.length-1], macdsig=sigLine[sigLine.length-1];
+  const {upper:bbUp,lower:bbLo,mid:bbMid}=bb[bb.length-1];
+  const bbRange=bbUp-bbLo;
+  const bbPos=bbRange>0?(cl1-bbLo)/bbRange*100:50;
+  const atrNow=atr14[atr14.length-1];
+  const atrAvg=atr14.slice(-10).reduce((a,b)=>a+b)/10;
+  const atrRatio=atrNow/atrAvg;
+
+  // ── VOTE 1: EMA Stack ─────────────────────────────────────────────
+  const vEMA = (cl1>e20&&e20>e50&&e50>e200)?1:(cl1<e20&&e20<e50&&e50<e200)?-1:0;
+
+  // ── VOTE 2: RSI ───────────────────────────────────────────────────
+  const vRSI = (rsi<35||(rsi>50&&rsi<68))?1:(rsi>65||(rsi<50&&rsi>32))?-1:0;
+
+  // ── VOTE 3: MACD ──────────────────────────────────────────────────
+  const vMACD = (macd>macdsig&&macd>0)?1:(macd<macdsig&&macd<0)?-1:0;
+
+  // ── VOTE 4: Bollinger Bands ───────────────────────────────────────
+  const vBB = bbPos<25?1:bbPos>75?-1:(bbPos>55?1:bbPos<45?-1:0);
+
+  // ── VOTE 5: ATR Regime ────────────────────────────────────────────
+  const vATR = (atrRatio<1.5&&cl1>e20)?1:(atrRatio<1.5&&cl1<e20)?-1:0;
+
+  // ── VOTE 6: Momentum ─────────────────────────────────────────────
+  const vMOM = (cl1>cl2&&cl1>e20)?1:(cl1<cl2&&cl1<e20)?-1:0;
+
+  const votes=[vEMA,vRSI,vMACD,vBB,vATR,vMOM];
+  const bullV=votes.filter(v=>v===1).length;
+  const bearV=votes.filter(v=>v===-1).length;
+  const maxV=Math.max(bullV,bearV);
+  const conf=Math.round(maxV/6*100);
+
+  // ── MINIMUM THRESHOLDS (p_MinVotes=2, p_MinConf=40%) ─────────────
+  const dir=(bullV>bearV&&maxV>=2&&conf>=40)?'buy':
+             (bearV>bullV&&maxV>=2&&conf>=40)?'sell':'scan';
+
+  // ── SESSION-AWARE FILTERING ───────────────────────────────────────
+  const sess=getAutoSession();
+  // London STRICT: requires full EMA stack (vEMA !== 0)
+  if(sess==='LONDON'&&dir!=='scan'&&vEMA===0) return {dir:'scan',conf,votes:{ema:vEMA,rsi:vRSI,macd:vMACD,bb:vBB,atrV:vATR,mom:vMOM},atr:atrNow,rsi,ema:{e20,e50,e200}};
+
+  // ── ATR-BASED TP/SL (strategy doc Section 9) ─────────────────────
+  // Micro account tier defaults: SL=0.25×ATR, TP1=0.40×ATR
+  const slDist  = atrNow * 0.25;
+  const tp1Dist = atrNow * 0.40;
+  const tp3Dist = atrNow * 0.75;
+
+  const price=cl1;
+  const tp    = dir==='buy' ? price+tp1Dist : dir==='sell' ? price-tp1Dist : price;
+  const sl    = dir==='buy' ? price-slDist  : dir==='sell' ? price+slDist  : price;
+
+  // ── GUARD TIER (v10.9.1 adaptive) ────────────────────────────────
+  const guard = conf>=90?0.40:conf>=70?0.30:0.20;
+
+  // ── OVERLAYS LABEL ────────────────────────────────────────────────
+  const ovlParts=[];
+  if(vEMA!==0) ovlParts.push('EMA');
+  if(vMACD!==0) ovlParts.push('MACD');
+  if(vRSI!==0) ovlParts.push('RSI');
+  if(vBB!==0) ovlParts.push('BB');
+  const overlays=ovlParts.slice(0,3).join('·')||'—';
+
+  // ── ATR REGIME ────────────────────────────────────────────────────
+  const atrRegime=atrRatio<0.8?'LOW':atrRatio<1.2?'MED':atrRatio<2.0?'HIGH':'EXTREME';
+  const cdMap={LONDON:{LOW:45,MED:60,HIGH:90,EXTREME:180},
+               NY:    {LOW:20,MED:45,HIGH:60,EXTREME:120},
+               ASIAN: {LOW:45,MED:45,HIGH:90,EXTREME:150},
+               NIGHT: {LOW:45,MED:45,HIGH:90,EXTREME:150}};
+  const cd=(cdMap[sess]||cdMap.ASIAN)[atrRegime];
+
+  return {dir,conf,price,tp,sl,guard,peak:0,session:sess,
+          time:new Date().toTimeString().slice(0,8),tp1:false,
+          overlays,atr:atrNow,atrRegime,cooldown:cd,
+          votes:{ema:vEMA,rsi:vRSI,macd:vMACD,bb:vBB,atrV:vATR,mom:vMOM},
+          rsi,ema:{e20,e50,e200}};
+}
+
+// ── FETCH H1 CANDLES AND RUN ENGINE ────────────────────────────────
+let lastOHLC=null;
+let lastSignalTime=0;
+const MIN_SIGNAL_INTERVAL=60000; // don't refire same direction in <60s
+
+async function fetchAndComputeSignal(){
+  // Try multiple sources for H1 OHLC data
+  let ohlc=null;
+
+  // Source 1: Yahoo Finance XAUUSD=X, H1 interval, 20 days (enough for EMA200)
+  const YF_URLS=[
+    'https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1h&range=20d',
+    'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1h&range=20d',
+  ];
+  for(const yUrl of YF_URLS){
+    for(const proxy of ['https://corsproxy.io/?','https://api.allorigins.win/raw?url=']){
+      try{
+        const r=await Promise.race([
+          fetch(proxy+encodeURIComponent(yUrl),{cache:'no-store'}),
+          new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),8000))
+        ]);
+        if(!r.ok) continue;
+        const d=await r.json();
+        const result=d?.chart?.result?.[0];
+        if(!result) continue;
+        const ts=result.timestamp;
+        const q=result.indicators?.quote?.[0];
+        if(!ts||!q) continue;
+        ohlc=ts.map((t,i)=>({t:t*1000,o:q.open[i],h:q.high[i],l:q.low[i],c:q.close[i]}))
+               .filter(b=>b.o&&b.h&&b.l&&b.c); // remove null bars
+        if(ohlc.length>=30){
+          console.log('H1 OHLC: '+ohlc.length+' bars via '+proxy.split('?')[0]);
+          break;
+        } else {ohlc=null;}
+      }catch(e){console.warn('OHLC fetch error:',e.message);}
+      if(ohlc) break;
+    }
+    if(ohlc) break;
+  }
+
+  if(!ohlc||ohlc.length<30){
+    console.warn('Could not fetch H1 OHLC — signal engine paused');
+    return;
+  }
+  lastOHLC=ohlc;
+
+  // Use real current price if confirmed
+  if(priceConfirmed&&livePrice>1000&&ohlc.length>0){
+    ohlc[ohlc.length-1].c=livePrice; // update last close to live price
+  }
+
+  // Run the signal engine
+  const sig=computeSignal(ohlc);
+  if(!sig) return;
+
+  // Update live UI
+  applyComputedSignal(sig);
+}
+
+function applyComputedSignal(sig){
+  if(!sig) return;
+  const now=Date.now();
+  const price=(priceConfirmed&&livePrice>1000)?livePrice:sig.price;
+  sig.price=price;
+  // Recompute TP/SL from live price
+  const atr=sig.atr||20;
+  sig.tp = sig.dir==='buy'?price+atr*0.40:sig.dir==='sell'?price-atr*0.40:price;
+  sig.sl = sig.dir==='buy'?price-atr*0.25:sig.dir==='sell'?price+atr*0.25:price;
+  sig.guard = sig.conf>=90?0.40:sig.conf>=70?0.30:0.20;
+
+  currentSig={...sig};
+
+  // Log to signal history if direction changed and not scan
+  if(sig.dir!=='scan'){
+    const last=SIG_LOG[SIG_LOG.length-1];
+    if(!last||last.dir!==sig.dir||now-lastSignalTime>MIN_SIGNAL_INTERVAL){
+      SIG_LOG.push({...sig,logTime:now});
+      if(SIG_LOG.length>50) SIG_LOG.shift();
+      lastSignalTime=now;
+    }
+  }
+
+  updateSignalPanel(sig);
+  updateSignalOverlay(sig);
+  updateVoteChips(sig.votes);
+  updateMarketStats(sig);
+  console.log('Signal:',sig.dir.toUpperCase(),'Conf:',sig.conf+'%','ATR:',sig.atr?.toFixed(2),'Votes:',JSON.stringify(sig.votes));
+}
+
+function updateVoteChips(v){
+  const map={ema:'v-ema',rsi:'v-rsi',macd:'v-macd',bb:'v-bb',atrV:'v-atr-v',mom:'v-mom'};
+  Object.entries(map).forEach(([k,id])=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const val=v[k];
+    el.textContent=val===1?'▲':val===-1?'▼':'—';
+    el.className='vote-chip-val '+(val===1?'up':val===-1?'down':'flat');
+  });
+}
+
+function updateMarketStats(sig){
+  const set=(id,val,color)=>{
+    const e=document.getElementById(id);
+    if(!e) return;
+    e.textContent=val;
+    if(color) e.style.color=color;
+  };
+  // Trend
+  const trendColor=sig.dir==='buy'?'var(--green)':sig.dir==='sell'?'var(--red)':'var(--gold2)';
+  const trendText=sig.dir==='buy'?'BULL':sig.dir==='sell'?'BEAR':'RANGE';
+  set('ov-trend',trendText,trendColor);
+  // ATR regime
+  const atrColor=sig.atrRegime==='LOW'?'var(--green)':sig.atrRegime==='EXTREME'?'var(--red)':'var(--gold2)';
+  set('ov-atr',sig.atrRegime||'MED',atrColor);
+  // Cooldown
+  set('ov-cd',(sig.cooldown||60)+'s','var(--cyan)');
+  // Guard
+  set('ov-guard','$'+(sig.guard||0.30).toFixed(2));
+  // Bull/bear bias from vote counts
+  if(sig.votes){
+    const bullV=Object.values(sig.votes).filter(v=>v===1).length;
+    const bearV=Object.values(sig.votes).filter(v=>v===-1).length;
+    const total=bullV+bearV||1;
+    const bullPct=Math.round(bullV/total*100);
+    const bearPct=100-bullPct;
+    const fill=document.getElementById('bb-fill');
+    if(fill) fill.style.width=bullPct+'%';
+    const bpEl=document.getElementById('bb-bull-pct');
+    if(bpEl) bpEl.textContent=bullPct+'%';
+    const brEl=document.getElementById('bb-bear-pct');
+    if(brEl) brEl.textContent=bearPct+'%';
+  }
+  // RSI display in reason panel
+  if(sig.rsi){
+    const rsiState=sig.rsi>70?'OVERBOUGHT':sig.rsi<30?'OVERSOLD':sig.rsi>50?'BULLISH ZONE':'BEARISH ZONE';
+    document.querySelectorAll('.r-val').forEach(el=>{
+      if(el.id==='rp-rsi') el.textContent='RSI(14) = '+sig.rsi.toFixed(1)+' — '+rsiState;
+    });
+  }
+}
+
+// Signal history — illustrative sample trades (EA backtest reference)
+// Real-time signals are tracked in SIG_LOG during the session
 const HISTORY=[
   {dir:'buy',entry:3285.40,exit:3291.20,pnl:5.80,result:'win',tag:'tp',session:'LONDON',conf:88,time:'10:14',source:'Kitco',tpTime:'8m 22s',accurate:true},
   {dir:'sell',entry:3302.10,exit:3297.80,pnl:4.30,result:'win',tag:'tp',session:'NY',conf:91,time:'13:52',source:'Bloomberg',tpTime:'6m 55s',accurate:true},
@@ -944,31 +1270,6 @@ const HISTORY=[
 ];
 let histFilter='all';
 
-// Gold OHLC data (simulated - real data would come from a price API)
-const GOLD_OHLC={
-  day:[
-    {date:'29 Mar',open:3298.10,high:3328.40,low:3290.50,close:3312.40,chg:0.44},
-    {date:'28 Mar',open:3276.80,high:3302.60,low:3272.10,close:3298.10,chg:0.65},
-    {date:'27 Mar',open:3255.40,high:3284.20,low:3250.80,close:3276.80,chg:0.65},
-    {date:'26 Mar',open:3240.10,high:3262.80,low:3236.40,close:3255.40,chg:0.47},
-    {date:'25 Mar',open:3228.60,high:3248.90,low:3222.30,close:3240.10,chg:0.36},
-    {date:'24 Mar',open:3198.20,high:3235.60,low:3194.80,close:3228.60,chg:0.95},
-  ],
-  week:[
-    {date:'Wk 24 Mar',open:3198.20,high:3328.40,low:3190.60,close:3312.40,chg:3.57},
-    {date:'Wk 17 Mar',open:3124.50,high:3205.80,low:3118.20,close:3198.20,chg:2.36},
-    {date:'Wk 10 Mar',open:3082.40,high:3132.60,low:3076.90,close:3124.50,chg:1.37},
-    {date:'Wk 03 Mar',open:3044.80,high:3095.20,low:3040.10,close:3082.40,chg:1.24},
-  ],
-  month:[
-    {date:'Mar 2026',open:3104.20,high:3328.40,low:3098.60,close:3312.40,chg:6.70},
-    {date:'Feb 2026',open:2942.80,high:3115.60,low:2938.40,close:3104.20,chg:5.49},
-    {date:'Jan 2026',open:2642.10,high:2960.40,low:2638.20,close:2942.80,chg:11.38},
-    {date:'Dec 2025',open:2624.50,high:2670.80,low:2584.20,close:2642.10,chg:0.67},
-    {date:'Nov 2025',open:2748.40,high:2792.20,low:2538.80,close:2624.50,chg:-4.51},
-  ]
-};
-let goldRange='day';
 
 const SOURCES=[
   {name:'Kitco News',handle:'@KitcoNews',avatar:'KN',color:'#d97706',dir:'buy',signal:'Gold bullish above $3,300. EMA20 crossed above EMA50 on H1. Fib 0.382 acting as support. Target $3,340.',conf:88,agreement:78,verified:true,url:'https://www.kitco.com/news/'},
@@ -1036,7 +1337,11 @@ function setGoldRange(r,el){
 
 function renderGoldSummary(){
   const rows=GOLD_OHLC[goldRange]||[];
-  if(!rows.length) return;
+  const hlEl=document.getElementById('gold-headline');
+  if(!rows.length){
+    if(hlEl) hlEl.innerHTML=goldOHLCLoaded?'No data available for this range.':'Fetching live gold price data…';
+    return;
+  }
   const latest=rows[0], oldest=rows[rows.length-1];
   const periodHigh=Math.max(...rows.map(r=>r.high));
   const periodLow=Math.min(...rows.map(r=>r.low));
@@ -1053,7 +1358,6 @@ function renderGoldSummary(){
 
   const titleEl=document.getElementById('gold-summary-title');
   if(titleEl) titleEl.textContent='Gold '+periodName+' Summary';
-  const hlEl=document.getElementById('gold-headline');
   if(hlEl){
     hlEl.style.borderLeftColor=dirColor;
     hlEl.innerHTML=`Gold <span style="color:${dirColor};font-weight:700">${direction} ${Math.abs(totalChg).toFixed(2)}%</span> ${periodLabel} — from $${oldest.open.toFixed(2)} to <span style="color:${dirColor};font-weight:700">$${latest.close.toFixed(2)}</span> <span style="color:${dirColor}">${dirIcon}</span>`;
@@ -1069,6 +1373,10 @@ function renderGoldSummary(){
 
 function renderGoldOHLC(){
   const rows=GOLD_OHLC[goldRange]||[];
+  if(!rows.length){
+    document.getElementById('gold-ohlc-body').innerHTML=`<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:16px">${goldOHLCLoaded?'No data available':'Loading real data…'}</td></tr>`;
+    return;
+  }
   document.getElementById('gold-ohlc-body').innerHTML=rows.map(r=>`
     <tr>
       <td>${r.date}</td>
@@ -1136,20 +1444,24 @@ function filterNews(f,el){
 const SESSION_BIASES={ASIAN:{bull:52,bear:48},LONDON:{bull:65,bear:35},NY:{bull:58,bear:42},NIGHT:{bull:50,bear:50}};
 
 function getAutoSession(){
-  // Current time in SAST (UTC+2)
+  // Use UTC/GMT directly — strategy document specifies GMT session hours
   const now=new Date();
-  const sast=new Date(now.getTime()+now.getTimezoneOffset()*60000+2*3600000);
-  const h=sast.getHours(),m=sast.getMinutes();
+  const h=now.getUTCHours();
+  const m=now.getUTCMinutes();
   const mins=h*60+m;
-  // Session times in SAST:
-  // Asian:  01:00-09:00 (60-540)
-  // London: 09:00-17:00 (540-1020)
-  // NY:     15:00-23:00 (900-1380) — overlap with London 15-17
-  // Night:  23:00-01:00 (1380-1500 or 0-60)
-  if(mins>=540&&mins<900) return 'LONDON';
-  if(mins>=900&&mins<1380) return 'NY';
-  if(mins>=60&&mins<540) return 'ASIAN';
-  return 'NIGHT';
+  // Session times in GMT (strategy doc Section 2):
+  // Blocked:  05:55-07:15 GMT (London open blackout)
+  // Asian:    00:00-07:00 GMT
+  // London:   07:00-13:00 GMT
+  // Overlap:  13:00-16:00 GMT
+  // NY:       13:00-21:00 GMT
+  // Night:    21:00-00:00 GMT
+  if(mins>=355&&mins<435) return 'NIGHT';  // 05:55-07:15 blocked = Night-lite
+  if(mins>=0&&mins<420)   return 'ASIAN';  // 00:00-07:00
+  if(mins>=420&&mins<780) return 'LONDON'; // 07:00-13:00
+  if(mins>=780&&mins<960) return 'NY';     // 13:00-16:00 overlap then NY
+  if(mins>=960&&mins<1260)return 'NY';     // 16:00-21:00 NY proper
+  return 'NIGHT';                           // 21:00-00:00
 }
 
 function applySession(name){
@@ -1164,8 +1476,8 @@ function applySession(name){
   if(el('bb-fill')) el('bb-fill').style.width=b.bull+'%';
   if(el('bb-bull-pct')) el('bb-bull-pct').textContent=b.bull+'%';
   if(el('bb-bear-pct')) el('bb-bear-pct').textContent=b.bear+'%';
-  // Update cooldown per session
-  const cdMap={LONDON:'60s',NY:'45s',ASIAN:'90s',NIGHT:'120s'};
+  // Update cooldown per session (strategy doc Section 3, Medium ATR defaults)
+  const cdMap={LONDON:'60s',NY:'45s',ASIAN:'45s',NIGHT:'45s'};
   if(el('ov-cd')) el('ov-cd').textContent=cdMap[name]||'60s';
 }
 
@@ -1329,8 +1641,6 @@ async function handleAIUpload(event){
   // Wait for image to load then analyze
   preview.onload=async function(){
     try{
-      // Simulate realistic analysis time (650–1400ms)
-      await new Promise(r=>setTimeout(r,650+Math.random()*750));
       const result=await analyzeChartPixels(preview);
       showAIResult(result);
     }catch(err){
@@ -1341,7 +1651,6 @@ async function handleAIUpload(event){
   // In case image already loaded
   if(preview.complete&&preview.naturalHeight>0){
     try{
-      await new Promise(r=>setTimeout(r,650+Math.random()*750));
       const result=await analyzeChartPixels(preview);
       showAIResult(result);
     }catch(e){showAIResult(null);}
@@ -1411,16 +1720,47 @@ dropZone.addEventListener('drop',e=>{
   if(file&&file.type.startsWith('image/')) handleAIUpload({target:{files:[file]}});
 });
 
-// ── LIVE TICK ──────────────────────────────────────────────────────
-// ── REAL GOLD PRICE FETCHER ───────────────────────────────────────
-// Uses free public APIs — no API key required, no cost.
-// Tries 3 sources in order, falls back gracefully.
-let livePrice = 0;          // 0 = not yet fetched
-let priceConfirmed = false; // true once real price received
+// ── REAL GOLD PRICE + OHLC FETCHER ───────────────────────────────
+// No AbortController — uses Promise.race timeout only.
+// Tries multiple CORS proxies × multiple data sources for maximum reliability.
+
+let livePrice = 0;
+let priceConfirmed = false;
 let fetchErrors = 0;
 
+// ── Ordered proxy list (tried in sequence) ────────────────────────
+const CORS_PROXIES = [
+  'https://corsproxy.io/?url=',
+  'https://api.allorigins.win/raw?url=',
+  'https://thingproxy.freeboard.io/fetch/',
+  'https://api.codetabs.com/v1/proxy?quest=',
+  'https://corsproxy.io/?',
+];
+
+// Safe fetch — Promise.race timeout, NO AbortController
+function safeFetch(url, ms=7000){
+  return Promise.race([
+    fetch(url, {cache:'no-store'}),
+    new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms))
+  ]);
+}
+
+// Try a target URL through each proxy in sequence, return first success
+async function fetchViaProxy(targetUrl, ms=7000){
+  for(const proxy of CORS_PROXIES){
+    try{
+      const r = await Promise.race([
+        fetch(proxy + encodeURIComponent(targetUrl), {cache:'no-store'}),
+        new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),ms))
+      ]);
+      if(r && r.ok) return r;
+    }catch(e){ /* try next proxy */ }
+  }
+  return null;
+}
+
 function applyPrice(p){
-  if(!p||isNaN(p)||p<1000) return false; // sanity check — gold is always >$1000
+  if(!p||isNaN(p)||p<1000) return false;
   livePrice = p;
   priceConfirmed = true;
   fetchErrors = 0;
@@ -1430,153 +1770,141 @@ function applyPrice(p){
   set('sig-price', '@ '+p.toFixed(2));
   set('sig-ov-entry', fmt);
   currentSig.price = p;
-  // Update signal TP/SL relative to real price
   const sigBuy = currentSig.dir === 'buy';
   set('sig-ov-tp',  '$'+(sigBuy ? p+6 : p-6).toFixed(2));
   set('sig-ov-sl',  '$'+(sigBuy ? p-3 : p+3).toFixed(2));
   set('sig-tp',     '$'+(sigBuy ? p+6 : p-6).toFixed(2));
   set('sig-sl',     '$'+(sigBuy ? p-3 : p+3).toFixed(2));
-  // Badge border — green = fresh, gold = stale
   const badge = document.getElementById('hdr-price');
   if(badge){ badge.style.borderColor='var(--gold-dim)'; badge.style.color='var(--gold2)'; }
-  // Update SIGNALS array to real price so signal panel is consistent
-  SIGNALS.forEach(s=>{
-    const wasBuy=s.dir==='buy';
-    s.price=p;
-    s.tp=wasBuy?Math.round((p+6)*100)/100:Math.round((p-6)*100)/100;
-  });
   if(typeof currentSig!=='undefined'){
     currentSig.price=p;
-    currentSig.tp=currentSig.dir==='buy'?Math.round((p+6)*100)/100:Math.round((p-6)*100)/100;
+    const atr=currentSig.atr||20;
+    currentSig.tp  = currentSig.dir==='buy'?p+atr*0.40:currentSig.dir==='sell'?p-atr*0.40:p;
+    currentSig.sl  = currentSig.dir==='buy'?p-atr*0.25:currentSig.dir==='sell'?p+atr*0.25:p;
     updateSignalPanel(currentSig);
     updateSignalOverlay(currentSig);
+  }
+  if(typeof lastOHLC!=='undefined'&&lastOHLC&&lastOHLC.length>0){
+    lastOHLC[lastOHLC.length-1].c=p;
+    const sig=computeSignal(lastOHLC);
+    if(sig) applyComputedSignal(sig);
   }
   return true;
 }
 
 async function fetchGoldPrice(){
-  // Helper: try a fetch with timeout
-  async function tryFetch(url, opts={}, timeoutMs=5000){
-    const ctrl = new AbortController();
-    const timer = setTimeout(()=>ctrl.abort(), timeoutMs);
-    try{
-      const r = await fetch(url, {...opts, signal:ctrl.signal, cache:'no-store'});
-      clearTimeout(timer);
-      return r;
-    }catch(e){ clearTimeout(timer); throw e; }
-  }
-
-  // ── Source 1: metals.live /v1/spot — returns [{gold:price,...}]
+  // ── Source A: metals.live (has CORS headers, direct fetch) ───────
   try{
-    const r = await tryFetch('https://api.metals.live/v1/spot');
-    if(r.ok){
+    const r = await safeFetch('https://api.metals.live/v1/spot');
+    if(r&&r.ok){
       const d = await r.json();
-      // Response is array: [{gold: 3314.5, silver: 32.1, ...}]
-      const raw = Array.isArray(d) ? d[0] : d;
-      const p = raw?.gold || raw?.XAU || raw?.price;
-      if(applyPrice(Number(p))){ console.log('Gold price: metals.live $'+Number(p).toFixed(2)); return; }
+      const raw = Array.isArray(d)?d[0]:d;
+      const p = raw?.gold||raw?.XAU||raw?.price;
+      if(applyPrice(Number(p))){ console.log('Gold: metals.live $'+Number(p).toFixed(2)); return; }
     }
-  }catch(e){ console.warn('Source1 fail:',e.message); }
+  }catch(e){ console.warn('Source A fail:',e.message); }
 
-  // ── Source 2: corsproxy.io → Yahoo Finance GC=F (gold futures) ──
+  // ── Source B: Yahoo Finance GC=F via proxy ────────────────────────
   try{
-    const target = 'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d';
-    const r = await tryFetch('https://corsproxy.io/?'+encodeURIComponent(target));
-    if(r.ok){
+    const r = await fetchViaProxy('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d');
+    if(r){
       const d = await r.json();
       const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if(applyPrice(Number(p))){ console.log('Gold price: Yahoo GC=F $'+Number(p).toFixed(2)); return; }
+      if(applyPrice(Number(p))){ console.log('Gold: Yahoo GC=F $'+Number(p).toFixed(2)); return; }
     }
-  }catch(e){ console.warn('Source2 fail:',e.message); }
+  }catch(e){ console.warn('Source B fail:',e.message); }
 
-  // ── Source 3: allorigins → Yahoo Finance XAUUSD=X ───────────────
+  // ── Source C: Yahoo Finance XAUUSD=X via proxy ───────────────────
   try{
-    const target = 'https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d';
-    const r = await tryFetch('https://api.allorigins.win/raw?url='+encodeURIComponent(target));
-    if(r.ok){
+    const r = await fetchViaProxy('https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d');
+    if(r){
       const d = await r.json();
       const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if(applyPrice(Number(p))){ console.log('Gold price: Yahoo XAUUSD $'+Number(p).toFixed(2)); return; }
+      if(applyPrice(Number(p))){ console.log('Gold: Yahoo XAUUSD $'+Number(p).toFixed(2)); return; }
     }
-  }catch(e){ console.warn('Source3 fail:',e.message); }
+  }catch(e){ console.warn('Source C fail:',e.message); }
 
-  // ── Source 4: corsproxy.io → Yahoo XAUUSD=X ─────────────────────
+  // ── Source D: goldprice.org via proxy ────────────────────────────
   try{
-    const target = 'https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d';
-    const r = await tryFetch('https://corsproxy.io/?'+encodeURIComponent(target));
-    if(r.ok){
+    const r = await fetchViaProxy('https://data-asg.goldprice.org/dbXRates/USD');
+    if(r){
       const d = await r.json();
-      const p = d?.chart?.result?.[0]?.meta?.regularMarketPrice;
-      if(applyPrice(Number(p))){ console.log('Gold price: corsproxy XAUUSD $'+Number(p).toFixed(2)); return; }
+      const p = d?.items?.[0]?.xauPrice||d?.xauPrice;
+      if(applyPrice(Number(p))){ console.log('Gold: goldprice.org $'+Number(p).toFixed(2)); return; }
     }
-  }catch(e){ console.warn('Source4 fail:',e.message); }
+  }catch(e){ console.warn('Source D fail:',e.message); }
 
-  // ── Source 5: goldprice.org via allorigins ───────────────────────
+  // ── Source E: Frankfurter XAU→USD (ECB data, has CORS) ───────────
   try{
-    const target = 'https://data-asg.goldprice.org/dbXRates/USD';
-    const r = await tryFetch('https://api.allorigins.win/raw?url='+encodeURIComponent(target));
-    if(r.ok){
+    const r = await safeFetch('https://api.frankfurter.app/latest?from=XAU&to=USD');
+    if(r&&r.ok){
       const d = await r.json();
-      // Response: {items:[{xauPrice:3314.5,...}]}
-      const p = d?.items?.[0]?.xauPrice || d?.xauPrice;
-      if(applyPrice(Number(p))){ console.log('Gold price: goldprice.org $'+Number(p).toFixed(2)); return; }
+      // Frankfurter returns 1 XAU in USD
+      const p = d?.rates?.USD;
+      if(applyPrice(Number(p))){ console.log('Gold: Frankfurter XAU $'+Number(p).toFixed(2)); return; }
     }
-  }catch(e){ console.warn('Source5 fail:',e.message); }
+  }catch(e){ console.warn('Source E fail:',e.message); }
 
-  // ── All sources failed ───────────────────────────────────────────
+  // ── All failed ────────────────────────────────────────────────────
   fetchErrors++;
   console.warn('All gold price sources failed. Attempt #'+fetchErrors);
   const badge = document.getElementById('hdr-price');
-  if(badge && !priceConfirmed){
-    badge.style.borderColor='rgba(239,68,68,0.5)';
-    badge.style.color='var(--text2)';
-    badge.textContent='NO FEED';
-  }
+  if(badge&&!priceConfirmed){ badge.style.borderColor='rgba(239,68,68,0.5)'; badge.style.color='var(--text2)'; badge.textContent='NO FEED'; }
 }
 
-// Micro-tick: adds tiny noise (±$0.15) between real fetches for live feel
+// ── REAL GOLD OHLC FETCHER ─────────────────────────────────────────
+// Gold OHLC — populated from live Yahoo Finance fetch
+const GOLD_OHLC={day:[],week:[],month:[]};
+let goldOHLCLoaded=false;
+let goldRange='day';
+
+async function fetchGoldOHLC(){
+  const ranges={
+    day:   'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=14d',
+    week:  'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1wk&range=3mo',
+    month: 'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1mo&range=2y',
+  };
+  let anyLoaded=false;
+  for(const [key,url] of Object.entries(ranges)){
+    const r = await fetchViaProxy(url, 9000);
+    if(!r){ console.warn('OHLC '+key+': all proxies failed'); continue; }
+    try{
+      const d = await r.json();
+      const res = d?.chart?.result?.[0];
+      if(!res){ console.warn('OHLC '+key+': bad response'); continue; }
+      const ts=res.timestamp, q=res.indicators?.quote?.[0];
+      if(!ts||!q){ continue; }
+      const rows=ts.map((t,i)=>{
+        const dt=new Date(t*1000);
+        const label=key==='day'?dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):
+                    key==='week'?'Wk '+dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):
+                    dt.toLocaleDateString('en-GB',{month:'short',year:'numeric'});
+        return{date:label,open:q.open[i],high:q.high[i],low:q.low[i],close:q.close[i],
+               chg:q.open[i]?((q.close[i]-q.open[i])/q.open[i]*100):0};
+      }).filter(r=>r.open&&r.high&&r.low&&r.close).reverse();
+      GOLD_OHLC[key]=rows;
+      anyLoaded=true;
+      console.log('OHLC '+key+': '+rows.length+' bars loaded');
+    }catch(e){ console.warn('OHLC '+key+' parse error:',e.message); }
+  }
+  goldOHLCLoaded=true;
+  renderGoldOHLC();
+  renderGoldSummary();
+}
+
+// Tick: updates display from real livePrice only — no fake noise
 function tick(){
   if(!priceConfirmed || livePrice<1000) return;
-  livePrice += (Math.random()-0.5)*0.15;
   const ps = '$'+livePrice.toFixed(2);
   const set=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
   set('hdr-price', ps);
   set('sig-price', '@ '+livePrice.toFixed(2));
   set('sig-ov-entry', ps);
-  currentSig.price = livePrice;
-  // Keep signal bar in sync with live price every tick
-  const _isBuy = currentSig.dir==='buy';
-  const _tp2 = livePrice+(_isBuy?6:-6);
-  const _sl2 = livePrice+(_isBuy?-3:3);
-  const setQ=(id,val)=>{const e=document.getElementById(id);if(e)e.textContent=val;};
-  setQ('sig-ov-tp',   '$'+_tp2.toFixed(2));
-  setQ('sig-ov-sl',   '$'+_sl2.toFixed(2));
-  setQ('sig-tp',      '$'+_tp2.toFixed(2));
-  setQ('sig-sl',      '$'+_sl2.toFixed(2));
-  // Trend/ATR live simulation (low frequency)
-  const trends=['BULL','BULL','BULL','RANGE','BEAR'];
-  const atrs=['LOW','MED','MED','HIGH','EXTREME'];
-  if(Math.random()<0.015){
-    const t=trends[Math.floor(Math.random()*trends.length)];
-    const a=atrs[Math.floor(Math.random()*atrs.length)];
-    const tEl=document.getElementById('ov-trend');
-    if(tEl){tEl.textContent=t;tEl.style.color=t==='BULL'?'var(--green)':t==='BEAR'?'var(--red)':'var(--gold2)';}
-    const aEl=document.getElementById('ov-atr');
-    if(aEl){aEl.textContent=a;aEl.style.color=a==='LOW'?'var(--green)':a==='EXTREME'?'var(--red)':'var(--gold2)';}
-  }
 }
 
 function animateVotes(){
-  const ids=['v-ema','v-rsi','v-macd','v-bb','v-atr-v','v-mom'];
-  const states=[{v:'▲',c:'up'},{v:'▼',c:'down'},{v:'—',c:'flat'}];
-  const w=[0,0,0,0,0,1,1,2];
-  ids.forEach(id=>{
-    if(Math.random()<.07){
-      const s=states[w[Math.floor(Math.random()*w.length)]];
-      const el=document.getElementById(id);
-      if(el){el.textContent=s.v;el.className='vote-chip-val '+s.c;}
-    }
-  });
+  // Votes are set only from real computed signal — no random animation
 }
 
 // ── INIT ───────────────────────────────────────────────────────────
@@ -1584,6 +1912,7 @@ window.addEventListener('load',()=>{
   renderHistory();
   renderSources();
   renderNews();
+  // Show loading state initially for gold OHLC
   renderGoldOHLC();
   renderGoldSummary();
   updateSignalPanel(currentSig);
@@ -1592,10 +1921,15 @@ window.addEventListener('load',()=>{
   startSignalTimer();
   // Fetch real gold price immediately, then every 30s
   fetchGoldPrice();
-  setInterval(fetchGoldPrice, 30000);
-  // Micro-tick for live feel between real fetches
-  setInterval(tick,1200);
-  setInterval(animateVotes,900);
+  setInterval(fetchGoldPrice, 2*60*1000); // every 2 min
+  setInterval(fetchGoldOHLC, 2*60*1000); // every 2 min
+  // Fetch real OHLC data for gold price history page
+  fetchGoldOHLC();
+  // Fetch H1 OHLC and compute real signal — on load and every 5 minutes
+  setTimeout(()=>{
+    fetchAndComputeSignal();
+    setInterval(fetchAndComputeSignal, 2*60*1000); // every 2 min
+  }, 2000); // 2s delay so price fetch can complete first
   // Auto session — run immediately and every 60s
   updateAutoSession();
   setInterval(updateAutoSession,60000);
