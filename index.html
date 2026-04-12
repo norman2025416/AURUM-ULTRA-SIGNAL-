@@ -42,7 +42,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 .dnav-btn.active{border-bottom-color:var(--gold);color:var(--gold2)}
 .dnav-btn svg{width:14px;height:14px}
 #main{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.tab-panel{display:none;flex:1;overflow-y:auto;padding:10px;flex-direction:column;gap:9px}
+.tab-panel{display:none;flex:1;overflow-y:auto;padding:8px;flex-direction:column;gap:7px}
 .tab-panel.active{display:flex}
 #panel-chart{overflow:hidden;padding:8px;gap:6px}
 #tv-container{flex:1;min-height:0!important}
@@ -119,7 +119,6 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 .hist-pnl.loss{color:var(--red)}
 .hist-sub{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .hist-meta{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace}
-.hist-source{font-size:10px;padding:1px 6px;border-radius:4px;background:rgba(167,139,250,.1);color:var(--purple);font-family:'Space Mono',monospace}
 .hist-timing{font-size:10px;color:var(--cyan);font-family:'Space Mono',monospace}
 .hist-tag{font-size:10px;padding:1px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-weight:700}
 .hist-tag.tp{background:rgba(34,197,94,.1);color:var(--green)}
@@ -165,63 +164,66 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 .tab-panel.active>*:nth-child(4){animation-delay:.12s}
 .tab-panel.active>*:nth-child(5){animation-delay:.16s}
 
-/* ═══ SIGNAL PAGE STYLES ═══ */
+/* ═══ SIGNAL PAGE ═══ */
 .sig-engine-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:.5px}
 .sig-engine-badge.hf{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
 .sig-engine-badge.amd{background:rgba(212,168,68,.15);color:var(--gold2);border:1px solid rgba(212,168,68,.3)}
 .sig-engine-badge.scan{background:var(--bg4);color:var(--text3);border:1px solid var(--border2)}
-.sig-main-dir{font-size:28px;font-weight:800;font-family:'Space Mono',monospace;letter-spacing:1px}
+/* ── Tighter signal direction text ── */
+.sig-main-dir{font-size:22px;font-weight:800;font-family:'Space Mono',monospace;letter-spacing:.5px}
 .sig-main-dir.buy{color:var(--green)}
 .sig-main-dir.sell{color:var(--red)}
 .sig-main-dir.scan{color:var(--gold)}
-.tp-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border)}
+/* ── Compact TP rows ── */
+.tp-row{display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)}
 .tp-row:last-child{border:none}
 .tp-label{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace;width:36px}
-.tp-price{font-size:15px;font-weight:700;font-family:'Space Mono',monospace}
+.tp-price{font-size:13px;font-weight:700;font-family:'Space Mono',monospace}
 .tp-r{font-size:10px;color:var(--text3);font-family:'Space Mono',monospace}
-.tp-bar{flex:1;margin:0 10px;height:4px;background:var(--bg4);border-radius:2px;overflow:hidden}
+.tp-bar{flex:1;margin:0 8px;height:3px;background:var(--bg4);border-radius:2px;overflow:hidden}
 .tp-bar-fill{height:100%;border-radius:2px;transition:width .5s}
-
-/* ICT Confluence row */
-.ict-row{display:flex;align-items:center;gap:10px;padding:8px 12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+/* ── Compact ICT rows ── */
+.ict-row{display:flex;align-items:center;gap:8px;padding:6px 10px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
 .ict-row:hover{background:var(--bg3)}
 .ict-row:last-child{border:none}
-.ict-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ict-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
 .ict-icon.bull{background:var(--green-bg)}
 .ict-icon.bear{background:var(--red-bg)}
 .ict-icon.neutral{background:var(--bg4)}
 .ict-icon.warn{background:rgba(251,146,60,.1)}
 .ict-content{flex:1;min-width:0}
-.ict-name{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:2px}
-.ict-status{font-size:12px;font-weight:700;font-family:'Space Mono',monospace}
+.ict-name{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text2);margin-bottom:1px}
+.ict-status{font-size:11px;font-weight:700;font-family:'Space Mono',monospace}
 .ict-status.bull{color:var(--green)}
 .ict-status.bear{color:var(--red)}
 .ict-status.neutral{color:var(--text3)}
 .ict-status.warn{color:var(--orange)}
-.ict-tip{font-size:10px;color:var(--text3);line-height:1.4;margin-top:2px;display:none}
+.ict-tip{font-size:10px;color:var(--text3);line-height:1.4;margin-top:4px;display:none;padding:5px 7px;background:var(--bg3);border-radius:5px;border-left:2px solid var(--gold-dim)}
 .ict-row.expanded .ict-tip{display:block}
-.ict-chevron{font-size:10px;color:var(--text3);flex-shrink:0;transition:transform .2s}
+.ict-chevron{font-size:9px;color:var(--text3);flex-shrink:0;transition:transform .2s}
 .ict-row.expanded .ict-chevron{transform:rotate(180deg)}
-.ict-t1-badge{font-size:9px;padding:1px 5px;border-radius:3px;background:rgba(212,168,68,.2);color:var(--gold);font-family:'Space Mono',monospace;font-weight:700;flex-shrink:0}
-
-/* Projection Ray SVG */
-#proj-canvas{width:100%;height:180px;display:block;border-radius:10px;background:#06090f;border:1px solid var(--border)}
-.proj-legend{display:flex;gap:12px;flex-wrap:wrap;padding:6px 2px}
-.proj-leg{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text3);font-family:'Space Mono',monospace}
-.proj-leg-line{width:20px;height:2px;border-radius:1px}
-
-/* Signal status bar */
-.sig-status-bar{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;border-radius:8px;margin-bottom:0}
-.sig-status-bar.buy{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2)}
-.sig-status-bar.sell{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2)}
-.sig-status-bar.scan{background:var(--bg3);border:1px solid var(--border)}
-
-/* Confidence bar */
-.conf-track{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden;flex:1;margin:0 8px}
+.ict-t1-badge{font-size:8px;padding:1px 4px;border-radius:3px;background:rgba(212,168,68,.2);color:var(--gold);font-family:'Space Mono',monospace;font-weight:700;flex-shrink:0}
+/* ── Compact projection ray ── */
+#proj-canvas{width:100%;height:130px;display:block;border-radius:8px;background:#06090f;border:1px solid var(--border)}
+.proj-legend{display:flex;gap:10px;flex-wrap:wrap;padding:4px 2px}
+.proj-leg{display:flex;align-items:center;gap:4px;font-size:9px;color:var(--text3);font-family:'Space Mono',monospace}
+.proj-leg-line{width:14px;height:2px;border-radius:1px}
+/* ── Confidence bar ── */
+.conf-track{height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;flex:1;margin:0 8px}
 .conf-fill-bar{height:100%;border-radius:3px;transition:width .5s}
 .conf-fill-bar.buy{background:linear-gradient(90deg,#16a34a,var(--green))}
 .conf-fill-bar.sell{background:linear-gradient(90deg,#b91c1c,var(--red))}
 .conf-fill-bar.scan{background:linear-gradient(90deg,var(--gold-dim),var(--gold))}
+
+/* ── Collapsible (Signal Reasoning + Data Sources on Stats) ── */
+.coll-wrap{border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.coll-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--bg2);cursor:pointer;user-select:none}
+.coll-header-title{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3)}
+.coll-chevron{font-size:10px;color:var(--text3);transition:transform .25s}
+.coll-chevron.open{transform:rotate(180deg)}
+.coll-body{background:var(--bg2);max-height:0;overflow:hidden;transition:max-height .3s ease}
+.coll-body.open{max-height:500px}
+.coll-inner{padding:8px 12px 10px}
 </style>
 </head>
 <body>
@@ -388,19 +390,17 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
   </div>
 </div>
 
-<!-- ══ SIGNAL PAGE — REBUILT ══ -->
+<!-- ══ SIGNAL PAGE ══ -->
 <div class="tab-panel" id="panel-signal">
 
-  <!-- A: MAIN SIGNAL CARD -->
-  <div id="sig-main-wrap" style="background:var(--bg2);border:2px solid var(--border);border-radius:14px;overflow:hidden;transition:border-color .3s">
-
-    <!-- Header row -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--border)">
-      <div style="display:flex;align-items:center;gap:10px">
-        <div id="sig-arrow-box" style="width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;background:var(--bg4)">◉</div>
+  <!-- A: MAIN SIGNAL CARD — compact -->
+  <div id="sig-main-wrap" style="background:var(--bg2);border:2px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .3s;flex-shrink:0">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:9px 12px;border-bottom:1px solid var(--border)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <div id="sig-arrow-box" style="width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--bg4)">◉</div>
         <div>
           <div class="sig-main-dir scan" id="sig-main-dir">◉ SCANNING</div>
-          <div style="display:flex;align-items:center;gap:6px;margin-top:3px">
+          <div style="display:flex;align-items:center;gap:5px;margin-top:2px">
             <span class="sig-engine-badge scan" id="sig-engine-badge">ICT AMD</span>
             <span style="font-size:10px;color:var(--text3);font-family:'Space Mono',monospace" id="sig-session-lbl">—</span>
           </div>
@@ -408,24 +408,20 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
       </div>
       <div style="text-align:right">
         <div style="font-family:'Space Mono',monospace;font-size:11px;color:var(--text2)" id="sig-time-lbl">--:--:--</div>
-        <div style="font-size:10px;color:var(--text3);margin-top:2px">XAUUSD M1</div>
+        <div style="font-size:9px;color:var(--text3);margin-top:1px">XAUUSD M1</div>
       </div>
     </div>
-
-    <!-- Confidence bar -->
-    <div style="padding:8px 14px 0;display:flex;align-items:center;gap:8px">
+    <div style="padding:5px 12px 0;display:flex;align-items:center;gap:8px">
       <span style="font-size:9px;color:var(--text3);font-family:'Space Mono',monospace;white-space:nowrap">CONFLUENCE</span>
       <div class="conf-track"><div class="conf-fill-bar scan" id="sig-conf-bar" style="width:0%"></div></div>
       <span style="font-size:11px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2);white-space:nowrap" id="sig-conf-pct">0%</span>
     </div>
-
-    <!-- TP / SL ladder -->
-    <div style="padding:10px 14px">
+    <div style="padding:6px 12px 4px">
       <div class="tp-row">
         <span class="tp-label" style="color:var(--text3)">ENTRY</span>
         <div class="tp-bar"><div class="tp-bar-fill" style="width:0%;background:var(--gold)"></div></div>
         <span class="tp-price" id="tp-entry" style="color:var(--text)">—</span>
-        <span class="tp-r" style="margin-left:8px">live</span>
+        <span class="tp-r" style="margin-left:6px">live</span>
       </div>
       <div class="tp-row">
         <span class="tp-label" style="color:var(--cyan)">TP1</span>
@@ -445,76 +441,69 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
         <span class="tp-price" id="tp-tp3" style="color:#a3e635">—</span>
         <span class="tp-r" id="tp3-r">+3.5R</span>
       </div>
-      <div class="tp-row" style="background:rgba(239,68,68,.04);border-radius:6px;padding:6px 8px;margin-top:4px;border:1px solid rgba(239,68,68,.15)">
+      <div class="tp-row" style="background:rgba(239,68,68,.04);border-radius:5px;padding:4px 6px;margin-top:3px;border:1px solid rgba(239,68,68,.15)">
         <span class="tp-label" style="color:var(--red);font-weight:700">SL</span>
         <div class="tp-bar"><div class="tp-bar-fill" style="width:100%;background:var(--red)"></div></div>
         <span class="tp-price" id="tp-sl" style="color:var(--red)">—</span>
         <span class="tp-r" id="sig-rr" style="color:var(--text2)">R:R—</span>
       </div>
     </div>
-
-    <!-- Stats row -->
     <div style="display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--border)">
-      <div style="padding:8px 10px;text-align:center;border-right:1px solid var(--border)">
-        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">SL DIST</div>
-        <div style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl-dist">—</div>
+      <div style="padding:5px 8px;text-align:center;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:1px">SL DIST</div>
+        <div style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--red)" id="sig-sl-dist">—</div>
       </div>
-      <div style="padding:8px 10px;text-align:center;border-right:1px solid var(--border)">
-        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">ATR</div>
-        <div style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-atr-val">—</div>
+      <div style="padding:5px 8px;text-align:center;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:1px">ATR</div>
+        <div style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-atr-val">—</div>
       </div>
-      <div style="padding:8px 10px;text-align:center;border-right:1px solid var(--border)">
-        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">T1 VOTES</div>
-        <div style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-t1-count">—</div>
+      <div style="padding:5px 8px;text-align:center;border-right:1px solid var(--border)">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:1px">T1 VOTES</div>
+        <div style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--cyan)" id="sig-t1-count">—</div>
       </div>
-      <div style="padding:8px 10px;text-align:center">
-        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:2px">ENGINE</div>
-        <div style="font-size:13px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-engine-val">—</div>
+      <div style="padding:5px 8px;text-align:center">
+        <div style="font-size:8px;color:var(--text3);font-family:'Space Mono',monospace;margin-bottom:1px">ENGINE</div>
+        <div style="font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--gold2)" id="sig-engine-val">—</div>
       </div>
     </div>
   </div>
 
-  <!-- B: PROJECTION RAY -->
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-    <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+  <!-- B: PROJECTION RAY — compact -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0">
+    <div style="padding:5px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
       <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">ICT Projection Ray</span>
       <span style="font-size:9px;font-family:'Space Mono',monospace;color:var(--text3)" id="proj-phase-lbl">Phase: SCANNING</span>
     </div>
-    <div style="padding:8px">
-      <canvas id="proj-canvas" width="800" height="180"></canvas>
+    <div style="padding:5px">
+      <canvas id="proj-canvas" width="800" height="130"></canvas>
       <div class="proj-legend">
-        <div class="proj-leg"><div class="proj-leg-line" style="background:var(--green)"></div>Bull ray</div>
-        <div class="proj-leg"><div class="proj-leg-line" style="background:var(--red)"></div>Bear ray</div>
-        <div class="proj-leg"><div class="proj-leg-line" style="background:var(--gold);height:1px;border-top:1px dashed var(--gold)"></div>CE/Entry</div>
+        <div class="proj-leg"><div class="proj-leg-line" style="background:var(--green)"></div>Bull</div>
+        <div class="proj-leg"><div class="proj-leg-line" style="background:var(--red)"></div>Bear</div>
+        <div class="proj-leg"><div class="proj-leg-line" style="background:var(--gold)"></div>Entry</div>
         <div class="proj-leg"><div class="proj-leg-line" style="background:var(--cyan);opacity:.5"></div>ATR band</div>
       </div>
     </div>
   </div>
 
-  <!-- C: ICT AMD CONFLUENCE PANEL -->
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-    <div style="padding:8px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+  <!-- C: ICT AMD CONFLUENCE — compact rows -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0">
+    <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
       <span style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text2)">ICT AMD Confluence</span>
-      <span style="font-size:9px;color:var(--text3)">Tap row for learning tip ▼</span>
+      <span style="font-size:9px;color:var(--text3)">Tap row for tip ▼</span>
     </div>
-    <div id="ict-rows-container">
-      <!-- Populated by JS -->
-    </div>
+    <div id="ict-rows-container"></div>
   </div>
 
-  <!-- D: SIGNAL REASON PANEL -->
-  <div style="background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px">
-    <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Signal Reasoning</div>
-    <div id="sig-reason-list" style="font-family:'Space Mono',monospace;font-size:11px;line-height:2;color:var(--text2)">
-      Scanning for ICT AMD confluence…
+  <!-- D: SIGNAL REASONING — collapsible to save space -->
+  <div class="coll-wrap" style="flex-shrink:0">
+    <div class="coll-header" onclick="toggleColl('reason')">
+      <span class="coll-header-title">Signal Reasoning</span>
+      <span class="coll-chevron" id="coll-chevron-reason">▼</span>
     </div>
-  </div>
-
-  <!-- E: DATA SOURCE STATUS -->
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:10px 12px">
-    <div style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:8px">Live Data Sources</div>
-    <div id="data-sources-status" style="display:flex;flex-direction:column;gap:5px;font-family:'Space Mono',monospace;font-size:10px;color:var(--text3)">
-      <div>Fetching live OHLC data…</div>
+    <div class="coll-body" id="coll-body-reason">
+      <div class="coll-inner">
+        <div id="sig-reason-list" style="font-family:'Space Mono',monospace;font-size:11px;line-height:1.9;color:var(--text2)">Scanning for ICT AMD confluence…</div>
+      </div>
     </div>
   </div>
 
@@ -619,7 +608,26 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
       <div class="timing-bar-row"><span class="timing-bar-label">Asian</span><div class="timing-bar-track"><div class="timing-bar-fill" style="width:80%"></div></div><span class="timing-bar-val">24m</span></div>
     </div>
   </div>
-</div>
+
+  <!-- LIVE DATA SOURCES — moved here from Signal page, collapsible -->
+  <div class="coll-wrap">
+    <div class="coll-header" onclick="toggleColl('datasrc')" style="background:var(--bg2)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="coll-header-title">Live Data Sources</span>
+        <div id="ds-dot" style="width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0"></div>
+      </div>
+      <span class="coll-chevron" id="coll-chevron-datasrc">▼</span>
+    </div>
+    <div class="coll-body" id="coll-body-datasrc">
+      <div class="coll-inner">
+        <div id="data-sources-status" style="display:flex;flex-direction:column;gap:6px;font-family:'Space Mono',monospace;font-size:10px;color:var(--text3)">
+          <div>Fetching live OHLC data…</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /panel-stats -->
 
 <!-- ══ NEWS ══ -->
 <div class="tab-panel" id="panel-news">
@@ -670,909 +678,363 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 <script>
 'use strict';
 
-// ══════════════════════════════════════════════════════════════════
-// AURUM ULTRA — ICT AMD SIGNAL ENGINE
-// Mirrors AURUM NUCLEAR EA v9.4 logic:
-// CountTier1Votes() — Judas, CHoCH, OB, FVG, AMD Phase, MN Bias
-// CountVotes() — full confluence including EMA, RSI, Tenkan, PDH/PDL
-// Signal fires when T1 >= 2 AND confidence >= 55%
-// ══════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+// AURUM ULTRA — ICT AMD SIGNAL ENGINE v9.4
+// ════════════════════════════════════════════════════
 
-// ── Global state ─────────────────────────────────────────────────
-let livePrice = 0, priceConfirmed = false;
-let lastH1OHLC = null;
-let lastSignal = null;
-let signalTimer = 0;
-let signalTimerInterval = null;
-let histFilter = 'all';
-let goldRange = 'day';
-let goldOHLCData = {day:[],week:[],month:[]};
-let currentTF = '1';
-let rsiEnabled = false;
-let newsItems = [];
-let sessionSignals = [];
+let livePrice=0,priceConfirmed=false;
+let lastH1OHLC=null,lastSignal=null;
+let signalTimer=0,signalTimerInterval=null;
+let histFilter='all',goldRange='day';
+let goldOHLCData={day:[],week:[],month:[]};
+let currentTF='1',rsiEnabled=false;
+let newsItems=[],sessionSignals=[];
 
-// ICT AMD state
-let ictState = {
-  mnOpen: 0, mnBias: 0,
-  asianHi: 0, asianLo: 999999,
-  judasFired: false, judasDir: 0, judasExtreme: 0,
-  lastCHoCH: 0, lastCHoCHPrice: 0,
-  liqSweep: false, liqSweepDir: 0,
-  pdh: 0, pdl: 0,
-  weekHi: 0, weekLo: 999999,
-  phase: 0, phaseName: 'SCANNING',
-  active4HDir: 0,
-  fvgBull: null, fvgBear: null,
-  obBull: null, obBear: null,
-  atr: 0, tenkan: 0, kijun: 0,
-  ema20: 0, ema50: 0, ema200: 0,
-  rsi: 50
+let ictState={
+  mnOpen:0,mnBias:0,asianHi:0,asianLo:999999,
+  judasFired:false,judasDir:0,judasExtreme:0,
+  lastCHoCH:0,lastCHoCHPrice:0,liqSweep:false,liqSweepDir:0,
+  pdh:0,pdl:0,weekHi:0,weekLo:999999,phase:0,phaseName:'SCANNING',
+  active4HDir:0,fvgBull:null,fvgBear:null,obBull:null,obBear:null,
+  atr:0,tenkan:0,kijun:0,ema20:0,ema50:0,ema200:0,rsi:50
 };
 
-// ── INDICATOR MATH ────────────────────────────────────────────────
-function calcEMA(arr, p) {
-  if (arr.length < p) return arr[arr.length-1] || 0;
-  const k = 2/(p+1);
-  let e = arr.slice(0,p).reduce((a,b)=>a+b,0)/p;
-  for (let i=p; i<arr.length; i++) e = arr[i]*k + e*(1-k);
-  return e;
-}
-function calcEMASeries(arr, p) {
-  const k = 2/(p+1);
-  let e = arr.slice(0,p).reduce((a,b)=>a+b,0)/p;
-  const out = [e];
-  for (let i=p; i<arr.length; i++) { e = arr[i]*k+e*(1-k); out.push(e); }
-  return out;
-}
-function calcRSI(closes, p=14) {
-  if (closes.length < p+2) return 50;
-  let gains=0,losses=0;
-  for (let i=1; i<=p; i++) { const d=closes[i]-closes[i-1]; d>0?gains+=d:losses+=Math.abs(d); }
-  let ag=gains/p, al=losses/p;
-  for (let i=p+1; i<closes.length; i++) {
-    const d=closes[i]-closes[i-1];
-    const g=d>0?d:0, l=d<0?Math.abs(d):0;
-    ag=(ag*(p-1)+g)/p; al=(al*(p-1)+l)/p;
-  }
-  return al===0?100:100-(100/(1+ag/al));
-}
-function calcATR(bars, p=14) {
-  if (bars.length < 2) return 20;
-  const trs=[];
-  for (let i=1; i<bars.length; i++) {
-    const hl=bars[i].h-bars[i].l;
-    const hc=Math.abs(bars[i].h-bars[i-1].c);
-    const lc=Math.abs(bars[i].l-bars[i-1].c);
-    trs.push(Math.max(hl,hc,lc));
-  }
-  if (trs.length < p) return trs.reduce((a,b)=>a+b,0)/trs.length;
-  let atr=trs.slice(0,p).reduce((a,b)=>a+b,0)/p;
-  for (let i=p; i<trs.length; i++) atr=(atr*(p-1)+trs[i])/p;
-  return atr;
-}
-function calcTenkan(bars) {
-  const n = Math.min(9, bars.length);
-  const sl = bars.slice(-n);
-  return (Math.max(...sl.map(b=>b.h)) + Math.min(...sl.map(b=>b.l)))/2;
-}
-function calcKijun(bars) {
-  const n = Math.min(26, bars.length);
-  const sl = bars.slice(-n);
-  return (Math.max(...sl.map(b=>b.h)) + Math.min(...sl.map(b=>b.l)))/2;
+// ── Collapsible toggle ────────────────────────────
+function toggleColl(key){
+  const body=document.getElementById('coll-body-'+key);
+  const chev=document.getElementById('coll-chevron-'+key);
+  if(!body)return;
+  const open=body.classList.toggle('open');
+  if(chev)chev.classList.toggle('open',open);
 }
 
-// ── SESSION DETECTION ─────────────────────────────────────────────
-function getSession() {
-  const now = new Date();
-  const h = now.getUTCHours(), m = now.getUTCMinutes();
-  const mins = h*60+m;
-  if (mins>=0 && mins<420) return 'ASIAN';
-  if (mins>=420 && mins<780) return 'LONDON';
-  if (mins>=780 && mins<1260) return 'NY';
-  return 'NIGHT';
-}
-function getAMDPhase() {
-  const sess = getSession();
-  if (sess==='ASIAN') return {phase:1, name:'ACCUMULATION', desc:'Asian session — institutions building positions quietly'};
-  if (sess==='LONDON') return {phase:2, name:'MANIPULATION', desc:'London open — Judas sweep likely, watch for fake move'};
-  if (sess==='NY') return {phase:3, name:'DISTRIBUTION', desc:'NY session — true directional move, highest probability'};
-  return {phase:0, name:'SCANNING', desc:'Between sessions — reduced confluence required'};
-}
+// ── Indicator math ────────────────────────────────
+function calcEMA(arr,p){if(arr.length<p)return arr[arr.length-1]||0;const k=2/(p+1);let e=arr.slice(0,p).reduce((a,b)=>a+b,0)/p;for(let i=p;i<arr.length;i++)e=arr[i]*k+e*(1-k);return e;}
+function calcEMASeries(arr,p){const k=2/(p+1);let e=arr.slice(0,p).reduce((a,b)=>a+b,0)/p;const out=[e];for(let i=p;i<arr.length;i++){e=arr[i]*k+e*(1-k);out.push(e);}return out;}
+function calcRSI(closes,p=14){if(closes.length<p+2)return 50;let gains=0,losses=0;for(let i=1;i<=p;i++){const d=closes[i]-closes[i-1];d>0?gains+=d:losses+=Math.abs(d);}let ag=gains/p,al=losses/p;for(let i=p+1;i<closes.length;i++){const d=closes[i]-closes[i-1];const g=d>0?d:0,l=d<0?Math.abs(d):0;ag=(ag*(p-1)+g)/p;al=(al*(p-1)+l)/p;}return al===0?100:100-(100/(1+ag/al));}
+function calcATR(bars,p=14){if(bars.length<2)return 20;const trs=[];for(let i=1;i<bars.length;i++){const hl=bars[i].h-bars[i].l,hc=Math.abs(bars[i].h-bars[i-1].c),lc=Math.abs(bars[i].l-bars[i-1].c);trs.push(Math.max(hl,hc,lc));}if(trs.length<p)return trs.reduce((a,b)=>a+b,0)/trs.length;let atr=trs.slice(0,p).reduce((a,b)=>a+b,0)/p;for(let i=p;i<trs.length;i++)atr=(atr*(p-1)+trs[i])/p;return atr;}
+function calcTenkan(bars){const n=Math.min(9,bars.length),sl=bars.slice(-n);return(Math.max(...sl.map(b=>b.h))+Math.min(...sl.map(b=>b.l)))/2;}
+function calcKijun(bars){const n=Math.min(26,bars.length),sl=bars.slice(-n);return(Math.max(...sl.map(b=>b.h))+Math.min(...sl.map(b=>b.l)))/2;}
 
-// ── ICT STATE FROM H1 BARS ────────────────────────────────────────
-function computeICTState(bars) {
-  if (!bars || bars.length < 30) return;
-  const closes = bars.map(b=>b.c);
-  const price  = livePrice > 1000 ? livePrice : closes[closes.length-1];
+function getSession(){const now=new Date(),h=now.getUTCHours(),m=now.getUTCMinutes(),mins=h*60+m;if(mins>=0&&mins<420)return'ASIAN';if(mins>=420&&mins<780)return'LONDON';if(mins>=780&&mins<1260)return'NY';return'NIGHT';}
+function getAMDPhase(){const sess=getSession();if(sess==='ASIAN')return{phase:1,name:'ACCUMULATION',desc:'Asian session — institutions building positions quietly'};if(sess==='LONDON')return{phase:2,name:'MANIPULATION',desc:'London open — Judas sweep likely, watch for fake move'};if(sess==='NY')return{phase:3,name:'DISTRIBUTION',desc:'NY session — true directional move, highest probability'};return{phase:0,name:'SCANNING',desc:'Between sessions — reduced confluence required'};}
 
-  ictState.ema20  = calcEMA(closes, 20);
-  ictState.ema50  = calcEMA(closes, 50);
-  ictState.ema200 = calcEMA(closes, Math.min(200, closes.length-1));
-  ictState.rsi    = calcRSI(closes, 14);
-  ictState.atr    = calcATR(bars, 14);
-  ictState.tenkan = calcTenkan(bars);
-  ictState.kijun  = calcKijun(bars);
-
-  const mnBar = bars.find(b => { const d=new Date(b.t); return d.getUTCHours()===0; });
-  if (mnBar) {
-    ictState.mnOpen = mnBar.o;
-    ictState.mnBias = price < mnBar.o - 2 ? 1 : price > mnBar.o + 2 ? -1 : 0;
-  }
-
-  const todayStart = new Date(); todayStart.setUTCHours(0,0,0,0);
-  const ydayStart  = new Date(todayStart); ydayStart.setDate(ydayStart.getDate()-1);
-  const ydayBars   = bars.filter(b=>b.t>=ydayStart.getTime()&&b.t<todayStart.getTime());
-  if (ydayBars.length) {
-    ictState.pdh = Math.max(...ydayBars.map(b=>b.h));
-    ictState.pdl = Math.min(...ydayBars.map(b=>b.l));
-  }
-
-  const asianBars = bars.filter(b=>{ const h=new Date(b.t).getUTCHours(); return h>=0&&h<7; });
-  if (asianBars.length) {
-    ictState.asianHi = Math.max(...asianBars.map(b=>b.h));
-    ictState.asianLo = Math.min(...asianBars.map(b=>b.l));
-  }
-
-  const sess = getSession();
-  if (sess==='LONDON' && ictState.asianHi>0) {
-    const recentBars = bars.slice(-8);
-    for (const b of recentBars) {
-      const bh = new Date(b.t).getUTCHours();
-      if (bh>=7 && bh<=10) {
-        if (b.h > ictState.asianHi && b.c < ictState.asianHi && b.c < b.o) {
-          ictState.judasFired=true; ictState.judasDir=-1; ictState.judasExtreme=b.h; break;
-        }
-        if (b.l < ictState.asianLo && b.c > ictState.asianLo && b.c > b.o) {
-          ictState.judasFired=true; ictState.judasDir=1; ictState.judasExtreme=b.l; break;
-        }
-      }
-    }
-  }
-
-  const lookback = bars.slice(-20);
-  let swingHi=0, swingLo=999999;
-  for (let i=1; i<lookback.length-1; i++) {
-    if (lookback[i].h>lookback[i-1].h&&lookback[i].h>lookback[i+1].h) swingHi=Math.max(swingHi,lookback[i].h);
-    if (lookback[i].l<lookback[i-1].l&&lookback[i].l<lookback[i+1].l) swingLo=Math.min(swingLo,lookback[i].l);
-  }
-  const last2=bars.slice(-2);
-  if (last2.length>=2) {
-    if (last2[1].c>swingHi&&last2[0].c<=swingHi) ictState.lastCHoCH=1;
-    else if (last2[1].c<swingLo&&last2[0].c>=swingLo) ictState.lastCHoCH=-1;
-  }
-
-  ictState.fvgBull=null; ictState.fvgBear=null;
-  for (let i=1; i<bars.length-1; i++) {
-    const gap=bars[i+1].l - bars[i-1].h;
-    if (gap>1.0 && !ictState.fvgBull) ictState.fvgBull={hi:bars[i+1].l,lo:bars[i-1].h,ce:(bars[i+1].l+bars[i-1].h)/2};
-    const gap2=bars[i-1].l - bars[i+1].h;
-    if (gap2>1.0 && !ictState.fvgBear) ictState.fvgBear={hi:bars[i-1].l,lo:bars[i+1].h,ce:(bars[i-1].l+bars[i+1].h)/2};
-  }
-
-  ictState.obBull=null; ictState.obBear=null;
-  for (let i=2; i<bars.length-2; i++) {
-    const b=bars[i];
-    if (b.h>bars[i-1].h&&b.h>bars[i+1].h&&b.h>price&&price>b.h-30) {
-      if (!ictState.obBear) ictState.obBear={hi:b.h+0.5,lo:b.h-3,mid:(b.h*2-2.5)/2};
-    }
-    if (b.l<bars[i-1].l&&b.l<bars[i+1].l&&b.l<price&&price<b.l+30) {
-      if (!ictState.obBull) ictState.obBull={hi:b.l+3,lo:b.l-0.5,mid:(b.l*2+2.5)/2};
-    }
-  }
-
-  const amd=getAMDPhase();
-  ictState.phase=amd.phase; ictState.phaseName=amd.name;
-  ictState.active4HDir=ictState.mnBias!==0?ictState.mnBias:(ictState.ema20>ictState.ema50?1:-1);
+function computeICTState(bars){
+  if(!bars||bars.length<30)return;
+  const closes=bars.map(b=>b.c),price=livePrice>1000?livePrice:closes[closes.length-1];
+  ictState.ema20=calcEMA(closes,20);ictState.ema50=calcEMA(closes,50);ictState.ema200=calcEMA(closes,Math.min(200,closes.length-1));
+  ictState.rsi=calcRSI(closes,14);ictState.atr=calcATR(bars,14);ictState.tenkan=calcTenkan(bars);ictState.kijun=calcKijun(bars);
+  const mnBar=bars.find(b=>{const d=new Date(b.t);return d.getUTCHours()===0;});
+  if(mnBar){ictState.mnOpen=mnBar.o;ictState.mnBias=price<mnBar.o-2?1:price>mnBar.o+2?-1:0;}
+  const todayStart=new Date();todayStart.setUTCHours(0,0,0,0);
+  const ydayStart=new Date(todayStart);ydayStart.setDate(ydayStart.getDate()-1);
+  const ydayBars=bars.filter(b=>b.t>=ydayStart.getTime()&&b.t<todayStart.getTime());
+  if(ydayBars.length){ictState.pdh=Math.max(...ydayBars.map(b=>b.h));ictState.pdl=Math.min(...ydayBars.map(b=>b.l));}
+  const asianBars=bars.filter(b=>{const h=new Date(b.t).getUTCHours();return h>=0&&h<7;});
+  if(asianBars.length){ictState.asianHi=Math.max(...asianBars.map(b=>b.h));ictState.asianLo=Math.min(...asianBars.map(b=>b.l));}
+  const sess=getSession();
+  if(sess==='LONDON'&&ictState.asianHi>0){const recentBars=bars.slice(-8);for(const b of recentBars){const bh=new Date(b.t).getUTCHours();if(bh>=7&&bh<=10){if(b.h>ictState.asianHi&&b.c<ictState.asianHi&&b.c<b.o){ictState.judasFired=true;ictState.judasDir=-1;ictState.judasExtreme=b.h;break;}if(b.l<ictState.asianLo&&b.c>ictState.asianLo&&b.c>b.o){ictState.judasFired=true;ictState.judasDir=1;ictState.judasExtreme=b.l;break;}}}}
+  const lookback=bars.slice(-20);let swingHi=0,swingLo=999999;
+  for(let i=1;i<lookback.length-1;i++){if(lookback[i].h>lookback[i-1].h&&lookback[i].h>lookback[i+1].h)swingHi=Math.max(swingHi,lookback[i].h);if(lookback[i].l<lookback[i-1].l&&lookback[i].l<lookback[i+1].l)swingLo=Math.min(swingLo,lookback[i].l);}
+  const last2=bars.slice(-2);if(last2.length>=2){if(last2[1].c>swingHi&&last2[0].c<=swingHi)ictState.lastCHoCH=1;else if(last2[1].c<swingLo&&last2[0].c>=swingLo)ictState.lastCHoCH=-1;}
+  ictState.fvgBull=null;ictState.fvgBear=null;
+  for(let i=1;i<bars.length-1;i++){const gap=bars[i+1].l-bars[i-1].h;if(gap>1.0&&!ictState.fvgBull)ictState.fvgBull={hi:bars[i+1].l,lo:bars[i-1].h,ce:(bars[i+1].l+bars[i-1].h)/2};const gap2=bars[i-1].l-bars[i+1].h;if(gap2>1.0&&!ictState.fvgBear)ictState.fvgBear={hi:bars[i-1].l,lo:bars[i+1].h,ce:(bars[i-1].l+bars[i+1].h)/2};}
+  ictState.obBull=null;ictState.obBear=null;
+  for(let i=2;i<bars.length-2;i++){const b=bars[i];if(b.h>bars[i-1].h&&b.h>bars[i+1].h&&b.h>price&&price>b.h-30){if(!ictState.obBear)ictState.obBear={hi:b.h+0.5,lo:b.h-3,mid:(b.h*2-2.5)/2};}if(b.l<bars[i-1].l&&b.l<bars[i+1].l&&b.l<price&&price<b.l+30){if(!ictState.obBull)ictState.obBull={hi:b.l+3,lo:b.l-0.5,mid:(b.l*2+2.5)/2};}}
+  const amd=getAMDPhase();ictState.phase=amd.phase;ictState.phaseName=amd.name;ictState.active4HDir=ictState.mnBias!==0?ictState.mnBias:(ictState.ema20>ictState.ema50?1:-1);
 }
 
-// ── T1 VOTES ──────────────────────────────────────────────────────
-function countT1Votes(dir) {
-  let v=0;
-  const price = livePrice>1000?livePrice:(lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:0);
-  if (ictState.judasFired && ictState.judasDir===dir) v++;
-  if (ictState.lastCHoCH===dir) v++;
-  if (ictState.liqSweep && ((dir===1&&ictState.liqSweepDir===-1)||(dir===-1&&ictState.liqSweepDir===1))) v++;
-  if (dir===1&&ictState.obBull&&price>=ictState.obBull.lo&&price<=ictState.obBull.hi) v++;
-  if (dir===-1&&ictState.obBear&&price<=ictState.obBear.hi&&price>=ictState.obBear.lo) v++;
-  if (dir===1&&ictState.fvgBull&&price>=ictState.fvgBull.lo&&price<=ictState.fvgBull.hi) v++;
-  if (dir===-1&&ictState.fvgBear&&price<=ictState.fvgBear.hi&&price>=ictState.fvgBear.lo) v++;
-  if (ictState.phase>=2&&ictState.active4HDir===dir) v++;
-  if (ictState.mnBias===dir) v++;
+function countT1Votes(dir){
+  let v=0;const price=livePrice>1000?livePrice:(lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:0);
+  if(ictState.judasFired&&ictState.judasDir===dir)v++;
+  if(ictState.lastCHoCH===dir)v++;
+  if(ictState.liqSweep&&((dir===1&&ictState.liqSweepDir===-1)||(dir===-1&&ictState.liqSweepDir===1)))v++;
+  if(dir===1&&ictState.obBull&&price>=ictState.obBull.lo&&price<=ictState.obBull.hi)v++;
+  if(dir===-1&&ictState.obBear&&price<=ictState.obBear.hi&&price>=ictState.obBear.lo)v++;
+  if(dir===1&&ictState.fvgBull&&price>=ictState.fvgBull.lo&&price<=ictState.fvgBull.hi)v++;
+  if(dir===-1&&ictState.fvgBear&&price<=ictState.fvgBear.hi&&price>=ictState.fvgBear.lo)v++;
+  if(ictState.phase>=2&&ictState.active4HDir===dir)v++;
+  if(ictState.mnBias===dir)v++;
   return v;
 }
 
-// ── FULL VOTES ────────────────────────────────────────────────────
 const MAX_VOTES=16;
-function countVotes(dir) {
-  let v=0;
-  const price = livePrice>1000?livePrice:(lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:0);
-  if (ictState.atr>0&&ictState.atr<30) v++;
-  if (dir===1&&ictState.obBull&&price>=ictState.obBull.lo&&price<=ictState.obBull.hi) v++;
-  if (dir===-1&&ictState.obBear&&price<=ictState.obBear.hi&&price>=ictState.obBear.lo) v++;
-  if (dir===1&&ictState.fvgBull&&price>=ictState.fvgBull.lo&&price<=ictState.fvgBull.hi) v++;
-  if (dir===-1&&ictState.fvgBear&&price<=ictState.fvgBear.hi&&price>=ictState.fvgBear.lo) v++;
-  if (ictState.judasFired&&ictState.judasDir===dir) v++;
-  if (ictState.lastCHoCH===dir) v++;
-  if (ictState.mnBias===dir) v++;
-  if (dir===1&&ictState.tenkan>ictState.kijun) v++;
-  if (dir===-1&&ictState.tenkan<ictState.kijun) v++;
+function countVotes(dir){
+  let v=0;const price=livePrice>1000?livePrice:(lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:0);
+  if(ictState.atr>0&&ictState.atr<30)v++;
+  if(dir===1&&ictState.obBull&&price>=ictState.obBull.lo&&price<=ictState.obBull.hi)v++;
+  if(dir===-1&&ictState.obBear&&price<=ictState.obBear.hi&&price>=ictState.obBear.lo)v++;
+  if(dir===1&&ictState.fvgBull&&price>=ictState.fvgBull.lo&&price<=ictState.fvgBull.hi)v++;
+  if(dir===-1&&ictState.fvgBear&&price<=ictState.fvgBear.hi&&price>=ictState.fvgBear.lo)v++;
+  if(ictState.judasFired&&ictState.judasDir===dir)v++;
+  if(ictState.lastCHoCH===dir)v++;
+  if(ictState.mnBias===dir)v++;
+  if(dir===1&&ictState.tenkan>ictState.kijun)v++;
+  if(dir===-1&&ictState.tenkan<ictState.kijun)v++;
   const rsi=ictState.rsi;
-  if (dir===1&&rsi>45&&rsi<75) v++;
-  if (dir===-1&&rsi<55&&rsi>25) v++;
-  if (lastH1OHLC&&lastH1OHLC.length>3) {
-    const cls=lastH1OHLC.slice(-4).map(b=>b.c);
-    const slope=cls[cls.length-1]-cls[cls.length-2];
-    if (dir===1&&slope>0.05&&lastH1OHLC[lastH1OHLC.length-1].c>ictState.ema20) v++;
-    if (dir===-1&&slope<-0.05&&lastH1OHLC[lastH1OHLC.length-1].c<ictState.ema20) v++;
-  }
-  if (ictState.phase>=2&&ictState.active4HDir===dir) v++;
+  if(dir===1&&rsi>45&&rsi<75)v++;if(dir===-1&&rsi<55&&rsi>25)v++;
+  if(lastH1OHLC&&lastH1OHLC.length>3){const cls=lastH1OHLC.slice(-4).map(b=>b.c),slope=cls[cls.length-1]-cls[cls.length-2];if(dir===1&&slope>0.05&&lastH1OHLC[lastH1OHLC.length-1].c>ictState.ema20)v++;if(dir===-1&&slope<-0.05&&lastH1OHLC[lastH1OHLC.length-1].c<ictState.ema20)v++;}
+  if(ictState.phase>=2&&ictState.active4HDir===dir)v++;
   const lastClose=lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:price;
-  if (dir===1&&lastClose>ictState.ema20&&ictState.ema20>ictState.ema50) v++;
-  if (dir===-1&&lastClose<ictState.ema20&&ictState.ema20<ictState.ema50) v++;
-  if (ictState.atr>0) {
-    if (dir===1&&ictState.pdl>0&&Math.abs(price-ictState.pdl)<ictState.atr*1.0) v++;
-    if (dir===-1&&ictState.pdh>0&&Math.abs(price-ictState.pdh)<ictState.atr*1.0) v++;
-  }
+  if(dir===1&&lastClose>ictState.ema20&&ictState.ema20>ictState.ema50)v++;
+  if(dir===-1&&lastClose<ictState.ema20&&ictState.ema20<ictState.ema50)v++;
+  if(ictState.atr>0){if(dir===1&&ictState.pdl>0&&Math.abs(price-ictState.pdl)<ictState.atr*1.0)v++;if(dir===-1&&ictState.pdh>0&&Math.abs(price-ictState.pdh)<ictState.atr*1.0)v++;}
   return Math.min(MAX_VOTES,v);
 }
 
-// ── SIGNAL COMPUTATION ────────────────────────────────────────────
-function computeSignal() {
-  if (!lastH1OHLC || lastH1OHLC.length<30) return null;
-  const price = livePrice>1000?livePrice:lastH1OHLC[lastH1OHLC.length-1].c;
-  const t1B=countT1Votes(1), t1S=countT1Votes(-1);
-  const vB=countVotes(1),    vS=countVotes(-1);
-  const confB=Math.round(vB*100/MAX_VOTES);
-  const confS=Math.round(vS*100/MAX_VOTES);
-  const sess=getSession();
-  const thresh=sess==='ASIAN'?33:55;
-  const minT1=2;
-
-  let dir=0, conf=0, t1=0;
-  if (t1B>=minT1&&confB>=thresh&&t1B>t1S) { dir=1; conf=confB; t1=t1B; }
-  else if (t1S>=minT1&&confS>=thresh&&t1S>t1B) { dir=-1; conf=confS; t1=t1S; }
-
+function computeSignal(){
+  if(!lastH1OHLC||lastH1OHLC.length<30)return null;
+  const price=livePrice>1000?livePrice:lastH1OHLC[lastH1OHLC.length-1].c;
+  const t1B=countT1Votes(1),t1S=countT1Votes(-1);
+  const vB=countVotes(1),vS=countVotes(-1);
+  const confB=Math.round(vB*100/MAX_VOTES),confS=Math.round(vS*100/MAX_VOTES);
+  const sess=getSession(),thresh=sess==='ASIAN'?33:55,minT1=2;
+  let dir=0,conf=0,t1=0;
+  if(t1B>=minT1&&confB>=thresh&&t1B>t1S){dir=1;conf=confB;t1=t1B;}
+  else if(t1S>=minT1&&confS>=thresh&&t1S>t1B){dir=-1;conf=confS;t1=t1S;}
   let engine='SCAN';
-  if (dir!==0) {
-    const ema=dir===1?(lastH1OHLC[lastH1OHLC.length-1].c>ictState.ema20&&ictState.ema20>ictState.ema50):
-                     (lastH1OHLC[lastH1OHLC.length-1].c<ictState.ema20&&ictState.ema20<ictState.ema50);
-    const ten=dir===1?ictState.tenkan>ictState.kijun:ictState.tenkan<ictState.kijun;
-    if (ema&&ten) engine='HF';
-    else if (t1>=3) engine='AMD';
-    else engine='HF';
-  }
-
-  const atr=ictState.atr||20;
-  const sess2=getSession();
-  const slMult=sess2==='ASIAN'?1.2:sess2==='LONDON'?1.5:1.8;
-  let slDist=atr*slMult*0.25;
-  slDist=Math.min(slDist, 5.0);
-  const sl  = dir===1?price-slDist:dir===-1?price+slDist:0;
-  const tp1 = dir===1?price+slDist*1.2:dir===-1?price-slDist*1.2:0;
-  const tp2 = dir===1?price+slDist*2.0:dir===-1?price-slDist*2.0:0;
-  const tp3 = dir===1?price+slDist*3.5:dir===-1?price-slDist*3.5:0;
-  const rr  = slDist>0?Math.abs(tp2-price)/slDist:0;
-
-  const sig = {
-    dir, conf, t1, engine, price, sl, tp1, tp2, tp3, slDist, rr,
-    atr, sess, time: new Date().toTimeString().slice(0,8),
-    phaseName: ictState.phaseName,
-    judasFired: ictState.judasFired, judasDir: ictState.judasDir,
-    choch: ictState.lastCHoCH,
-    mnBias: ictState.mnBias, mnOpen: ictState.mnOpen,
-    hasFVG: dir===1?!!ictState.fvgBull:!!ictState.fvgBear,
-    hasOB:  dir===1?!!ictState.obBull:!!ictState.obBear,
-    ema20: ictState.ema20, ema50: ictState.ema50, ema200: ictState.ema200,
-    tenkan: ictState.tenkan, kijun: ictState.kijun,
-    rsi: ictState.rsi,
-    pdh: ictState.pdh, pdl: ictState.pdl,
-    asianHi: ictState.asianHi, asianLo: ictState.asianLo,
-    confBull: confB, confBear: confS, votesBull: vB, votesBear: vS
-  };
-  lastSignal=sig;
-  return sig;
+  if(dir!==0){const ema=dir===1?(lastH1OHLC[lastH1OHLC.length-1].c>ictState.ema20&&ictState.ema20>ictState.ema50):(lastH1OHLC[lastH1OHLC.length-1].c<ictState.ema20&&ictState.ema20<ictState.ema50);const ten=dir===1?ictState.tenkan>ictState.kijun:ictState.tenkan<ictState.kijun;if(ema&&ten)engine='HF';else if(t1>=3)engine='AMD';else engine='HF';}
+  const atr=ictState.atr||20,sess2=getSession(),slMult=sess2==='ASIAN'?1.2:sess2==='LONDON'?1.5:1.8;
+  let slDist=Math.min(atr*slMult*0.25,5.0);
+  const sl=dir===1?price-slDist:dir===-1?price+slDist:0;
+  const tp1=dir===1?price+slDist*1.2:dir===-1?price-slDist*1.2:0;
+  const tp2=dir===1?price+slDist*2.0:dir===-1?price-slDist*2.0:0;
+  const tp3=dir===1?price+slDist*3.5:dir===-1?price-slDist*3.5:0;
+  const rr=slDist>0?Math.abs(tp2-price)/slDist:0;
+  const sig={dir,conf,t1,engine,price,sl,tp1,tp2,tp3,slDist,rr,atr,sess,time:new Date().toTimeString().slice(0,8),phaseName:ictState.phaseName,judasFired:ictState.judasFired,judasDir:ictState.judasDir,choch:ictState.lastCHoCH,mnBias:ictState.mnBias,mnOpen:ictState.mnOpen,hasFVG:dir===1?!!ictState.fvgBull:!!ictState.fvgBear,hasOB:dir===1?!!ictState.obBull:!!ictState.obBear,ema20:ictState.ema20,ema50:ictState.ema50,ema200:ictState.ema200,tenkan:ictState.tenkan,kijun:ictState.kijun,rsi:ictState.rsi,pdh:ictState.pdh,pdl:ictState.pdl,asianHi:ictState.asianHi,asianLo:ictState.asianLo,confBull:confB,confBear:confS,votesBull:vB,votesBear:vS};
+  lastSignal=sig;return sig;
 }
 
-// ── SIGNAL UI ─────────────────────────────────────────────────────
-function applySignalUI(sig) {
-  if (!sig) return;
+function applySignalUI(sig){
+  if(!sig)return;
   const p=n=>n.toFixed(2);
   const set=(id,val,color)=>{const e=document.getElementById(id);if(!e)return;e.textContent=val;if(color)e.style.color=color;};
   const dirName=sig.dir===1?'▲ BUY':sig.dir===-1?'▼ SELL':'◉ SCANNING';
   const dirColor=sig.dir===1?'var(--green)':sig.dir===-1?'var(--red)':'var(--gold)';
-
   const wrap=document.getElementById('sig-main-wrap');
-  if(wrap) wrap.style.borderColor=sig.dir===1?'rgba(34,197,94,.4)':sig.dir===-1?'rgba(239,68,68,.4)':'var(--border)';
-  set('sig-main-dir',dirName); document.getElementById('sig-main-dir').style.color=dirColor;
+  if(wrap)wrap.style.borderColor=sig.dir===1?'rgba(34,197,94,.4)':sig.dir===-1?'rgba(239,68,68,.4)':'var(--border)';
+  set('sig-main-dir',dirName);document.getElementById('sig-main-dir').style.color=dirColor;
   const arrowBox=document.getElementById('sig-arrow-box');
   if(arrowBox){arrowBox.textContent=sig.dir===1?'↑':sig.dir===-1?'↓':'◉';arrowBox.style.background=sig.dir===1?'var(--green-bg)':sig.dir===-1?'var(--red-bg)':'var(--bg4)';}
   const engBadge=document.getElementById('sig-engine-badge');
   if(engBadge){engBadge.textContent=sig.engine;engBadge.className='sig-engine-badge '+(sig.engine==='HF'?'hf':sig.engine==='AMD'?'amd':'scan');}
-  set('sig-session-lbl',sig.sess+' · '+sig.phaseName);
-  set('sig-time-lbl',sig.time);
-
+  set('sig-session-lbl',sig.sess+' · '+sig.phaseName);set('sig-time-lbl',sig.time);
   const confBar=document.getElementById('sig-conf-bar');
   if(confBar){const pct=sig.dir!==0?sig.conf:0;confBar.style.width=pct+'%';confBar.className='conf-fill-bar '+(sig.dir===1?'buy':sig.dir===-1?'sell':'scan');}
   set('sig-conf-pct',(sig.dir!==0?sig.conf:0)+'%');
-
-  if (sig.dir!==0) {
-    set('tp-entry','$'+p(sig.price));
-    set('tp-tp1','$'+p(sig.tp1)); set('tp-tp2','$'+p(sig.tp2)); set('tp-tp3','$'+p(sig.tp3));
-    set('tp-sl','$'+p(sig.sl));
-    set('sig-rr','R:R 1:'+sig.rr.toFixed(1));
+  if(sig.dir!==0){
+    set('tp-entry','$'+p(sig.price));set('tp-tp1','$'+p(sig.tp1));set('tp-tp2','$'+p(sig.tp2));set('tp-tp3','$'+p(sig.tp3));set('tp-sl','$'+p(sig.sl));set('sig-rr','R:R 1:'+sig.rr.toFixed(1));
     const setBar=(id,pct,col)=>{const e=document.getElementById(id);if(e){e.style.width=pct+'%';e.style.background=col;}};
-    setBar('tp1-bar',40,sig.dir===1?'var(--cyan)':'var(--red)');
-    setBar('tp2-bar',66,sig.dir===1?'var(--green)':'var(--orange)');
-    setBar('tp3-bar',100,sig.dir===1?'#a3e635':'#f87171');
-  } else {
-    ['tp-entry','tp-tp1','tp-tp2','tp-tp3','tp-sl'].forEach(id=>set(id,'—'));
-    set('sig-rr','R:R —');
-  }
-
-  set('sig-sl-dist',sig.dir!==0?'$'+p(sig.slDist):'—');
-  set('sig-atr-val','$'+p(sig.atr));
-  set('sig-t1-count',sig.t1+'/6');
-  set('sig-engine-val',sig.engine);
-
-  set('chart-sig-dir',dirName); document.getElementById('chart-sig-dir').style.color=dirColor;
-  set('chart-entry',sig.dir!==0?'$'+p(sig.price):'—');
-  set('chart-tp1',sig.dir!==0?'$'+p(sig.tp1):'—');
-  set('chart-sl',sig.dir!==0?'$'+p(sig.sl):'—');
-  set('chart-rr',sig.dir!==0?'1:'+sig.rr.toFixed(1):'—');
-  set('chart-conf',sig.conf+'%');
-  const chartBar=document.getElementById('sig-bar-wrap');
-  if(chartBar) chartBar.style.borderColor=sig.dir===1?'rgba(34,197,94,.3)':sig.dir===-1?'rgba(239,68,68,.3)':'var(--border)';
-
-  updateOverviewStats(sig);
-  renderICTRows(sig);
-  renderReasonPanel(sig);
-  drawProjectionRay(sig);
-  set('proj-phase-lbl','Phase: '+sig.phaseName);
-
-  if (sig.dir!==0) {
-    const last=sessionSignals[sessionSignals.length-1];
-    if (!last||last.dir!==sig.dir||last.price!==sig.price) {
-      sessionSignals.push({...sig,logTime:Date.now()});
-    }
-  }
+    setBar('tp1-bar',40,sig.dir===1?'var(--cyan)':'var(--red)');setBar('tp2-bar',66,sig.dir===1?'var(--green)':'var(--orange)');setBar('tp3-bar',100,sig.dir===1?'#a3e635':'#f87171');
+  }else{['tp-entry','tp-tp1','tp-tp2','tp-tp3','tp-sl'].forEach(id=>set(id,'—'));set('sig-rr','R:R —');}
+  set('sig-sl-dist',sig.dir!==0?'$'+p(sig.slDist):'—');set('sig-atr-val','$'+p(sig.atr));set('sig-t1-count',sig.t1+'/6');set('sig-engine-val',sig.engine);
+  set('chart-sig-dir',dirName);document.getElementById('chart-sig-dir').style.color=dirColor;
+  set('chart-entry',sig.dir!==0?'$'+p(sig.price):'—');set('chart-tp1',sig.dir!==0?'$'+p(sig.tp1):'—');set('chart-sl',sig.dir!==0?'$'+p(sig.sl):'—');set('chart-rr',sig.dir!==0?'1:'+sig.rr.toFixed(1):'—');set('chart-conf',sig.conf+'%');
+  const chartBar=document.getElementById('sig-bar-wrap');if(chartBar)chartBar.style.borderColor=sig.dir===1?'rgba(34,197,94,.3)':sig.dir===-1?'rgba(239,68,68,.3)':'var(--border)';
+  updateOverviewStats(sig);renderICTRows(sig);renderReasonPanel(sig);drawProjectionRay(sig);set('proj-phase-lbl','Phase: '+sig.phaseName);
+  if(sig.dir!==0){const last=sessionSignals[sessionSignals.length-1];if(!last||last.dir!==sig.dir||last.price!==sig.price)sessionSignals.push({...sig,logTime:Date.now()});}
   updateDataSourceStatus();
 }
 
-// ── ICT ROWS ──────────────────────────────────────────────────────
-const ICT_DEFINITIONS = [
-  {
-    key:'judas', name:'Judas Sweep', t1:true, icon:'🎭',
-    tip:'A Judas sweep is when price FAKES above a previous high (or below a low) to stop out traders, then reverses hard. Named after the betrayal — price tricks you then goes the other way. When Judas fires BULL, price swept lows = smart money hunted stops below, now prepare to BUY.',
-    bullTip:'✅ JUDAS BULL ACTIVE — Price swept Asian lows, reversed up. This is the manipulation phase completing. Get ready for distribution phase (NY) to push higher. Look for CHoCH confirmation before entry.',
-    bearTip:'✅ JUDAS BEAR ACTIVE — Price swept Asian highs, reversed down. Fake breakout confirmed. Watch for CE limit entry on the next M1 FVG.',
-    waitTip:'👁 Watching for Judas sweep in the Asian high/low zone. During London open (07:00-10:00 UTC), price often makes a fake move above or below the Asian range before the real direction.'
-  },
-  {
-    key:'choch', name:'CHoCH (Structure Break)', t1:true, icon:'🔄',
-    tip:'Change of Character — price closes ABOVE a recent swing high (bull CHoCH) or BELOW a swing low (bear CHoCH). This tells you the structure has flipped. If price was making lower lows and then breaks above the last swing high, the bears are losing control.',
-    bullTip:'✅ BULL CHoCH CONFIRMED — Price broke above a swing high, structure flipped bullish. This is a strong entry signal in alignment with the HF engine.',
-    bearTip:'✅ BEAR CHoCH CONFIRMED — Price broke below a swing low, structure flipped bearish. Sellers are in control.',
-    waitTip:'⏳ Watching for CHoCH. A close above/below the most recent swing point will trigger confirmation. No entry without structure confirmation.'
-  },
-  {
-    key:'mnbias', name:'MN Bias (Midnight Open)', t1:true, icon:'🌙',
-    tip:'The NY Midnight Open (00:00 NY time) is the most important reference price in ICT. Price BELOW the midnight open = institutions are short (bearish bias). Price ABOVE = institutions are long (bullish). Always trade WITH the midnight bias.',
-    bullTip:'✅ MN BULL BIAS — Current price is below the midnight open. Institutions position long overnight. Look for buys at key levels.',
-    bearTip:'✅ MN BEAR BIAS — Current price is above the midnight open. Institutions position short. Look for sells at key levels.',
-    waitTip:'⚠ MN NEUTRAL — Price is close to the midnight open. No clear institutional bias. Wait for price to clear the MN open before entering.'
-  },
-  {
-    key:'amdphase', name:'AMD Phase', t1:false, icon:'⏰',
-    tip:'ICT AMD framework: Asian (Accumulation) = institutions quietly build positions. London (Manipulation) = Judas sweeps happen, stops are hunted. NY (Distribution) = the REAL move happens. Highest probability entries are in the Distribution phase when direction is confirmed from Manipulation.',
-    bullTip:'', bearTip:'', waitTip:''
-  },
-  {
-    key:'fvg', name:'H1 FVG (Fair Value Gap)', t1:true, icon:'📐',
-    tip:'A Fair Value Gap forms when price moves so fast that a 3-bar gap is left on the chart (bar[1] high < bar[3] low = bull FVG). Price returns to fill this gap because institutions need to fill unfilled orders. When price is IN a FVG = high probability zone for reversal.',
-    bullTip:'✅ IN BULL FVG — Price is inside a bullish Fair Value Gap. This is a structural support zone. The gap was created by an impulse move and institutions need to fill orders here. CE (midpoint) is the ideal limit entry.',
-    bearTip:'✅ IN BEAR FVG — Price is inside a bearish Fair Value Gap (resistance zone). Institutions are selling into this gap.',
-    waitTip:'⏳ No active FVG at current price. Wait for price to pull back into a FVG zone or a new FVG to form on the next impulse candle.'
-  },
-  {
-    key:'ob', name:'Order Block (OB)', t1:true, icon:'🧱',
-    tip:'An Order Block is the LAST candle before a big impulse move — it represents the last price where institutions placed large orders. When price returns to an OB zone, those institutional orders are waiting. It is the strongest support/resistance in ICT because smart money defends it.',
-    bullTip:'✅ IN DEMAND OB — Price is at a Demand Order Block (bullish OB). Institutions placed buy orders here before the last big up move. Highest probability buy zone.',
-    bearTip:'✅ IN SUPPLY OB — Price is at a Supply Order Block (bearish OB). Institutions placed sell orders here before the last big down move.',
-    waitTip:'⏳ No active Order Block at current price range. OBs form at swing pivots — watch for the next impulse move to create a new OB to trade the retest.'
-  },
-  {
-    key:'ema', name:'EMA Stack Alignment', t1:false, icon:'📈',
-    tip:'EMA 20, 50, and 200 stack alignment: when EMA20 > EMA50 > EMA200 = full bull trend. EMA20 < EMA50 < EMA200 = full bear trend. Trading with the EMA stack means the trend is your friend. Against the stack = counter-trend = higher risk.',
-    bullTip:'✅ FULL BULL STACK — EMA20 > EMA50 > EMA200. Trend is bullish across all timeframes. Only take buy signals.',
-    bearTip:'✅ FULL BEAR STACK — EMA20 < EMA50 < EMA200. Trend is bearish. Only take sell signals.',
-    waitTip:'⚠ MIXED EMA STACK — EMAs are not fully aligned. This is a ranging or transitioning market. Reduce position size and wait for clear alignment.'
-  },
-  {
-    key:'pdh', name:'PDH/PDL Proximity', t1:false, icon:'📏',
-    tip:'Previous Day High (PDH) and Previous Day Low (PDL) are key reference levels. Price approaching PDH from below = resistance ahead, prepare for reversal or tighten TP. Price approaching PDL from above = support. Institutions use these levels for entries and exits.',
-    bullTip:'🎯 NEAR PDL — Price is close to yesterday\'s low. This is a potential institutional support zone. A bounce from PDL is a high probability buy setup.',
-    bearTip:'🎯 NEAR PDH — Price is close to yesterday\'s high. This is a potential institutional resistance zone. A rejection at PDH is a high probability sell setup.',
-    waitTip:'✓ Price is clear of PDH/PDL zones. No imminent reversal pressure from key daily levels.'
-  }
+// ── ICT Row definitions ───────────────────────────
+const ICT_DEFINITIONS=[
+  {key:'judas',name:'Judas Sweep',t1:true,icon:'🎭',tip:'A Judas sweep is when price FAKES above a high (or below a low) to stop out traders, then reverses hard. When Judas fires BULL: price swept lows = smart money hunted stops below, now BUY.',bullTip:'✅ JUDAS BULL ACTIVE — Price swept Asian lows, reversed up. Manipulation phase completing. Look for CHoCH confirmation before entry.',bearTip:'✅ JUDAS BEAR ACTIVE — Price swept Asian highs, reversed down. Fake breakout confirmed. Watch for CE limit entry on the next M1 FVG.',waitTip:'👁 Watching for Judas sweep. During London open (07:00-10:00 UTC), price often makes a fake move above/below the Asian range first.'},
+  {key:'choch',name:'CHoCH (Structure Break)',t1:true,icon:'🔄',tip:'Change of Character — price closes ABOVE a recent swing high (bull CHoCH) or BELOW a swing low (bear CHoCH). The trend has structurally flipped.',bullTip:'✅ BULL CHoCH CONFIRMED — Price broke above a swing high, structure flipped bullish. Strong entry signal aligned with HF engine.',bearTip:'✅ BEAR CHoCH CONFIRMED — Price broke below a swing low, structure flipped bearish.',waitTip:'⏳ Watching for CHoCH. A close above/below the last swing point will trigger confirmation.'},
+  {key:'mnbias',name:'MN Bias (Midnight Open)',t1:true,icon:'🌙',tip:'The NY Midnight Open (00:00 NY time) is the key ICT reference. Price BELOW = institutions are short. Price ABOVE = institutions are long. Always trade WITH the midnight bias.',bullTip:'✅ MN BULL BIAS — Price is below the midnight open. Institutions positioned long. Look for buys at key levels.',bearTip:'✅ MN BEAR BIAS — Price is above midnight open. Institutions positioned short. Look for sells.',waitTip:'⚠ MN NEUTRAL — Price near midnight open. No clear institutional bias yet.'},
+  {key:'amdphase',name:'AMD Phase',t1:false,icon:'⏰',tip:'ICT AMD: Asian = Accumulation (quiet build). London = Manipulation (Judas sweeps). NY = Distribution (real direction). Best entries are in Distribution after Manipulation confirms direction.',bullTip:'',bearTip:'',waitTip:''},
+  {key:'fvg',name:'H1 Fair Value Gap',t1:true,icon:'📐',tip:'A Fair Value Gap is a 3-bar price gap where institutions left unfilled orders. When price is IN a FVG it is a high-probability reversal zone. CE (midpoint) is the ideal limit entry.',bullTip:'✅ IN BULL FVG — Price inside a bullish Fair Value Gap. Structural support. CE limit entry zone.',bearTip:'✅ IN BEAR FVG — Price inside a bearish Fair Value Gap. Resistance zone for sells.',waitTip:'⏳ No active FVG at current price. Wait for price to pull back into a FVG zone.'},
+  {key:'ob',name:'Order Block (OB)',t1:true,icon:'🧱',tip:'An Order Block is the LAST candle before a big impulse move. It represents the last price where institutions placed large orders. When price returns, those orders are waiting.',bullTip:'✅ IN DEMAND OB — Price at a Demand Order Block. Institutions placed buy orders here before the last big up move.',bearTip:'✅ IN SUPPLY OB — Price at a Supply Order Block. Institutions placed sell orders here.',waitTip:'⏳ No Order Block at current price. Watch for the next impulse to create a new OB.'},
+  {key:'ema',name:'EMA Stack Alignment',t1:false,icon:'📈',tip:'EMA20 > EMA50 > EMA200 = full bull trend. EMA20 < EMA50 < EMA200 = full bear trend. Trading WITH the EMA stack = higher probability entries.',bullTip:'✅ FULL BULL STACK — EMA20 > EMA50 > EMA200. Trend bullish across timeframes. Only take buys.',bearTip:'✅ FULL BEAR STACK — EMA20 < EMA50 < EMA200. Trend bearish. Only take sells.',waitTip:'⚠ MIXED EMA STACK — EMAs not fully aligned. Ranging market. Wait for clear alignment.'},
+  {key:'pdh',name:'PDH/PDL Proximity',t1:false,icon:'📏',tip:'Previous Day High (PDH) and Low (PDL) are key institutional reference levels. Price near PDH = potential resistance. Price near PDL = potential support.',bullTip:'🎯 NEAR PDL — Close to yesterday\'s low. Potential institutional support zone. Bounce from PDL = high probability buy.',bearTip:'🎯 NEAR PDH — Close to yesterday\'s high. Potential institutional resistance. Rejection = high probability sell.',waitTip:'✓ Price clear of PDH/PDL zones. No imminent reversal pressure from daily levels.'}
 ];
 
-function getICTRowData(def, sig) {
-  const price = sig?sig.price:livePrice;
-  switch(def.key) {
-    case 'judas': {
-      const active=ictState.judasFired;
-      return {
-        status: active?(ictState.judasDir===1?'BULL ACTIVE 🎭':'BEAR ACTIVE 🎭'):'Watching…',
-        cls: active?(ictState.judasDir===1?'bull':'bear'):'neutral',
-        tip: active?(ictState.judasDir===1?def.bullTip:def.bearTip):def.waitTip,
-        t1active: active
-      };
-    }
-    case 'choch': {
-      const active=ictState.lastCHoCH!==0;
-      return {
-        status: active?(ictState.lastCHoCH===1?'BULL CHoCH ✅':'BEAR CHoCH ✅'):'No CHoCH',
-        cls: active?(ictState.lastCHoCH===1?'bull':'bear'):'neutral',
-        tip: active?(ictState.lastCHoCH===1?def.bullTip:def.bearTip):def.waitTip,
-        t1active: active
-      };
-    }
-    case 'mnbias': {
-      const b=ictState.mnBias;
-      const mnStr=ictState.mnOpen>0?'Open: $'+ictState.mnOpen.toFixed(2):'Calibrating…';
-      return {
-        status: b===1?'BULL BIAS ↑ '+mnStr:b===-1?'BEAR BIAS ↓ '+mnStr:'NEUTRAL '+mnStr,
-        cls: b===1?'bull':b===-1?'bear':'neutral',
-        tip: b===1?def.bullTip:b===-1?def.bearTip:def.waitTip,
-        t1active: b!==0
-      };
-    }
-    case 'amdphase': {
-      const amd=getAMDPhase();
-      return {
-        status: amd.name,
-        cls: amd.phase===3?'bull':amd.phase===2?'warn':'neutral',
-        tip: amd.desc+'\n\nAsian (00-07 UTC) = ACCUMULATION — institutions quietly building positions. Don\'t trade against the Asian range.\nLondon (07-13 UTC) = MANIPULATION — Judas sweep time! Watch for fake breaks above/below Asian high/low.\nNY (13-21 UTC) = DISTRIBUTION — Real direction. Highest confluence, best entries.',
-        t1active: amd.phase>=2
-      };
-    }
-    case 'fvg': {
-      const bullIn=ictState.fvgBull&&price>=ictState.fvgBull.lo&&price<=ictState.fvgBull.hi;
-      const bearIn=ictState.fvgBear&&price<=ictState.fvgBear.hi&&price>=ictState.fvgBear.lo;
-      const hasB=!!ictState.fvgBull, hasS=!!ictState.fvgBear;
-      const status=bullIn?'IN BULL FVG ✅ CE:$'+ictState.fvgBull.ce.toFixed(2):bearIn?'IN BEAR FVG ✅ CE:$'+ictState.fvgBear.ce.toFixed(2):hasB||hasS?'FVG nearby, not inside':'No FVG detected';
-      return {
-        status, cls: bullIn?'bull':bearIn?'bear':'neutral',
-        tip: bullIn?def.bullTip:bearIn?def.bearTip:def.waitTip,
-        t1active: bullIn||bearIn
-      };
-    }
-    case 'ob': {
-      const bullIn=ictState.obBull&&price>=ictState.obBull.lo&&price<=ictState.obBull.hi;
-      const bearIn=ictState.obBear&&price<=ictState.obBear.hi&&price>=ictState.obBear.lo;
-      return {
-        status: bullIn?'IN DEMAND OB ✅':bearIn?'IN SUPPLY OB ✅':'No active OB',
-        cls: bullIn?'bull':bearIn?'bear':'neutral',
-        tip: bullIn?def.bullTip:bearIn?def.bearTip:def.waitTip,
-        t1active: bullIn||bearIn
-      };
-    }
-    case 'ema': {
-      const lastC=lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:price;
-      const bull=lastC>ictState.ema20&&ictState.ema20>ictState.ema50&&ictState.ema50>ictState.ema200;
-      const bear=lastC<ictState.ema20&&ictState.ema20<ictState.ema50&&ictState.ema50<ictState.ema200;
-      return {
-        status: bull?'FULL BULL STACK ↑':bear?'FULL BEAR STACK ↓':'Mixed / Ranging',
-        cls: bull?'bull':bear?'bear':'neutral',
-        tip: bull?def.bullTip:bear?def.bearTip:def.waitTip,
-        t1active: false
-      };
-    }
-    case 'pdh': {
-      const atr=ictState.atr||20;
-      const nearH=ictState.pdh>0&&Math.abs(price-ictState.pdh)<atr;
-      const nearL=ictState.pdl>0&&Math.abs(price-ictState.pdl)<atr;
-      const s=nearH?'NEAR PDH $'+ictState.pdh.toFixed(2)+' ⚠':nearL?'NEAR PDL $'+ictState.pdl.toFixed(2)+' 🎯':'Clear — PDH:$'+(ictState.pdh||0).toFixed(2)+' PDL:$'+(ictState.pdl||0).toFixed(2);
-      return {
-        status:s, cls: nearH?'bear':nearL?'bull':'neutral',
-        tip: nearH?def.bearTip:nearL?def.bullTip:def.waitTip,
-        t1active: false
-      };
-    }
+function getICTRowData(def,sig){
+  const price=sig?sig.price:livePrice;
+  switch(def.key){
+    case'judas':{const active=ictState.judasFired;return{status:active?(ictState.judasDir===1?'BULL ACTIVE 🎭':'BEAR ACTIVE 🎭'):'Watching…',cls:active?(ictState.judasDir===1?'bull':'bear'):'neutral',tip:active?(ictState.judasDir===1?def.bullTip:def.bearTip):def.waitTip,t1active:active};}
+    case'choch':{const active=ictState.lastCHoCH!==0;return{status:active?(ictState.lastCHoCH===1?'BULL CHoCH ✅':'BEAR CHoCH ✅'):'No CHoCH',cls:active?(ictState.lastCHoCH===1?'bull':'bear'):'neutral',tip:active?(ictState.lastCHoCH===1?def.bullTip:def.bearTip):def.waitTip,t1active:active};}
+    case'mnbias':{const b=ictState.mnBias,mnStr=ictState.mnOpen>0?'Open: $'+ictState.mnOpen.toFixed(2):'Calibrating…';return{status:b===1?'BULL BIAS ↑ '+mnStr:b===-1?'BEAR BIAS ↓ '+mnStr:'NEUTRAL '+mnStr,cls:b===1?'bull':b===-1?'bear':'neutral',tip:b===1?def.bullTip:b===-1?def.bearTip:def.waitTip,t1active:b!==0};}
+    case'amdphase':{const amd=getAMDPhase();return{status:amd.name,cls:amd.phase===3?'bull':amd.phase===2?'warn':'neutral',tip:amd.desc+'\n\nAsian (00-07 UTC)=ACCUMULATION. London (07-13 UTC)=MANIPULATION — Judas sweep time. NY (13-21 UTC)=DISTRIBUTION — real direction, best entries.',t1active:amd.phase>=2};}
+    case'fvg':{const bullIn=ictState.fvgBull&&price>=ictState.fvgBull.lo&&price<=ictState.fvgBull.hi,bearIn=ictState.fvgBear&&price<=ictState.fvgBear.hi&&price>=ictState.fvgBear.lo;const status=bullIn?'IN BULL FVG ✅ CE:$'+ictState.fvgBull.ce.toFixed(2):bearIn?'IN BEAR FVG ✅ CE:$'+ictState.fvgBear.ce.toFixed(2):(ictState.fvgBull||ictState.fvgBear)?'FVG nearby':'No FVG detected';return{status,cls:bullIn?'bull':bearIn?'bear':'neutral',tip:bullIn?def.bullTip:bearIn?def.bearTip:def.waitTip,t1active:bullIn||bearIn};}
+    case'ob':{const bullIn=ictState.obBull&&price>=ictState.obBull.lo&&price<=ictState.obBull.hi,bearIn=ictState.obBear&&price<=ictState.obBear.hi&&price>=ictState.obBear.lo;return{status:bullIn?'IN DEMAND OB ✅':bearIn?'IN SUPPLY OB ✅':'No active OB',cls:bullIn?'bull':bearIn?'bear':'neutral',tip:bullIn?def.bullTip:bearIn?def.bearTip:def.waitTip,t1active:bullIn||bearIn};}
+    case'ema':{const lastC=lastH1OHLC?lastH1OHLC[lastH1OHLC.length-1].c:price,bull=lastC>ictState.ema20&&ictState.ema20>ictState.ema50&&ictState.ema50>ictState.ema200,bear=lastC<ictState.ema20&&ictState.ema20<ictState.ema50&&ictState.ema50<ictState.ema200;return{status:bull?'FULL BULL STACK ↑':bear?'FULL BEAR STACK ↓':'Mixed / Ranging',cls:bull?'bull':bear?'bear':'neutral',tip:bull?def.bullTip:bear?def.bearTip:def.waitTip,t1active:false};}
+    case'pdh':{const atr=ictState.atr||20,nearH=ictState.pdh>0&&Math.abs(price-ictState.pdh)<atr,nearL=ictState.pdl>0&&Math.abs(price-ictState.pdl)<atr;const s=nearH?'NEAR PDH $'+ictState.pdh.toFixed(2)+' ⚠':nearL?'NEAR PDL $'+ictState.pdl.toFixed(2)+' 🎯':'Clear — PDH:$'+(ictState.pdh||0).toFixed(2);return{status:s,cls:nearH?'bear':nearL?'bull':'neutral',tip:nearH?def.bearTip:nearL?def.bullTip:def.waitTip,t1active:false};}
   }
-  return {status:'—',cls:'neutral',tip:'',t1active:false};
+  return{status:'—',cls:'neutral',tip:'',t1active:false};
 }
 
-function renderICTRows(sig) {
-  const container=document.getElementById('ict-rows-container');
-  if(!container)return;
+function renderICTRows(sig){
+  const container=document.getElementById('ict-rows-container');if(!container)return;
   container.innerHTML='';
   ICT_DEFINITIONS.forEach((def,idx)=>{
     const data=getICTRowData(def,sig);
-    const row=document.createElement('div');
-    row.className='ict-row';
-    row.id='ict-row-'+idx;
-    row.innerHTML=`
-      <div class="ict-icon ${data.cls}">${def.icon}</div>
-      <div class="ict-content">
-        <div class="ict-name">${def.name}${def.t1?' &nbsp;<span class="ict-t1-badge">T1</span>':''}</div>
-        <div class="ict-status ${data.cls}">${data.status}</div>
-        <div class="ict-tip">${data.tip.replace(/\n/g,'<br>')}</div>
-      </div>
-      <div class="ict-chevron">▼</div>
-    `;
-    row.addEventListener('click',()=>{ row.classList.toggle('expanded'); });
+    const row=document.createElement('div');row.className='ict-row';row.id='ict-row-'+idx;
+    row.innerHTML=`<div class="ict-icon ${data.cls}">${def.icon}</div><div class="ict-content"><div class="ict-name">${def.name}${def.t1?' &nbsp;<span class="ict-t1-badge">T1</span>':''}</div><div class="ict-status ${data.cls}">${data.status}</div><div class="ict-tip">${data.tip.replace(/\n/g,'<br>')}</div></div><div class="ict-chevron">▼</div>`;
+    row.addEventListener('click',()=>row.classList.toggle('expanded'));
     container.appendChild(row);
   });
 }
 
-// ── REASON PANEL ──────────────────────────────────────────────────
-function renderReasonPanel(sig) {
-  const el=document.getElementById('sig-reason-list');
-  if(!el)return;
+function renderReasonPanel(sig){
+  const el=document.getElementById('sig-reason-list');if(!el)return;
   if(!sig||sig.dir===0){el.textContent='Scanning for ICT AMD confluence…';return;}
   const dirWord=sig.dir===1?'BUY':'SELL';
   const lines=[
     `◈ Session: ${sig.sess} — AMD Phase: ${sig.phaseName}`,
     `◈ Signal: ${dirWord} @ $${sig.price.toFixed(2)} — Confluence: ${sig.conf}%`,
     `◈ Tier-1 Votes: ${sig.t1}/6 — Engine: ${sig.engine}`,
-    sig.judasFired?`◈ ✅ JUDAS ${sig.judasDir===1?'BULL':'BEAR'} — Sweep confirmed, structure reversing`:'◈ ⏳ Judas: watching for sweep',
-    sig.choch!==0?`◈ ✅ CHoCH ${sig.choch===1?'BULL':'BEAR'} confirmed — structure break at swing point`:'◈ ⏳ CHoCH: no structure break yet',
-    `◈ MN Bias: ${sig.mnBias===1?'BULL (below midnight open $'+sig.mnOpen.toFixed(2)+')':sig.mnBias===-1?'BEAR (above midnight open $'+sig.mnOpen.toFixed(2)+')':'NEUTRAL'}`,
-    `◈ EMA Stack: 20=${sig.ema20.toFixed(1)} 50=${sig.ema50.toFixed(1)} — ${sig.dir===1&&sig.ema20>sig.ema50?'BULL ALIGNED ✅':'BEAR/MIXED'}`,
-    `◈ RSI(14): ${sig.rsi.toFixed(1)} — ${sig.rsi>70?'OVERBOUGHT ⚠':sig.rsi<30?'OVERSOLD 🎯':sig.rsi>50?'Bullish zone':'Bearish zone'}`,
-    `◈ ATR(14): $${sig.atr.toFixed(2)} — SL: $${sig.slDist.toFixed(2)} — R:R 1:${sig.rr.toFixed(1)}`,
-    sig.hasFVG?`◈ ✅ ${sig.dir===1?'BULL':'BEAR'} FVG active — CE limit entry zone`:'◈ No FVG at current price',
-    sig.hasOB?`◈ ✅ ${sig.dir===1?'DEMAND':'SUPPLY'} Order Block active — institutional zone`:'◈ No Order Block at current price',
-    `◈ PDH: $${sig.pdh.toFixed(2)} — PDL: $${sig.pdl.toFixed(2)}`
+    sig.judasFired?`◈ ✅ JUDAS ${sig.judasDir===1?'BULL':'BEAR'} — Sweep confirmed`:'◈ ⏳ Judas: watching',
+    sig.choch!==0?`◈ ✅ CHoCH ${sig.choch===1?'BULL':'BEAR'} confirmed`:'◈ ⏳ CHoCH: no break yet',
+    `◈ MN Bias: ${sig.mnBias===1?'BULL ($'+sig.mnOpen.toFixed(2)+')':sig.mnBias===-1?'BEAR ($'+sig.mnOpen.toFixed(2)+')':'NEUTRAL'}`,
+    `◈ EMA: 20=${sig.ema20.toFixed(1)} 50=${sig.ema50.toFixed(1)} — ${sig.dir===1&&sig.ema20>sig.ema50?'BULL ✅':'BEAR/MIXED'}`,
+    `◈ RSI: ${sig.rsi.toFixed(1)} | ATR: $${sig.atr.toFixed(2)} | R:R 1:${sig.rr.toFixed(1)}`,
+    sig.hasFVG?`◈ ✅ ${sig.dir===1?'BULL':'BEAR'} FVG — CE limit entry zone`:'◈ No FVG at current price',
+    sig.hasOB?`◈ ✅ ${sig.dir===1?'DEMAND':'SUPPLY'} OB — institutional zone`:'◈ No OB at current price',
+    `◈ PDH: $${sig.pdh.toFixed(2)} | PDL: $${sig.pdl.toFixed(2)}`
   ];
-  el.innerHTML=lines.map(l=>`<div style="margin-bottom:2px">${l}</div>`).join('');
+  el.innerHTML=lines.map(l=>`<div style="margin-bottom:1px">${l}</div>`).join('');
 }
 
-// ── PROJECTION RAY ────────────────────────────────────────────────
-function drawProjectionRay(sig) {
-  const canvas=document.getElementById('proj-canvas');
-  if(!canvas)return;
+function drawProjectionRay(sig){
+  const canvas=document.getElementById('proj-canvas');if(!canvas)return;
   const ctx=canvas.getContext('2d');
-  const W=canvas.offsetWidth||800, H=canvas.offsetHeight||180;
-  canvas.width=W; canvas.height=H;
-  ctx.clearRect(0,0,W,H);
-  ctx.fillStyle='#06090f';
-  ctx.fillRect(0,0,W,H);
-
-  if (!lastH1OHLC||lastH1OHLC.length<10) {
-    ctx.fillStyle='#4a5568';ctx.font='12px Space Mono,monospace';
-    ctx.textAlign='center';ctx.fillText('Fetching OHLC data…',W/2,H/2);return;
-  }
-
+  const W=canvas.offsetWidth||800,H=canvas.offsetHeight||130;
+  canvas.width=W;canvas.height=H;
+  ctx.fillStyle='#06090f';ctx.fillRect(0,0,W,H);
+  if(!lastH1OHLC||lastH1OHLC.length<10){ctx.fillStyle='#4a5568';ctx.font='11px Space Mono,monospace';ctx.textAlign='center';ctx.fillText('Fetching OHLC data…',W/2,H/2);return;}
   const bars=lastH1OHLC.slice(-24);
   const price=sig?sig.price:(livePrice||bars[bars.length-1].c);
-  const projDir=sig?sig.dir:0;
-  const projConf=sig?sig.conf/100:0;
-
+  const projDir=sig?sig.dir:0,projConf=sig?sig.conf/100:0;
   const pricePoints=[...bars.map(b=>b.h),...bars.map(b=>b.l),price];
   if(sig&&sig.dir!==0){pricePoints.push(sig.sl,sig.tp1,sig.tp2);}
-  const priceMax=Math.max(...pricePoints)+2;
-  const priceMin=Math.min(...pricePoints)-2;
-  const priceRange=priceMax-priceMin||1;
-
-  const candleArea=W*0.58;
-  const projArea=W*0.42;
-  const padT=18, padB=28;
-  const chartH=H-padT-padB;
-
+  const priceMax=Math.max(...pricePoints)+2,priceMin=Math.min(...pricePoints)-2,priceRange=priceMax-priceMin||1;
+  const candleArea=W*0.58,projArea=W*0.42,padT=16,padB=22,chartH=H-padT-padB;
   const toY=p=>padT+chartH*(1-(p-priceMin)/priceRange);
-  const candleW=Math.max(3,candleArea/bars.length*0.6);
-  const barStep=candleArea/bars.length;
-
-  const gridPrices=[priceMin+(priceRange*0.25),priceMin+(priceRange*0.5),priceMin+(priceRange*0.75)];
-  gridPrices.forEach(gp=>{
-    ctx.strokeStyle='#1a2535';ctx.lineWidth=1;ctx.setLineDash([3,5]);
-    ctx.beginPath();ctx.moveTo(0,toY(gp));ctx.lineTo(W,toY(gp));ctx.stroke();
-    ctx.fillStyle='#2a3a50';ctx.font='8px Space Mono,monospace';ctx.textAlign='left';
-    ctx.fillText('$'+gp.toFixed(0),2,toY(gp)-2);
-  });
+  const candleW=Math.max(2,candleArea/bars.length*0.6),barStep=candleArea/bars.length;
+  [0.25,0.5,0.75].forEach(f=>{const gp=priceMin+priceRange*f;ctx.strokeStyle='#1a2535';ctx.lineWidth=1;ctx.setLineDash([3,5]);ctx.beginPath();ctx.moveTo(0,toY(gp));ctx.lineTo(W,toY(gp));ctx.stroke();ctx.fillStyle='#2a3a50';ctx.font='7px Space Mono,monospace';ctx.textAlign='left';ctx.fillText('$'+gp.toFixed(0),2,toY(gp)-2);});
   ctx.setLineDash([]);
-
-  bars.forEach((b,i)=>{
-    const x=i*barStep+barStep/2;
-    const bull=b.c>=b.o;
-    const col=bull?'#22c55e':'#ef4444';
-    ctx.strokeStyle=col;ctx.lineWidth=1;
-    ctx.beginPath();ctx.moveTo(x,toY(b.h));ctx.lineTo(x,toY(b.l));ctx.stroke();
-    const bodyT=toY(Math.max(b.o,b.c)),bodyB=toY(Math.min(b.o,b.c));
-    const bodyH=Math.max(1,bodyB-bodyT);
-    ctx.fillStyle=bull?'#22c55e':'#ef4444';
-    ctx.fillRect(x-candleW/2,bodyT,candleW,bodyH);
-  });
-
-  if (lastH1OHLC.length>=20) {
-    const emaFull=calcEMASeries(lastH1OHLC.slice(-44).map(b=>b.c),20);
-    const emaSlice=emaFull.slice(-24);
-    ctx.strokeStyle='#1e7de0';ctx.lineWidth=1.5;ctx.setLineDash([]);
-    ctx.beginPath();
-    emaSlice.forEach((e,i)=>{
-      const x=i*barStep+barStep/2;
-      i===0?ctx.moveTo(x,toY(e)):ctx.lineTo(x,toY(e));
-    });
-    ctx.stroke();
-  }
-
-  const originX=candleArea;
-  const originY=toY(price);
-  ctx.fillStyle=projDir===1?'#22c55e':projDir===-1?'#ef4444':'#d4a844';
-  ctx.beginPath();ctx.arc(originX,originY,5,0,Math.PI*2);ctx.fill();
-
-  if (projDir!==0) {
-    const slopePerPx=(projDir*(priceRange*0.03+projConf*priceRange*0.04))/(projArea);
-    const endX=W-10, endY=originY-slopePerPx*projArea;
+  bars.forEach((b,i)=>{const x=i*barStep+barStep/2,bull=b.c>=b.o,col=bull?'#22c55e':'#ef4444';ctx.strokeStyle=col;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,toY(b.h));ctx.lineTo(x,toY(b.l));ctx.stroke();const bodyT=toY(Math.max(b.o,b.c)),bodyB=toY(Math.min(b.o,b.c)),bodyH=Math.max(1,bodyB-bodyT);ctx.fillStyle=col;ctx.fillRect(x-candleW/2,bodyT,candleW,bodyH);});
+  if(lastH1OHLC.length>=20){const emaFull=calcEMASeries(lastH1OHLC.slice(-44).map(b=>b.c),20),emaSlice=emaFull.slice(-24);ctx.strokeStyle='#1e7de0';ctx.lineWidth=1.5;ctx.setLineDash([]);ctx.beginPath();emaSlice.forEach((e,i)=>{const x=i*barStep+barStep/2;i===0?ctx.moveTo(x,toY(e)):ctx.lineTo(x,toY(e));});ctx.stroke();}
+  const originX=candleArea,originY=toY(price);
+  ctx.fillStyle=projDir===1?'#22c55e':projDir===-1?'#ef4444':'#d4a844';ctx.beginPath();ctx.arc(originX,originY,4,0,Math.PI*2);ctx.fill();
+  if(projDir!==0){
+    const rayColor=projDir===1?'#22c55e':'#ef4444',slopePerPx=(projDir*(priceRange*0.03+projConf*priceRange*0.04))/projArea,endX=W-8,endY=originY-slopePerPx*projArea;
     const bandDist=priceRange*0.02;
-    ctx.strokeStyle=projDir===1?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)';
-    ctx.lineWidth=1;ctx.setLineDash([2,4]);
+    ctx.strokeStyle=projDir===1?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)';ctx.lineWidth=1;ctx.setLineDash([2,4]);
     ctx.beginPath();ctx.moveTo(originX,originY-bandDist);ctx.lineTo(endX,endY-bandDist*1.5);ctx.stroke();
     ctx.beginPath();ctx.moveTo(originX,originY+bandDist);ctx.lineTo(endX,endY+bandDist*1.5);ctx.stroke();
-    ctx.setLineDash([]);
-    const rayColor=projDir===1?'#22c55e':'#ef4444';
-    ctx.strokeStyle=rayColor;ctx.lineWidth=2;ctx.setLineDash([8,5]);
-    ctx.beginPath();ctx.moveTo(originX,originY);ctx.lineTo(endX,endY);ctx.stroke();
-    ctx.setLineDash([]);
-    const midX=(originX+endX)/2, midY=(originY+endY)/2;
-    ctx.fillStyle=rayColor;ctx.beginPath();ctx.arc(midX,midY,3,0,Math.PI*2);ctx.fill();
-    ctx.fillStyle=rayColor;ctx.font='bold 9px Space Mono,monospace';ctx.textAlign='left';
-    ctx.fillText((projDir===1?'▲ BULL':'▼ BEAR')+' '+sig.conf+'%',endX-60,endY-6);
-    ctx.fillStyle='rgba(212,168,68,0.6)';ctx.font='8px Space Mono,monospace';
-    ctx.fillText('T1:'+sig.t1+' '+sig.engine,endX-55,endY+12);
-  } else {
-    ctx.strokeStyle='#3a4a60';ctx.lineWidth=1;ctx.setLineDash([4,6]);
-    ctx.beginPath();ctx.moveTo(originX,originY);ctx.lineTo(W-10,originY);ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle='#4a5568';ctx.font='9px Space Mono,monospace';ctx.textAlign='center';
-    ctx.fillText('SCANNING — awaiting confluence',W*0.78,originY-8);
+    ctx.setLineDash([]);ctx.strokeStyle=rayColor;ctx.lineWidth=2;ctx.setLineDash([8,5]);
+    ctx.beginPath();ctx.moveTo(originX,originY);ctx.lineTo(endX,endY);ctx.stroke();ctx.setLineDash([]);
+    const midX=(originX+endX)/2,midY=(originY+endY)/2;ctx.fillStyle=rayColor;ctx.beginPath();ctx.arc(midX,midY,3,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle=rayColor;ctx.font='bold 8px Space Mono,monospace';ctx.textAlign='left';ctx.fillText((projDir===1?'▲ BULL':'▼ BEAR')+' '+sig.conf+'%',endX-58,endY-5);
+    ctx.fillStyle='rgba(212,168,68,0.6)';ctx.font='7px Space Mono,monospace';ctx.fillText('T1:'+sig.t1+' '+sig.engine,endX-52,endY+10);
+  }else{ctx.strokeStyle='#3a4a60';ctx.lineWidth=1;ctx.setLineDash([4,6]);ctx.beginPath();ctx.moveTo(originX,originY);ctx.lineTo(W-8,originY);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle='#4a5568';ctx.font='8px Space Mono,monospace';ctx.textAlign='center';ctx.fillText('SCANNING — awaiting confluence',W*0.78,originY-7);}
+  if(sig&&sig.dir!==0){
+    const drawLv=(pr,col,lbl,dash)=>{const y=toY(pr);ctx.strokeStyle=col;ctx.lineWidth=1;ctx.setLineDash(dash||[3,4]);ctx.beginPath();ctx.moveTo(originX,y);ctx.lineTo(W,y);ctx.stroke();ctx.setLineDash([]);ctx.fillStyle=col;ctx.font='7px Space Mono,monospace';ctx.textAlign='right';ctx.fillText(lbl+' $'+pr.toFixed(1),W-3,y-2);};
+    drawLv(sig.sl,'#ef4444','SL',[4,4]);drawLv(sig.tp1,'#22d3ee','TP1',[2,4]);drawLv(sig.tp2,'#22c55e','TP2',[2,4]);
   }
-
-  if (sig&&sig.dir!==0) {
-    const drawLevel=(price2,col,lbl,dash)=>{
-      const y=toY(price2);
-      ctx.strokeStyle=col;ctx.lineWidth=1;ctx.setLineDash(dash||[3,4]);
-      ctx.beginPath();ctx.moveTo(originX,y);ctx.lineTo(W,y);ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.fillStyle=col;ctx.font='8px Space Mono,monospace';ctx.textAlign='right';
-      ctx.fillText(lbl+' $'+price2.toFixed(1),W-4,y-2);
-    };
-    drawLevel(sig.sl,'#ef4444','SL',[4,4]);
-    drawLevel(sig.tp1,'#22d3ee','TP1',[2,4]);
-    drawLevel(sig.tp2,'#22c55e','TP2',[2,4]);
-  }
-
-  ctx.strokeStyle='#1e2530';ctx.lineWidth=1;ctx.setLineDash([]);
-  ctx.beginPath();ctx.moveTo(candleArea,padT);ctx.lineTo(candleArea,H-padB);ctx.stroke();
-  ctx.fillStyle='rgba(212,168,68,0.9)';ctx.font='bold 9px Space Mono,monospace';ctx.textAlign='left';
-  ctx.fillText('$'+price.toFixed(2),originX+4,originY+3);
-  ctx.fillStyle='#2a3a50';ctx.font='8px Space Mono,monospace';ctx.textAlign='left';
-  ctx.fillText(getSession()+' · H1',4,H-8);
+  ctx.strokeStyle='#1e2530';ctx.lineWidth=1;ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(candleArea,padT);ctx.lineTo(candleArea,H-padB);ctx.stroke();
+  ctx.fillStyle='rgba(212,168,68,0.9)';ctx.font='bold 8px Space Mono,monospace';ctx.textAlign='left';ctx.fillText('$'+price.toFixed(2),originX+3,originY+3);
+  ctx.fillStyle='#2a3a50';ctx.font='7px Space Mono,monospace';ctx.textAlign='left';ctx.fillText(getSession()+' · H1',3,H-5);
 }
 
-// ── OVERVIEW STATS ────────────────────────────────────────────────
-function updateOverviewStats(sig) {
+function updateOverviewStats(sig){
   const sess=getSession();
   const s=(id,v,c)=>{const e=document.getElementById(id);if(!e)return;e.textContent=v;if(c)e.style.color=c;};
+  ['asian','london','ny','night'].forEach(sc=>{const el=document.getElementById('sess-'+sc);if(el)el.classList.toggle('active',sc.toUpperCase()===sess||sc.toUpperCase()===sess.replace('NY','NY'));});
   document.getElementById('sess-ny')?.classList.toggle('active',sess==='NY');
   document.getElementById('sess-night')?.classList.toggle('active',sess==='NIGHT');
   document.getElementById('sess-london')?.classList.toggle('active',sess==='LONDON');
   document.getElementById('sess-asian')?.classList.toggle('active',sess==='ASIAN');
-  const amd=getAMDPhase();
-  s('chart-amd-phase','AMD: '+amd.name);
+  const amd=getAMDPhase();s('chart-amd-phase','AMD: '+amd.name);
   const trend=sig&&sig.ema20>sig.ema50?'BULL':sig&&sig.ema20<sig.ema50?'BEAR':'RANGE';
-  const tColor=trend==='BULL'?'var(--green)':trend==='BEAR'?'var(--red)':'var(--gold2)';
-  s('ov-trend',trend,tColor);
-  s('ov-atr',sig?'$'+sig.atr.toFixed(1):'—');
-  s('ov-t1',sig?sig.t1+'/6':'—','var(--cyan)');
-  s('bb-session-lbl',sess);
-  if(sig) {
-    const bull=sig.confBull, bear=sig.confBear;
-    const bullPct=Math.round(bull/(bull+bear||1)*50+50);
-    const bearPct=100-bullPct;
-    const fill=document.getElementById('bb-fill');
-    if(fill) fill.style.width=bullPct+'%';
-    s('bb-bull-pct',bullPct+'%');
-    s('bb-bear-pct',bearPct+'%');
-  }
+  s('ov-trend',trend,trend==='BULL'?'var(--green)':trend==='BEAR'?'var(--red)':'var(--gold2)');
+  s('ov-atr',sig?'$'+sig.atr.toFixed(1):'—');s('ov-t1',sig?sig.t1+'/6':'—','var(--cyan)');s('bb-session-lbl',sess);
+  if(sig){const bullPct=Math.round(sig.confBull/(sig.confBull+sig.confBear||1)*50+50);const fill=document.getElementById('bb-fill');if(fill)fill.style.width=bullPct+'%';s('bb-bull-pct',bullPct+'%');s('bb-bear-pct',(100-bullPct)+'%');}
 }
 
-// ── LIVE PRICE ────────────────────────────────────────────────────
+// ── Fetching ──────────────────────────────────────
 const PROXIES=['https://corsproxy.io/?url=','https://api.allorigins.win/raw?url=','https://thingproxy.freeboard.io/fetch/'];
+async function tryFetch(url,ms=7000){return Promise.race([fetch(url,{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);}
+async function tryProxies(target,ms=7000){for(const px of PROXIES){try{const r=await Promise.race([fetch(px+encodeURIComponent(target),{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);if(r&&r.ok)return r;}catch(e){}}return null;}
 
-async function tryFetch(url,ms=7000) {
-  return Promise.race([fetch(url,{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
-}
-async function tryProxies(target,ms=7000) {
-  for (const px of PROXIES) {
-    try {
-      const r=await Promise.race([fetch(px+encodeURIComponent(target),{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);
-      if(r&&r.ok) return r;
-    } catch(e) {}
-  }
-  return null;
-}
-
-function applyLivePrice(p) {
-  if(!p||isNaN(p)||p<500) return false;
-  livePrice=p; priceConfirmed=true;
+function applyLivePrice(p){
+  if(!p||isNaN(p)||p<500)return false;
+  livePrice=p;priceConfirmed=true;
   const fmt='$'+p.toFixed(2);
   const badge=document.getElementById('hdr-price');
   if(badge){badge.textContent=fmt;badge.style.color='var(--gold2)';badge.style.borderColor='var(--gold-dim)';}
-  if(lastH1OHLC) {
-    lastH1OHLC[lastH1OHLC.length-1].c=p;
-    computeICTState(lastH1OHLC);
-    const sig=computeSignal();
-    if(sig) applySignalUI(sig);
-  }
+  const dot=document.getElementById('ds-dot');if(dot)dot.style.background='var(--green)';
+  if(lastH1OHLC){lastH1OHLC[lastH1OHLC.length-1].c=p;computeICTState(lastH1OHLC);const sig=computeSignal();if(sig)applySignalUI(sig);}
   return true;
 }
 
-async function fetchLivePrice() {
-  try {
-    const r=await tryFetch('https://api.metals.live/v1/spot',5000);
-    if(r&&r.ok){const d=await r.json();const arr=Array.isArray(d)?d:[d];const g=arr[0]?.gold;if(applyLivePrice(Number(g)))return;}
-  } catch(e){}
-  try {
-    const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d');
-    if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p)))return;}
-  } catch(e){}
-  try {
-    const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d');
-    if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p)))return;}
-  } catch(e){}
-  try {
-    const r=await tryFetch('https://api.frankfurter.app/latest?from=XAU&to=USD',6000);
-    if(r&&r.ok){const d=await r.json();if(applyLivePrice(Number(d?.rates?.USD)))return;}
-  } catch(e){}
-  const badge=document.getElementById('hdr-price');
-  if(badge&&!priceConfirmed){badge.textContent='NO FEED';badge.style.color='var(--red)';}
+async function fetchLivePrice(){
+  try{const r=await tryFetch('https://api.metals.live/v1/spot',5000);if(r&&r.ok){const d=await r.json();const arr=Array.isArray(d)?d:[d];const g=arr[0]?.gold;if(applyLivePrice(Number(g)))return;}}catch(e){}
+  try{const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d');if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p)))return;}}catch(e){}
+  try{const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d');if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p)))return;}}catch(e){}
+  try{const r=await tryFetch('https://api.frankfurter.app/latest?from=XAU&to=USD',6000);if(r&&r.ok){const d=await r.json();if(applyLivePrice(Number(d?.rates?.USD)))return;}}catch(e){}
+  const badge=document.getElementById('hdr-price');if(badge&&!priceConfirmed){badge.textContent='NO FEED';badge.style.color='var(--red)';}
 }
 
-// ── H1 OHLC ──────────────────────────────────────────────────────
-async function fetchH1OHLC() {
-  const urls=[
-    'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1h&range=20d',
-    'https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1h&range=20d'
-  ];
-  for(const url of urls) {
-    const r=await tryProxies(url,10000);
-    if(!r) continue;
-    try {
-      const d=await r.json();
-      const res=d?.chart?.result?.[0];
-      if(!res) continue;
-      const ts=res.timestamp,q=res.indicators?.quote?.[0];
-      if(!ts||!q) continue;
-      const bars=ts.map((t,i)=>({t:t*1000,o:q.open[i],h:q.high[i],l:q.low[i],c:q.close[i]}))
-                   .filter(b=>b.o&&b.h&&b.l&&b.c);
-      if(bars.length<30){continue;}
-      if(priceConfirmed&&livePrice>1000) bars[bars.length-1].c=livePrice;
-      lastH1OHLC=bars;
-      computeICTState(bars);
-      const sig=computeSignal();
-      if(sig) applySignalUI(sig);
-      updateDataSourceStatus(true);
-      return;
-    } catch(e){}
+async function fetchH1OHLC(){
+  const urls=['https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1h&range=20d','https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1h&range=20d'];
+  for(const url of urls){
+    const r=await tryProxies(url,10000);if(!r)continue;
+    try{const d=await r.json();const res=d?.chart?.result?.[0];if(!res)continue;const ts=res.timestamp,q=res.indicators?.quote?.[0];if(!ts||!q)continue;
+      const bars=ts.map((t,i)=>({t:t*1000,o:q.open[i],h:q.high[i],l:q.low[i],c:q.close[i]})).filter(b=>b.o&&b.h&&b.l&&b.c);
+      if(bars.length<30)continue;if(priceConfirmed&&livePrice>1000)bars[bars.length-1].c=livePrice;
+      lastH1OHLC=bars;computeICTState(bars);const sig=computeSignal();if(sig)applySignalUI(sig);updateDataSourceStatus(true);return;
+    }catch(e){console.warn('H1 parse error:',e);}
   }
   updateDataSourceStatus(false);
 }
 
-// ── GOLD OHLC ─────────────────────────────────────────────────────
-async function fetchGoldOHLC() {
-  const ranges={
-    day:'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=14d',
-    week:'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1wk&range=3mo',
-    month:'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1mo&range=2y'
-  };
-  for(const [key,url] of Object.entries(ranges)) {
-    try {
-      const r=await tryProxies(url,10000);if(!r)continue;
-      const d=await r.json();const res=d?.chart?.result?.[0];if(!res)continue;
-      const ts=res.timestamp,q=res.indicators?.quote?.[0];if(!ts||!q)continue;
-      goldOHLCData[key]=ts.map((t,i)=>{
-        const dt=new Date(t*1000);
-        return{
-          date:key==='day'?dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):
-               key==='week'?'Wk '+dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):
-               dt.toLocaleDateString('en-GB',{month:'short',year:'numeric'}),
-          open:q.open[i],high:q.high[i],low:q.low[i],close:q.close[i],
-          chg:q.open[i]?((q.close[i]-q.open[i])/q.open[i]*100):0
-        };
-      }).filter(r=>r.open&&r.close).reverse();
-    } catch(e){}
-  }
-  renderGoldOHLC(); renderGoldSummary();
+async function fetchGoldOHLC(){
+  const ranges={day:'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1d&range=14d',week:'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1wk&range=3mo',month:'https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1mo&range=2y'};
+  for(const[key,url]of Object.entries(ranges)){try{const r=await tryProxies(url,10000);if(!r)continue;const d=await r.json();const res=d?.chart?.result?.[0];if(!res)continue;const ts=res.timestamp,q=res.indicators?.quote?.[0];if(!ts||!q)continue;
+    goldOHLCData[key]=ts.map((t,i)=>{const dt=new Date(t*1000);return{date:key==='day'?dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):key==='week'?'Wk '+dt.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):dt.toLocaleDateString('en-GB',{month:'short',year:'numeric'}),open:q.open[i],high:q.high[i],low:q.low[i],close:q.close[i],chg:q.open[i]?((q.close[i]-q.open[i])/q.open[i]*100):0};}).filter(r=>r.open&&r.close).reverse();
+  }catch(e){}}
+  renderGoldOHLC();renderGoldSummary();
 }
 
-// ── DATA SOURCE STATUS ────────────────────────────────────────────
-function updateDataSourceStatus(ok) {
-  const el=document.getElementById('data-sources-status');
-  if(!el)return;
+function updateDataSourceStatus(ok){
+  const el=document.getElementById('data-sources-status');if(!el)return;
   const price=livePrice>0?'$'+livePrice.toFixed(2):'fetching…';
   const bars=lastH1OHLC?lastH1OHLC.length:0;
-  el.innerHTML=`
-    <div style="color:${priceConfirmed?'var(--green)':'var(--red)'}">● Live Price: ${price} ${priceConfirmed?'✓':'⏳'}</div>
-    <div style="color:${bars>30?'var(--green)':'var(--orange)'}">● H1 OHLC bars: ${bars} ${bars>30?'✓ ICT engine active':'⏳ loading…'}</div>
-    <div style="color:var(--text3)">● Sources: Yahoo Finance GC=F · XAUUSD=X · metals.live</div>
-    <div style="color:var(--text3)">● Refresh: every 2 min · Last: ${new Date().toTimeString().slice(0,8)}</div>
-  `;
+  el.innerHTML=`<div style="color:${priceConfirmed?'var(--green)':'var(--red)'}">● Live Price: ${price} ${priceConfirmed?'✓':'⏳'}</div><div style="color:${bars>30?'var(--green)':'var(--orange)'}">● H1 OHLC bars: ${bars} ${bars>30?'✓ ICT engine active':'⏳ loading…'}</div><div style="color:var(--text3)">● Sources: Yahoo Finance GC=F · XAUUSD=X · metals.live</div><div style="color:var(--text3)">● Refresh: every 2 min · Last: ${new Date().toTimeString().slice(0,8)}</div>`;
 }
 
-// ── NEWS ──────────────────────────────────────────────────────────
-const NEWS_STATIC=[
-  {title:'US Core PCE Price Index (MoM)',time:'15:30 UTC',impact:'high',gold_call:'⬆️ Below forecast → gold bullish. Fed less hawkish = XAU up.',preview:'Key inflation measure. Below expected = dollar weakens = gold rallies.',source:'Investing.com',url:'https://www.investing.com/economic-calendar/',goldTag:true,upcoming:true},
-  {title:'Fed Chair Powell Speech',time:'17:00 UTC',impact:'high',gold_call:'⬆️ Dovish tone = gold spike likely. Any rate cut signal = big move.',preview:'Market watching for forward guidance. Even a hint of easing pushes XAU sharply higher.',source:'FedReserve.gov',url:'https://www.federalreserve.gov/newsevents/',goldTag:true,upcoming:true},
-  {title:'US ISM Manufacturing PMI',time:'15:00 UTC',impact:'med',gold_call:'⬇️ Strong reading = dollar bid = gold pressure',preview:'Below 50 = contraction = risk-off = gold support. Above 50 = dollar strength.',source:'ForexFactory',url:'https://www.forexfactory.com/calendar',goldTag:true,upcoming:true},
-  {title:'FOMC Minutes',time:'19:00 UTC',impact:'high',gold_call:'Directional — watch hawkish vs dovish balance',preview:'Markets looking for pivot language to confirm rate cut trajectory for 2026.',source:'FedReserve.gov',url:'https://www.federalreserve.gov/newsevents/pressreleases/',goldTag:true,upcoming:false},
-  {title:'US Non-Farm Payrolls',time:'15:30 UTC FRIDAY',impact:'high',gold_call:'⬇️ Strong NFP = gold sell-off risk. Weak NFP = gold rally.',preview:'Most important data of the week. Miss vs beat dramatically shifts gold direction by $15-30.',source:'BLS.gov',url:'https://www.bls.gov/schedule/news_release/empsit.htm',goldTag:true,upcoming:true}
-];
-
-async function fetchNewsCommentary() {
-  newsItems=NEWS_STATIC;
-  renderNews();
-  const badge=document.getElementById('news-badge-count');
-  const dnBadge=document.getElementById('dnav-news-badge');
-  const highCount=NEWS_STATIC.filter(n=>n.impact==='high'&&n.upcoming).length;
-  if(badge)badge.textContent=highCount;
-  if(dnBadge)dnBadge.textContent=highCount;
-  const commentary=`Gold consolidating above $3,300 support ahead of key US data releases. Fed speakers remain cautious but market is pricing 2 cuts by year-end 2026. Dollar softening provides tailwind for XAU. ICT AMD framework: Asian session accumulation detected — London manipulation (Judas sweep) expected at session open. Watch $3,290 as key PDL support — break below extends to $3,260. Distribution phase (NY) directional move to confirm at 13:00 UTC.`;
-  const el=document.getElementById('news-commentary');
-  if(el)el.textContent=commentary;
-}
-
-// ── GOLD PAGE ─────────────────────────────────────────────────────
-function renderGoldOHLC() {
+// ── Gold page ─────────────────────────────────────
+function renderGoldOHLC(){
   const rows=goldOHLCData[goldRange]||[];
-  const tbody=document.getElementById('gold-ohlc-body');
-  if(!tbody)return;
+  const tbody=document.getElementById('gold-ohlc-body');if(!tbody)return;
   if(!rows.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--text3);padding:16px">Loading live data…</td></tr>';return;}
-  tbody.innerHTML=rows.map(r=>`<tr>
-    <td>${r.date}</td><td>${r.open?.toFixed(2)||'—'}</td>
-    <td style="color:var(--green)">${r.high?.toFixed(2)||'—'}</td>
-    <td style="color:var(--red)">${r.low?.toFixed(2)||'—'}</td>
-    <td>${r.close?.toFixed(2)||'—'}</td>
-    <td class="${r.chg>=0?'chg-pos':'chg-neg'}">${r.chg>=0?'+':''}${r.chg?.toFixed(2)||'0.00'}%</td>
-  </tr>`).join('');
+  tbody.innerHTML=rows.map(r=>`<tr><td>${r.date}</td><td>${r.open?.toFixed(2)||'—'}</td><td style="color:var(--green)">${r.high?.toFixed(2)||'—'}</td><td style="color:var(--red)">${r.low?.toFixed(2)||'—'}</td><td>${r.close?.toFixed(2)||'—'}</td><td class="${r.chg>=0?'chg-pos':'chg-neg'}">${r.chg>=0?'+':''}${r.chg?.toFixed(2)||'0.00'}%</td></tr>`).join('');
 }
-
-function renderGoldSummary() {
+function renderGoldSummary(){
   const rows=goldOHLCData[goldRange]||[];
-  const hl=document.getElementById('gold-headline');
-  if(!rows.length){if(hl)hl.textContent='Loading live gold data…';return;}
+  const hl=document.getElementById('gold-headline');if(!rows.length){if(hl)hl.textContent='Loading live gold data…';return;}
   const latest=rows[0],oldest=rows[rows.length-1];
-  const ph=Math.max(...rows.map(r=>r.high||0));
-  const pl=Math.min(...rows.map(r=>r.low||999999));
+  const ph=Math.max(...rows.map(r=>r.high||0)),pl=Math.min(...rows.map(r=>r.low||999999));
   const chg=oldest.open?((latest.close-oldest.open)/oldest.open*100):0;
-  const dir=chg>=0?'rose':'fell',dc=chg>=0?'var(--green)':'var(--red)';
-  if(hl){hl.style.borderLeftColor=dc;hl.innerHTML=`Gold <span style="color:${dc};font-weight:700">${dir} ${Math.abs(chg).toFixed(2)}%</span> — from $${oldest.open?.toFixed(2)||'—'} to <span style="color:${dc};font-weight:700">$${latest.close?.toFixed(2)||'—'}</span>`;}
+  const dc=chg>=0?'var(--green)':'var(--red)';
+  if(hl){hl.style.borderLeftColor=dc;hl.innerHTML=`Gold <span style="color:${dc};font-weight:700">${chg>=0?'rose':'fell'} ${Math.abs(chg).toFixed(2)}%</span> — from $${oldest.open?.toFixed(2)||'—'} to <span style="color:${dc};font-weight:700">$${latest.close?.toFixed(2)||'—'}</span>`;}
   const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
   s('g-high','$'+ph.toFixed(2));s('g-low','$'+pl.toFixed(2));
   s('g-avg','$'+(rows.reduce((a,r)=>a+(r.close||0),0)/rows.length).toFixed(2));
   s('g-vol','$'+(ph-pl).toFixed(2));
-  let bm=0,bd='';
-  rows.forEach(r=>{if(Math.abs(r.chg||0)>Math.abs(bm)){bm=r.chg;bd=r.date;}});
+  let bm=0,bd='';rows.forEach(r=>{if(Math.abs(r.chg||0)>Math.abs(bm)){bm=r.chg;bd=r.date;}});
   const bel=document.getElementById('g-bigmove');
-  // ✅ FIX: moved };font-weight:700 OUTSIDE the template expression
   if(bel)bel.innerHTML=`Biggest: <span style="color:${bm>=0?'var(--green)':'var(--red)'};font-weight:700">${bm>=0?'+':''}${bm?.toFixed(2)||'—'}%</span> on ${bd}`;
   s('gold-summary-title','Gold '+{day:'Daily',week:'Weekly',month:'Monthly'}[goldRange]+' Summary');
   s('gold-range-label',{day:'Daily',week:'Weekly',month:'Monthly'}[goldRange]);
 }
-
-function setGoldRange(r,el){
-  goldRange=r;
-  document.querySelectorAll('#gold-range-filter .filter-chip').forEach(c=>c.classList.remove('active'));
-  el.classList.add('active');
-  renderGoldOHLC();renderGoldSummary();
-}
+function setGoldRange(r,el){goldRange=r;document.querySelectorAll('#gold-range-filter .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderGoldOHLC();renderGoldSummary();}
 function openGoldPage(){document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));document.getElementById('panel-gold').classList.add('active');}
 function closeGoldPage(){switchTab('history');}
 
-// ── HISTORY ───────────────────────────────────────────────────────
+// ── History ───────────────────────────────────────
 const HISTORY_SAMPLE=[
   {dir:'buy',entry:3285.40,exit:3291.20,pnl:5.80,result:'win',tag:'tp',session:'LONDON',conf:88,time:'10:14',tpTime:'8m',judas:true,choch:true},
   {dir:'sell',entry:3302.10,exit:3297.80,pnl:4.30,result:'win',tag:'tp',session:'NY',conf:91,time:'13:52',tpTime:'6m',judas:false,choch:true},
@@ -1584,206 +1046,88 @@ function renderHistory(){
   const list=document.getElementById('history-list');if(!list)return;
   let items=HISTORY_SAMPLE;
   if(histFilter!=='all')items=HISTORY_SAMPLE.filter(h=>{if(histFilter==='win')return h.result==='win';if(histFilter==='loss')return h.result==='loss';if(histFilter==='tp')return h.tag==='tp';return true;});
-  const liveItems=sessionSignals.slice().reverse().slice(0,5).map(s=>({
-    dir:s.dir===1?'buy':'sell',entry:s.price,exit:0,pnl:0,result:'live',tag:'live',
-    session:s.sess,conf:s.conf,time:s.time,tpTime:'live',judas:s.judasFired,choch:s.choch!==0
-  }));
+  const liveItems=sessionSignals.slice().reverse().slice(0,5).map(s=>({dir:s.dir===1?'buy':'sell',entry:s.price,exit:0,pnl:0,result:'live',tag:'live',session:s.sess,conf:s.conf,time:s.time,tpTime:'live',judas:s.judasFired,choch:s.choch!==0}));
   const allItems=[...liveItems,...items];
-  list.innerHTML=allItems.map(h=>`
-    <div class="history-item">
-      <div class="hist-dir ${h.dir}">${h.dir==='buy'?'↑':'↓'}</div>
-      <div class="hist-info">
-        <div class="hist-main">
-          <span class="hist-signal">${h.dir.toUpperCase()} $${h.entry.toFixed(2)}${h.exit?` → $${h.exit.toFixed(2)}`:''}</span>
-          <span class="hist-pnl ${h.result}">${h.result==='live'?'LIVE':h.pnl>0?'+$'+h.pnl.toFixed(2):h.pnl<0?'$'+h.pnl.toFixed(2):'$0'}</span>
-        </div>
-        <div class="hist-sub">
-          <span class="hist-meta">${h.time} · ${h.session} · ${h.conf}%</span>
-          <span class="hist-tag ${h.tag}">${h.tag==='tp'?'TP HIT':h.tag==='guard'?'GUARD':h.tag==='live'?'LIVE':h.tag.toUpperCase()}</span>
-          ${h.tpTime!=='—'&&h.tpTime!=='live'?`<span class="hist-timing">⏱${h.tpTime}</span>`:''}
-          ${h.judas?'<span class="ai-tag bull" style="font-size:9px;padding:1px 4px">JUDAS</span>':''}
-          ${h.choch?'<span class="ai-tag" style="font-size:9px;padding:1px 4px;background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.3)">CHoCH</span>':''}
-        </div>
-      </div>
-    </div>`).join('');
+  list.innerHTML=allItems.map(h=>`<div class="history-item"><div class="hist-dir ${h.dir}">${h.dir==='buy'?'↑':'↓'}</div><div class="hist-info"><div class="hist-main"><span class="hist-signal">${h.dir.toUpperCase()} $${h.entry.toFixed(2)}${h.exit?` → $${h.exit.toFixed(2)}`:''}</span><span class="hist-pnl ${h.result}">${h.result==='live'?'LIVE':h.pnl>0?'+$'+h.pnl.toFixed(2):h.pnl<0?'$'+h.pnl.toFixed(2):'$0'}</span></div><div class="hist-sub"><span class="hist-meta">${h.time} · ${h.session} · ${h.conf}%</span><span class="hist-tag ${h.tag}">${h.tag==='tp'?'TP HIT':h.tag==='guard'?'GUARD':h.tag==='live'?'LIVE':h.tag.toUpperCase()}</span>${h.tpTime!=='—'&&h.tpTime!=='live'?`<span class="hist-timing">⏱${h.tpTime}</span>`:''} ${h.judas?'<span class="ai-tag bull" style="font-size:9px;padding:1px 4px">JUDAS</span>':''} ${h.choch?'<span class="ai-tag" style="font-size:9px;padding:1px 4px;background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.3)">CHoCH</span>':''}</div></div></div>`).join('');
 }
 function filterHistory(f,el){histFilter=f;document.querySelectorAll('#hist-filter .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderHistory();}
 
-// ── NEWS RENDER ───────────────────────────────────────────────────
+// ── News ──────────────────────────────────────────
+const NEWS_STATIC=[
+  {title:'US Core PCE Price Index (MoM)',time:'15:30 UTC',impact:'high',gold_call:'⬆️ Below forecast → gold bullish.',preview:'Key inflation measure. Below expected = dollar weakens = gold rallies.',source:'Investing.com',url:'https://www.investing.com/economic-calendar/',goldTag:true,upcoming:true},
+  {title:'Fed Chair Powell Speech',time:'17:00 UTC',impact:'high',gold_call:'⬆️ Dovish tone = gold spike likely.',preview:'Any rate cut signal = big move. Market watching for forward guidance.',source:'FedReserve.gov',url:'https://www.federalreserve.gov/newsevents/',goldTag:true,upcoming:true},
+  {title:'US ISM Manufacturing PMI',time:'15:00 UTC',impact:'med',gold_call:'⬇️ Strong reading = dollar bid = gold pressure',preview:'Below 50 = contraction = risk-off = gold support.',source:'ForexFactory',url:'https://www.forexfactory.com/calendar',goldTag:true,upcoming:true},
+  {title:'FOMC Minutes',time:'19:00 UTC',impact:'high',gold_call:'Directional — watch hawkish vs dovish balance',preview:'Markets looking for pivot language to confirm rate cut trajectory.',source:'FedReserve.gov',url:'https://www.federalreserve.gov/newsevents/pressreleases/',goldTag:true,upcoming:false},
+  {title:'US Non-Farm Payrolls',time:'15:30 UTC FRIDAY',impact:'high',gold_call:'⬇️ Strong NFP = gold sell-off risk. Weak NFP = gold rally.',preview:'Most important data. Miss vs beat shifts gold direction $15-30.',source:'BLS.gov',url:'https://www.bls.gov/schedule/news_release/empsit.htm',goldTag:true,upcoming:true}
+];
 let newsFilter='all';
+async function fetchNewsCommentary(){
+  newsItems=NEWS_STATIC;renderNews();
+  const badge=document.getElementById('news-badge-count'),dnBadge=document.getElementById('dnav-news-badge');
+  const highCount=NEWS_STATIC.filter(n=>n.impact==='high'&&n.upcoming).length;
+  if(badge)badge.textContent=highCount;if(dnBadge)dnBadge.textContent=highCount;
+  const el=document.getElementById('news-commentary');
+  if(el)el.textContent='Gold consolidating above $3,300 support ahead of key US data releases. Fed speakers remain cautious but market is pricing 2 cuts by year-end 2026. ICT AMD framework: Asian session accumulation detected — London manipulation (Judas sweep) expected at session open. Watch $3,290 as key PDL support.';
+}
 function renderNews(){
   const list=document.getElementById('news-list');if(!list)return;
   let items=newsItems.length?newsItems:NEWS_STATIC;
   if(newsFilter!=='all')items=items.filter(n=>{if(newsFilter==='high')return n.impact==='high';if(newsFilter==='gold')return n.goldTag;if(newsFilter==='upcoming')return n.upcoming;return true;});
-  list.innerHTML=items.map(n=>`<div class="news-item">
-    <div class="news-header">
-      <div class="news-impact ${n.impact}"></div>
-      <div class="news-title">${n.title}</div>
-      <div class="news-time">${n.time}</div>
-    </div>
-    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <span class="news-tag ${n.impact}">${n.impact.toUpperCase()}</span>
-      ${n.goldTag?'<span class="news-tag" style="background:rgba(212,168,68,.1);color:var(--gold)">GOLD</span>':''}
-      <a style="font-size:10px;color:var(--cyan);text-decoration:none;font-family:Space Mono,monospace" href="${n.url}" target="_blank" rel="noopener">${n.source} ↗</a>
-    </div>
-    <div class="news-preview">${n.preview}</div>
-    ${n.gold_call?`<div class="news-market-call">${n.gold_call}</div>`:''}
-  </div>`).join('');
+  list.innerHTML=items.map(n=>`<div class="news-item"><div class="news-header"><div class="news-impact ${n.impact}"></div><div class="news-title">${n.title}</div><div class="news-time">${n.time}</div></div><div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap"><span class="news-tag ${n.impact}">${n.impact.toUpperCase()}</span>${n.goldTag?'<span class="news-tag" style="background:rgba(212,168,68,.1);color:var(--gold)">GOLD</span>':''}<a style="font-size:10px;color:var(--cyan);text-decoration:none;font-family:Space Mono,monospace" href="${n.url}" target="_blank" rel="noopener">${n.source} ↗</a></div><div class="news-preview">${n.preview}</div>${n.gold_call?`<div class="news-market-call">${n.gold_call}</div>`:''}</div>`).join('');
 }
 function filterNews(f,el){newsFilter=f;document.querySelectorAll('#panel-news .filter-bar .filter-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderNews();}
 
-// ── AI CHART SCANNER ──────────────────────────────────────────────
-async function handleAIUpload(event) {
+// ── AI Chart Scanner ──────────────────────────────
+async function handleAIUpload(event){
   const file=event.target.files[0];if(!file)return;
-  const preview=document.getElementById('camera-preview');
-  const ph=document.getElementById('cu-placeholder');
-  preview.src=URL.createObjectURL(file);
-  preview.style.display='block';ph.style.display='none';
-  document.getElementById('ai-loading').classList.add('show');
-  document.getElementById('ai-result').classList.remove('show');
-  preview.onload=async()=>{
-    const result=await analyzeChartICT(preview);
-    showAIResult(result);
-    document.getElementById('ai-loading').classList.remove('show');
-  };
-  if(preview.complete&&preview.naturalHeight>0){
-    const result=await analyzeChartICT(preview);
-    showAIResult(result);
-    document.getElementById('ai-loading').classList.remove('show');
-  }
+  const preview=document.getElementById('camera-preview'),ph=document.getElementById('cu-placeholder');
+  preview.src=URL.createObjectURL(file);preview.style.display='block';ph.style.display='none';
+  document.getElementById('ai-loading').classList.add('show');document.getElementById('ai-result').classList.remove('show');
+  preview.onload=async()=>{const result=await analyzeChartICT(preview);showAIResult(result);document.getElementById('ai-loading').classList.remove('show');};
+  if(preview.complete&&preview.naturalHeight>0){const result=await analyzeChartICT(preview);showAIResult(result);document.getElementById('ai-loading').classList.remove('show');}
 }
-
-async function analyzeChartICT(imgEl) {
+async function analyzeChartICT(imgEl){
   return new Promise(resolve=>{
-    const canvas=document.createElement('canvas');
-    const W=imgEl.naturalWidth||800,H=imgEl.naturalHeight||600;
-    canvas.width=W;canvas.height=H;
-    const ctx=canvas.getContext('2d');
-    ctx.drawImage(imgEl,0,0,W,H);
-    const chartTop=Math.floor(H*0.1),chartBot=Math.floor(H*0.85);
-    const data=ctx.getImageData(0,0,W,H).data;
+    const canvas=document.createElement('canvas'),W=imgEl.naturalWidth||800,H=imgEl.naturalHeight||600;
+    canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');ctx.drawImage(imgEl,0,0,W,H);
+    const chartTop=Math.floor(H*0.1),chartBot=Math.floor(H*0.85),data=ctx.getImageData(0,0,W,H).data;
     const px=(x,y)=>{const i=(y*W+x)*4;return[data[i],data[i+1],data[i+2]];};
-
-    let gRec=0,rRec=0,gOld=0,rOld=0;
-    let emaPixels=0,purplePixels=0,yellowPixels=0;
+    let gRec=0,rRec=0,gOld=0,rOld=0,emaPixels=0,purplePixels=0,yellowPixels=0;
     const recStart=Math.floor(W*0.65);
-
-    for(let y=chartTop;y<chartBot;y++) {
-      for(let x=0;x<W;x++) {
-        const [r,g,b]=px(x,y);
-        const isGreen=g>100&&g>r*1.3&&g>b*1.0&&(r+g+b)>150;
-        const isRed=r>100&&r>g*1.3&&r>b*1.0&&(r+g+b)>150;
-        const isEMA=b>120&&b>r*1.2&&g>80;
-        const isPurple=b>80&&r>80&&g<100&&b>g*1.2;
-        const isYellow=r>180&&g>150&&b<80;
-        if(isGreen){x<recStart?gOld++:gRec++;} if(isRed){x<recStart?rOld++:rRec++;}
-        if(isEMA)emaPixels++;if(isPurple)purplePixels++;if(isYellow)yellowPixels++;
-      }
-    }
-
-    const recRatio=gRec/(gRec+rRec+1);
-    const oldRatio=gOld/(gOld+rOld+1);
-    const momentum=recRatio-oldRatio;
-
+    for(let y=chartTop;y<chartBot;y++){for(let x=0;x<W;x++){const[r,g,b]=px(x,y);const isGreen=g>100&&g>r*1.3&&g>b*1.0&&(r+g+b)>150,isRed=r>100&&r>g*1.3&&r>b*1.0&&(r+g+b)>150;if(isGreen){x<recStart?gOld++:gRec++;}if(isRed){x<recStart?rOld++:rRec++;}if(b>120&&b>r*1.2&&g>80)emaPixels++;if(b>80&&r>80&&g<100&&b>g*1.2)purplePixels++;if(r>180&&g>150&&b<80)yellowPixels++;}}
+    const recRatio=gRec/(gRec+rRec+1),oldRatio=gOld/(gOld+rOld+1),momentum=recRatio-oldRatio;
     let longWickBull=0,longWickBear=0;
-    for(let x=recStart;x<W-10;x+=4) {
-      let topGreen=-1,botGreen=chartBot,topRed=-1,botRed=chartBot;
-      for(let y=chartTop;y<chartBot;y++) {
-        const [r,g,b]=px(x,y);
-        if(g>100&&g>r*1.3){if(topGreen<0)topGreen=y;botGreen=y;}
-        if(r>100&&r>g*1.3){if(topRed<0)topRed=y;botRed=y;}
-      }
-      if(topRed>=0&&topGreen>=0&&topGreen>topRed&&(botRed-topRed)>(botGreen-topGreen)*1.5) longWickBull++;
-      if(topGreen>=0&&topRed>=0&&topRed>topGreen&&(botGreen-topGreen)>(botRed-topRed)*1.5) longWickBear++;
-    }
-
+    for(let x=recStart;x<W-10;x+=4){let topGreen=-1,botGreen=chartBot,topRed=-1,botRed=chartBot;for(let y=chartTop;y<chartBot;y++){const[r,g,b]=px(x,y);if(g>100&&g>r*1.3){if(topGreen<0)topGreen=y;botGreen=y;}if(r>100&&r>g*1.3){if(topRed<0)topRed=y;botRed=y;}}if(topRed>=0&&topGreen>=0&&topGreen>topRed&&(botRed-topRed)>(botGreen-topGreen)*1.5)longWickBull++;if(topGreen>=0&&topRed>=0&&topRed>topGreen&&(botGreen-topGreen)>(botRed-topRed)*1.5)longWickBear++;}
     let fvgDetected=false;
-    for(let x=recStart+20;x<W-20;x+=5) {
-      let prevHasCandle=false,curHasCandle=false,nextHasCandle=false;
-      for(let y=chartTop;y<chartBot;y++) {
-        const [r,g,b]=px(x-8,y);if(g>80||r>80)prevHasCandle=true;
-        const [r2,g2,b2]=px(x,y);if(g2>80||r2>80)curHasCandle=true;
-        const [r3,g3,b3]=px(x+8,y);if(g3>80||r3>80)nextHasCandle=true;
-      }
-      if(prevHasCandle&&!curHasCandle&&nextHasCandle){fvgDetected=true;break;}
-    }
-
+    for(let x=recStart+20;x<W-20;x+=5){let prev=false,cur=false,next=false;for(let y=chartTop;y<chartBot;y++){const[r,g,b]=px(x-8,y);if(g>80||r>80)prev=true;const[r2,g2,b2]=px(x,y);if(g2>80||r2>80)cur=true;const[r3,g3,b3]=px(x+8,y);if(g3>80||r3>80)next=true;}if(prev&&!cur&&next){fvgDetected=true;break;}}
     let direction='WAIT',strength=50;
-    if(recRatio>0.60){direction='BUY';strength=Math.round(52+recRatio*44);}
-    else if(recRatio<0.40){direction='SELL';strength=Math.round(52+(1-recRatio)*44);}
+    if(recRatio>0.60){direction='BUY';strength=Math.round(52+recRatio*44);}else if(recRatio<0.40){direction='SELL';strength=Math.round(52+(1-recRatio)*44);}
     strength=Math.min(93,Math.max(44,strength));
-
-    const judasBull=longWickBear>2;
-    const judasBear=longWickBull>2;
-    const judasStr=judasBull?'BULL (lows swept, reversal up)':judasBear?'BEAR (highs swept, reversal down)':'Not detected';
-    const judasColor=judasBull?'var(--green)':judasBear?'var(--red)':'var(--text3)';
-    const chochStr=Math.abs(momentum)>0.2?(momentum>0?'BULL CHoCH (momentum shifted ↑)':'BEAR CHoCH (momentum shifted ↓)'):'No clear CHoCH';
-    const chochColor=momentum>0.2?'var(--green)':momentum<-0.2?'var(--red)':'var(--text3)';
-    const emaStr=emaPixels>200?(direction==='BUY'?'BULL stack visible':'BEAR stack visible'):'EMA not clear';
-    const emaColor=direction==='BUY'?'var(--green)':'var(--red)';
-    const fvgStr=fvgDetected?'FVG gap detected — potential limit entry':'No clear FVG gap';
-    const fvgColor=fvgDetected?'var(--gold2)':'var(--text3)';
-
-    const patterns=[];
-    if(emaPixels>200)patterns.push('EMA/MA line');
-    if(judasBull||judasBear)patterns.push('Judas sweep wicks');
-    if(fvgDetected)patterns.push('Fair Value Gap');
-    if(Math.abs(momentum)>0.15)patterns.push('Momentum shift');
-    if(purplePixels>300)patterns.push('Oscillator pane (RSI/Stoch)');
-    if(yellowPixels>200)patterns.push('Key level/zone highlighted');
-    patterns.push('Candlestick pattern analysis');
-
-    const risks=[];
-    if(Math.abs(momentum)<0.1)risks.push({col:'var(--orange)',txt:'Low momentum — consolidation zone. Wait for clear direction before entry.'});
-    if(judasBull||judasBear)risks.push({col:'var(--cyan)',txt:'Judas sweep detected — the fake move may be complete. Confirm CHoCH before full entry.'});
-    if(fvgDetected)risks.push({col:'var(--gold)',txt:'FVG present — price may return to fill the gap. Ideal limit entry at the CE (midpoint).'});
-    if(purplePixels>500)risks.push({col:'var(--purple)',txt:'Oscillator below chart — check for overbought/oversold before entering.'});
-    risks.push({col:'var(--text3)',txt:'Always verify with AURUM EA confluence vote count before trading. Minimum 2 T1 votes required.'});
-
-    const zone=recRatio>0.6?'upper range':recRatio<0.4?'lower range':'mid-range';
-    const summary=`Chart shows ${direction==='BUY'?'bullish':direction==='SELL'?'bearish':'ranging'} price action. Recent candles in the ${zone} (${Math.round(recRatio*100)}% bull). ${judasBull||judasBear?'Judas sweep wicks detected — structural move expected.':''} ${fvgDetected?'FVG gap visible — CE limit entry opportunity.':''} ${emaPixels>200?'EMA line present — trend alignment visible.':''} Always confirm with EA confluence before trading.`;
-
-    resolve({direction,strength,summary,patterns,risks,judasStr,judasColor,chochStr,chochColor,emaStr,emaColor,fvgStr,fvgColor,hasOscillator:purplePixels>300});
+    const judasBull=longWickBear>2,judasBear=longWickBull>2;
+    resolve({direction,strength,summary:`Chart shows ${direction==='BUY'?'bullish':direction==='SELL'?'bearish':'ranging'} price action (${Math.round(recRatio*100)}% bull). ${judasBull||judasBear?'Judas sweep wicks detected.':''} ${fvgDetected?'FVG gap visible.':''} ${emaPixels>200?'EMA line present.':''} Always confirm with EA confluence before trading.`,patterns:[emaPixels>200?'EMA/MA line':null,judasBull||judasBear?'Judas sweep wicks':null,fvgDetected?'Fair Value Gap':null,Math.abs(momentum)>0.15?'Momentum shift':null,purplePixels>300?'Oscillator pane':null,'Candlestick analysis'].filter(Boolean),risks:[Math.abs(momentum)<0.1?{col:'var(--orange)',txt:'Low momentum — consolidation. Wait for direction.'}:null,judasBull||judasBear?{col:'var(--cyan)',txt:'Judas sweep detected — confirm CHoCH before entry.'}:null,fvgDetected?{col:'var(--gold)',txt:'FVG present — CE (midpoint) is the ideal limit entry.'}:null,{col:'var(--text3)',txt:'Always verify with AURUM EA confluence. Min 2 T1 votes required.'}].filter(Boolean),judasStr:judasBull?'BULL (lows swept, reversal up)':judasBear?'BEAR (highs swept, reversal down)':'Not detected',judasColor:judasBull?'var(--green)':judasBear?'var(--red)':'var(--text3)',chochStr:Math.abs(momentum)>0.2?(momentum>0?'BULL CHoCH (momentum shifted ↑)':'BEAR CHoCH (momentum shifted ↓)'):'No clear CHoCH',chochColor:momentum>0.2?'var(--green)':momentum<-0.2?'var(--red)':'var(--text3)',emaStr:emaPixels>200?(direction==='BUY'?'BULL stack visible':'BEAR stack visible'):'EMA not clear',emaColor:direction==='BUY'?'var(--green)':'var(--red)',fvgStr:fvgDetected?'FVG gap detected — CE limit entry':'No clear FVG gap',fvgColor:fvgDetected?'var(--gold2)':'var(--text3)',hasOscillator:purplePixels>300});
   });
 }
-
-function showAIResult(r) {
+function showAIResult(r){
   const el=document.getElementById('ai-result');el.classList.add('show');
-  const dc=r.direction==='BUY'?'bull':r.direction==='SELL'?'bear':'neutral';
-  const di=r.direction==='BUY'?'↑':r.direction==='SELL'?'↓':'~';
-  document.getElementById('ai-dir-box').className='ai-hero-dir '+dc;
-  document.getElementById('ai-dir-box').textContent=di;
-  document.getElementById('ai-dir-txt').className='ai-hero-val '+dc;
-  document.getElementById('ai-dir-txt').textContent=r.direction;
+  const dc=r.direction==='BUY'?'bull':r.direction==='SELL'?'bear':'neutral',di=r.direction==='BUY'?'↑':r.direction==='SELL'?'↓':'~';
+  document.getElementById('ai-dir-box').className='ai-hero-dir '+dc;document.getElementById('ai-dir-box').textContent=di;
+  document.getElementById('ai-dir-txt').className='ai-hero-val '+dc;document.getElementById('ai-dir-txt').textContent=r.direction;
   document.getElementById('ai-trend-txt').textContent='Confidence: '+r.strength+'%';
-  document.getElementById('ai-str-bar').style.width=r.strength+'%';
-  document.getElementById('ai-str-pct').textContent=r.strength+'%';
+  document.getElementById('ai-str-bar').style.width=r.strength+'%';document.getElementById('ai-str-pct').textContent=r.strength+'%';
   const s=(id,v,c)=>{const e=document.getElementById(id);if(!e)return;e.textContent=v;if(c)e.style.color=c;};
-  s('ai-judas',r.judasStr,r.judasColor);
-  s('ai-choch',r.chochStr,r.chochColor);
-  s('ai-fvg',r.fvgStr,r.fvgColor);
-  s('ai-ema',r.emaStr,r.emaColor);
+  s('ai-judas',r.judasStr,r.judasColor);s('ai-choch',r.chochStr,r.chochColor);s('ai-fvg',r.fvgStr,r.fvgColor);s('ai-ema',r.emaStr,r.emaColor);
   document.getElementById('ai-overlays').innerHTML=(r.patterns||[]).map(p=>`<span class="ai-tag source">${p}</span>`).join('');
   document.getElementById('ai-summary').textContent=r.summary||'';
   document.getElementById('ai-risks').innerHTML=(r.risks||[]).map(ri=>`<div style="display:flex;align-items:flex-start;gap:6px;font-size:11px;line-height:1.55;margin-bottom:4px"><span style="color:${ri.col};flex-shrink:0">◈</span><span style="color:${ri.col}">${ri.txt}</span></div>`).join('');
-  if(r.hasOscillator){const extra=document.createElement('div');extra.style.cssText='font-size:10px;color:var(--cyan);margin-top:6px;padding:6px 8px;background:rgba(34,211,238,0.08);border-radius:6px;font-family:Space Mono,monospace';extra.textContent='ℹ Oscillator pane detected below chart. RSI/Stoch visible — check for overbought (RSI>70) or oversold (RSI<30) before entry.';document.getElementById('ai-risks').appendChild(extra);}
   const tipBox=document.createElement('div');
   tipBox.style.cssText='background:rgba(212,168,68,0.08);border:1px solid rgba(212,168,68,0.2);border-radius:8px;padding:10px 12px;margin-top:6px;font-size:11px;color:var(--gold2);line-height:1.6';
-  tipBox.innerHTML=`<strong style="display:block;margin-bottom:4px">📚 ICT Learning Tip:</strong>${
-    r.direction==='BUY'?'Price action is bullish. In ICT AMD: look for a Judas sweep of recent lows (manipulation) followed by CHoCH (structure break) then enter on the FVG retest (CE limit). SL below the sweep low. Target 2R minimum.':
-    r.direction==='SELL'?'Price action is bearish. In ICT AMD: look for a Judas sweep of recent highs (manipulation) followed by CHoCH then enter on the FVG retest. SL above the sweep high. Target 2R minimum.':
-    'No clear directional bias. In ICT AMD this is still the Asian accumulation phase — institutions quietly building. Wait for London (07:00 UTC) for the Judas sweep to define direction.'}`;
+  tipBox.innerHTML=`<strong style="display:block;margin-bottom:4px">📚 ICT Learning Tip:</strong>${r.direction==='BUY'?'Price action is bullish. Look for Judas sweep of recent lows → CHoCH → FVG CE limit entry. SL below sweep low. Target 2R.':r.direction==='SELL'?'Price action is bearish. Look for Judas sweep of recent highs → CHoCH → FVG CE limit entry. SL above sweep high. Target 2R.':'No clear directional bias. Wait for London open (07:00 UTC) for the Judas sweep to define direction.'}`;
   document.getElementById('ai-risks').appendChild(tipBox);
 }
-
 const dropZone=document.getElementById('ai-drop');
-if(dropZone){
-  dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag');});
-  dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag'));
-  dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleAIUpload({target:{files:[f]}});});
-}
+if(dropZone){dropZone.addEventListener('dragover',e=>{e.preventDefault();dropZone.classList.add('drag');});dropZone.addEventListener('dragleave',()=>dropZone.classList.remove('drag'));dropZone.addEventListener('drop',e=>{e.preventDefault();dropZone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.startsWith('image/'))handleAIUpload({target:{files:[f]}});});}
 
-// ── TAB SWITCHING ─────────────────────────────────────────────────
+// ── Tab switching ─────────────────────────────────
 function switchTab(name){
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab-btn,.dnav-btn').forEach(b=>b.classList.remove('active'));
@@ -1794,50 +1138,31 @@ function switchTab(name){
   if(name==='signal'){setTimeout(()=>{if(lastSignal)drawProjectionRay(lastSignal);},100);}
 }
 
-// ── TRADINGVIEW ───────────────────────────────────────────────────
+// ── TradingView ───────────────────────────────────
 function loadTVWidget(tf){
   const c=document.getElementById('tv-widget-container');if(!c)return;c.innerHTML='';
   const s=document.createElement('script');s.src='https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';s.async=true;
-  s.innerHTML=JSON.stringify({
-    autosize:true,symbol:'OANDA:XAUUSD',interval:tf,timezone:'Africa/Johannesburg',
-    theme:'dark',style:'1',locale:'en',toolbar_bg:'#0a0c0f',enable_publishing:false,
-    hide_top_toolbar:false,hide_legend:true,save_image:false,hide_side_toolbar:true,
-    support_host:'https://www.tradingview.com',container_id:'tv-widget-container',
-    studies:rsiEnabled?['MASimple@tv-basicstudies','RSI@tv-basicstudies']:['MASimple@tv-basicstudies'],
-    overrides:{'mainSeriesProperties.candleStyle.upColor':'#22c55e','mainSeriesProperties.candleStyle.downColor':'#ef4444','mainSeriesProperties.candleStyle.borderUpColor':'#22c55e','mainSeriesProperties.candleStyle.borderDownColor':'#ef4444','mainSeriesProperties.candleStyle.wickUpColor':'#22c55e','mainSeriesProperties.candleStyle.wickDownColor':'#ef4444','paneProperties.background':'#0a0c0f','paneProperties.backgroundType':'solid'}
-  });
+  s.innerHTML=JSON.stringify({autosize:true,symbol:'OANDA:XAUUSD',interval:tf,timezone:'Africa/Johannesburg',theme:'dark',style:'1',locale:'en',toolbar_bg:'#0a0c0f',enable_publishing:false,hide_top_toolbar:false,hide_legend:true,save_image:false,hide_side_toolbar:true,support_host:'https://www.tradingview.com',container_id:'tv-widget-container',studies:rsiEnabled?['MASimple@tv-basicstudies','RSI@tv-basicstudies']:['MASimple@tv-basicstudies'],overrides:{'mainSeriesProperties.candleStyle.upColor':'#22c55e','mainSeriesProperties.candleStyle.downColor':'#ef4444','mainSeriesProperties.candleStyle.borderUpColor':'#22c55e','mainSeriesProperties.candleStyle.borderDownColor':'#ef4444','mainSeriesProperties.candleStyle.wickUpColor':'#22c55e','mainSeriesProperties.candleStyle.wickDownColor':'#ef4444','paneProperties.background':'#0a0c0f','paneProperties.backgroundType':'solid'}});
   c.appendChild(s);
 }
 function switchTF(tf,el){currentTF=tf;document.querySelectorAll('.tf-chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');loadTVWidget(tf);}
 function toggleRSI(){rsiEnabled=!rsiEnabled;const btn=document.getElementById('rsi-toggle-btn');if(btn){btn.textContent=rsiEnabled?'RSI ON':'RSI OFF';btn.style.background=rsiEnabled?'rgba(167,139,250,0.15)':'var(--bg3)';btn.style.color=rsiEnabled?'var(--purple)':'var(--muted)';}loadTVWidget(currentTF);}
 
-// ── SIGNAL TIMER ──────────────────────────────────────────────────
+// ── Signal timer ──────────────────────────────────
 function startSignalTimer(secs=180){
   clearInterval(signalTimerInterval);signalTimer=secs;
   const el=document.getElementById('sig-timer-val');
-  signalTimerInterval=setInterval(()=>{
-    signalTimer--;if(signalTimer<=0){signalTimer=180;fetchH1OHLC();}
-    const m=Math.floor(signalTimer/60),s=signalTimer%60;
-    if(el)el.textContent=m+':'+(s<10?'0':'')+s;
-  },1000);
+  signalTimerInterval=setInterval(()=>{signalTimer--;if(signalTimer<=0){signalTimer=180;fetchH1OHLC();}const m=Math.floor(signalTimer/60),s=signalTimer%60;if(el)el.textContent=m+':'+(s<10?'0':'')+s;},1000);
 }
 
-// ── INIT ──────────────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────
 window.addEventListener('load',()=>{
-  renderHistory();renderNews();renderGoldOHLC();renderGoldSummary();
-  renderICTRows(null);
-  loadTVWidget('1');
-  fetchLivePrice();
-  setTimeout(fetchH1OHLC,1500);
-  fetchGoldOHLC();
-  fetchNewsCommentary();
-  startSignalTimer(120);
+  renderHistory();renderNews();renderGoldOHLC();renderGoldSummary();renderICTRows(null);
+  loadTVWidget('1');fetchLivePrice();setTimeout(fetchH1OHLC,1500);fetchGoldOHLC();fetchNewsCommentary();startSignalTimer(120);
   setInterval(fetchLivePrice,90000);
   setInterval(fetchH1OHLC,120000);
   setInterval(fetchGoldOHLC,300000);
-  setInterval(()=>{
-    if(lastH1OHLC){computeICTState(lastH1OHLC);const s=computeSignal();if(s)applySignalUI(s);}
-  },30000);
+  setInterval(()=>{if(lastH1OHLC){computeICTState(lastH1OHLC);const s=computeSignal();if(s)applySignalUI(s);}},30000);
 });
 </script>
 </body>
