@@ -1540,64 +1540,56 @@ function updateOverviewStats(sig) {
 }
 
 // ── LIVE PRICE FETCHING ───────────────────────────────────────────
-const PROXIES=['https://corsproxy.io/?url=','https://api.allorigins.win/raw?url=','https://thingproxy.freeboard.io/fetch/'];
+const PROXIES=['https://corsproxy.io/?url=','https://api.allorigins.win/raw?url='];
 
-async function tryFetch(url,ms=7000) {
-  return Promise.race([fetch(url,{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);
+async function tryFetch(url,ms=7000){
+  try{return await Promise.race([fetch(url,{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('timeout')),ms))]);}catch(e){return null;}
 }
-async function tryProxies(target,ms=7000) {
-  for (const px of PROXIES) {
-    try {
+async function tryProxies(target,ms=8000){
+  for(const px of PROXIES){
+    try{
       const r=await Promise.race([fetch(px+encodeURIComponent(target),{cache:'no-store'}),new Promise((_,r)=>setTimeout(()=>r(new Error('t')),ms))]);
-      if(r&&r.ok) return r;
-    } catch(e) {}
+      if(r&&r.ok)return r;
+    }catch(e){}
   }
   return null;
 }
 
-function applyLivePrice(p) {
-  if(!p||isNaN(p)||p<500) return false;
-  livePrice=p; priceConfirmed=true;
+function applyLivePrice(p){
+  if(!p||isNaN(p)||p<500)return false;
+  livePrice=p;priceConfirmed=true;
   const fmt='$'+p.toFixed(2);
   const badge=document.getElementById('hdr-price');
   if(badge){badge.textContent=fmt;badge.style.color='var(--gold2)';badge.style.borderColor='var(--gold-dim)';}
-  // Re-run signal with new price
-  if(lastH1OHLC) {
+  const dot=document.getElementById('ds-dot');if(dot)dot.style.background='var(--green)';
+  if(lastH1OHLC){
     lastH1OHLC[lastH1OHLC.length-1].c=p;
     computeICTState(lastH1OHLC);
     const sig=computeSignal();
-    if(sig) applySignalUI(sig);
+    if(sig)applySignalUI(sig);
   }
   return true;
 }
 
-async function fetchLivePrice() {
-  // Source 1: metals.live (direct CORS)
-  try {
-    const r=await tryFetch('https://api.metals.live/v1/spot',5000);
-    if(r&&r.ok){const d=await r.json();const arr=Array.isArray(d)?d:[d];const g=arr[0]?.gold;if(applyLivePrice(Number(g)))return;}
-  } catch(e){}
-  // Source 2: Yahoo Finance GC=F
-  try {
-    const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d');
-    if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p)))return;}
-  } catch(e){}
-  // Source 3: Yahoo XAUUSD=X
-  try {
-    const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/XAUUSD%3DX?interval=1m&range=1d');
-    if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p)))return;}
-  } catch(e){}
-  // Source 4: Frankfurter XAU
-  try {
-    const r=await tryFetch('https://api.frankfurter.app/latest?from=XAU&to=USD',6000);
-    if(r&&r.ok){const d=await r.json();if(applyLivePrice(Number(d?.rates?.USD)))return;}
-  } catch(e){}
-  // All sources failed — retry after 12 seconds
-  const badge=document.getElementById('hdr-price');
-  if(badge&&!priceConfirmed){
-    badge.textContent='RETRY…';badge.style.color='var(--orange)';
-    setTimeout(fetchLivePrice,12000);
-  }
+let _priceFetching=false;
+async function fetchLivePrice(){
+  if(_priceFetching)return; _priceFetching=true;
+  try{
+    // Source 1: metals.live single endpoint
+    try{const r=await tryFetch('https://api.metals.live/v1/spot/gold',5000);if(r&&r.ok){const d=await r.json();const g=d?.price||d?.gold;if(applyLivePrice(Number(g))){_priceFetching=false;return;}}}catch(e){}
+    // Source 2: metals.live array
+    try{const r=await tryFetch('https://api.metals.live/v1/spot',5000);if(r&&r.ok){const d=await r.json();const arr=Array.isArray(d)?d:[d];const g=arr.find(x=>x.gold)?.gold||arr[0]?.gold;if(applyLivePrice(Number(g))){_priceFetching=false;return;}}}catch(e){}
+    // Source 3: Frankfurter XAU (very reliable, no CORS block)
+    try{const r=await tryFetch('https://api.frankfurter.app/latest?from=XAU&to=USD',7000);if(r&&r.ok){const d=await r.json();if(applyLivePrice(Number(d?.rates?.USD))){_priceFetching=false;return;}}}catch(e){}
+    // Source 4: open.er-api XAU
+    try{const r=await tryFetch('https://open.er-api.com/v6/latest/XAU',7000);if(r&&r.ok){const d=await r.json();if(applyLivePrice(Number(d?.rates?.USD))){_priceFetching=false;return;}}}catch(e){}
+    // Source 5: Yahoo via proxy
+    try{const r=await tryProxies('https://query1.finance.yahoo.com/v8/finance/chart/GC%3DF?interval=1m&range=1d',9000);if(r){const d=await r.json();const p=d?.chart?.result?.[0]?.meta?.regularMarketPrice;if(applyLivePrice(Number(p))){_priceFetching=false;return;}}}catch(e){}
+    // All failed
+    const badge=document.getElementById('hdr-price');
+    if(badge&&!priceConfirmed){badge.textContent='RETRY…';badge.style.color='var(--orange)';}
+    setTimeout(fetchLivePrice,10000);
+  }finally{_priceFetching=false;}
 }
 
 // ── H1 OHLC FETCHING ─────────────────────────────────────────────
@@ -1725,7 +1717,7 @@ function renderGoldSummary() {
   s('g-vol','$'+(ph-pl).toFixed(2));
   let bm=0,bd='';rows.forEach(r=>{if(Math.abs(r.chg||0)>Math.abs(bm)){bm=r.chg;bd=r.date;}});
   const bel=document.getElementById('g-bigmove');
-  if(bel)bel.innerHTML=`Biggest: <span style="color:${bm>=0?'var(--green)':'var(--red)';font-weight:700}">${bm>=0?'+':''}${bm?.toFixed(2)||'—'}%</span> on ${bd}`;
+  if(bel)bel.innerHTML=`Biggest: <span style="color:${bm>=0?'var(--green)':'var(--red)'};font-weight:700">${bm>=0?'+':''}${bm?.toFixed(2)||'—'}%</span> on ${bd}`;
   s('gold-summary-title','Gold '+{day:'Daily',week:'Weekly',month:'Monthly'}[goldRange]+' Summary');
   s('gold-range-label',{day:'Daily',week:'Weekly',month:'Monthly'}[goldRange]);
 }
