@@ -46,7 +46,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
 .tab-panel.active{display:flex}
 #panel-chart{overflow:hidden;padding:8px;gap:6px}
 #tv-container{flex:1;min-height:0!important}
-#tabs{height:var(--tab-h);background:var(--bg2);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(6,1fr);flex-shrink:0}
+#tabs{height:var(--tab-h);background:var(--bg2);border-top:1px solid var(--border);display:grid;grid-template-columns:repeat(7,1fr);flex-shrink:0}
 .tab-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:none;border:none;color:var(--text3);font-family:'Syne',sans-serif;font-size:8px;font-weight:700;letter-spacing:.3px;cursor:pointer;transition:color .2s;padding:6px 2px;text-transform:uppercase;position:relative}
 .tab-btn svg{width:18px;height:18px}
 .tab-btn.active{color:var(--gold)}
@@ -235,7 +235,7 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
     <div class="logo-mark">AU</div>
     <div>
       <div class="logo-text">AURUM ULTRA</div>
-      <div class="logo-sub">v9.4 · XAUUSD · M1 · ICT AMD</div>
+      <div class="logo-sub">v10.0 · XAUUSD · ICT AMD + CORRELATION</div>
     </div>
   </div>
   <div class="header-right">
@@ -265,6 +265,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
   <button class="dnav-btn" onclick="switchTab('news')" id="dnav-news">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4-4V6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
     News <span id="dnav-news-badge" style="background:var(--red);color:#fff;font-size:9px;padding:1px 5px;border-radius:8px;font-family:'Space Mono',monospace;font-weight:700">0</span>
+  </button>
+  <button class="dnav-btn" onclick="switchTab('corr')" id="dnav-corr">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="3"/><circle cx="15" cy="15" r="3"/><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6L5.6 18.4"/></svg>Correlation
   </button>
 </nav>
 
@@ -648,6 +651,244 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
   </div>
 </div>
 
+
+<!-- ══ CORRELATION INTELLIGENCE ══ -->
+<div class="tab-panel" id="panel-corr">
+
+  <!-- MASTER SIGNAL BAR -->
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;flex-shrink:0">
+    <div style="display:flex;align-items:center;gap:8px">
+      <div id="c-dir-box" style="width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;background:var(--bg4);flex-shrink:0">◉</div>
+      <div>
+        <div style="font-size:18px;font-weight:800;font-family:Space Mono,monospace;color:var(--gold2)" id="c-main-dir">◉ SCANNING</div>
+        <div style="font-size:9px;color:var(--text3);font-family:Space Mono,monospace;margin-top:1px" id="c-meta">Correlation engine loading…</div>
+      </div>
+    </div>
+    <div style="width:1px;height:36px;background:var(--border2);flex-shrink:0"></div>
+    <div style="text-align:center;min-width:50px">
+      <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700" id="c-entry">—</div>
+      <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">Entry</div>
+    </div>
+    <div style="text-align:center;min-width:50px">
+      <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700;color:var(--cyan)" id="c-tp1">—</div>
+      <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">TP1</div>
+    </div>
+    <div style="text-align:center;min-width:50px">
+      <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700;color:var(--green)" id="c-tp2">—</div>
+      <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">TP2</div>
+    </div>
+    <div style="text-align:center;min-width:50px">
+      <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700;color:var(--red)" id="c-sl">—</div>
+      <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">SL</div>
+    </div>
+    <div style="text-align:center;min-width:40px">
+      <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700;color:var(--gold2)" id="c-rr">—</div>
+      <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:1px">R:R</div>
+    </div>
+    <div style="flex:1;min-width:100px">
+      <div style="display:flex;justify-content:space-between;font-size:9px;font-family:Space Mono,monospace;color:var(--text3)">
+        <span>CONFLUENCE</span>
+        <span id="c-conf-pct" style="color:var(--gold2)">0%</span>
+      </div>
+      <div style="height:5px;background:var(--bg4);border-radius:3px;overflow:hidden;margin:3px 0">
+        <div id="c-conf-fill" style="height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--gold-dim),var(--gold));transition:width .5s"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:9px;font-family:Space Mono,monospace">
+        <span style="color:var(--text3)">Corr: <span id="c-corr-votes" style="color:var(--cyan)">0</span>/5</span>
+        <span style="color:var(--text3)">T1: <span id="c-t1" style="color:var(--gold2)">0</span>/6</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIVE TICKER CHIPS -->
+  <div style="display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0">
+    <div id="cc-xag" style="padding:4px 9px;border-radius:6px;font-size:10px;font-family:Space Mono,monospace;font-weight:700;border:1px solid var(--border2);background:var(--bg3);color:var(--text3)">XAG/USD: —</div>
+    <div id="cc-chf" style="padding:4px 9px;border-radius:6px;font-size:10px;font-family:Space Mono,monospace;font-weight:700;border:1px solid var(--border2);background:var(--bg3);color:var(--text3)">USD/CHF: —</div>
+    <div id="cc-aud" style="padding:4px 9px;border-radius:6px;font-size:10px;font-family:Space Mono,monospace;font-weight:700;border:1px solid var(--border2);background:var(--bg3);color:var(--text3)">AUD/USD: —</div>
+    <div id="cc-cad" style="padding:4px 9px;border-radius:6px;font-size:10px;font-family:Space Mono,monospace;font-weight:700;border:1px solid var(--border2);background:var(--bg3);color:var(--text3)">USD/CAD: —</div>
+    <div id="cc-eur" style="padding:4px 9px;border-radius:6px;font-size:10px;font-family:Space Mono,monospace;font-weight:700;border:1px solid var(--border2);background:var(--bg3);color:var(--text3)">EUR/USD: —</div>
+    <div style="flex:1;text-align:right;font-size:9px;font-family:Space Mono,monospace;color:var(--text3);display:flex;align-items:center;justify-content:flex-end;gap:8px">
+      <span>Updated: <span id="c-updated" style="color:var(--gold2)">—</span></span>
+      <span onclick="corrRefreshAll()" style="color:var(--cyan);cursor:pointer;padding:3px 7px;border:1px solid rgba(34,211,238,.3);border-radius:5px;font-weight:700">⟳</span>
+    </div>
+  </div>
+
+  <!-- 4 MINI CHART PANES -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
+
+    <!-- XAU/USD -->
+    <div id="cp-xau" style="background:var(--bg2);border:1px solid rgba(212,168,68,.3);border-radius:10px;overflow:hidden;position:relative">
+      <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:5px">
+          <span style="font-size:12px;font-weight:800;color:var(--gold2)">XAU/USD</span>
+          <span style="font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(212,168,68,.15);color:var(--gold2);border:1px solid rgba(212,168,68,.3);font-family:Space Mono,monospace;font-weight:700">LEAD</span>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700;color:var(--gold2)" id="cp-xau-pr">Loading…</div>
+          <div style="font-family:Space Mono,monospace;font-size:9px" id="cp-xau-chg">—</div>
+        </div>
+      </div>
+      <canvas id="cv-c-xau" style="width:100%;height:110px;display:block"></canvas>
+      <div style="position:absolute;bottom:5px;left:5px;right:5px;background:rgba(6,8,16,.9);border:1px solid var(--border2);border-radius:6px;padding:4px 7px;display:flex;justify-content:space-between;font-family:Space Mono,monospace;font-size:9px">
+        <span id="cp-xau-dir" style="color:var(--gold2);font-weight:700">◉ SCAN</span>
+        <span>TP1: <span id="cp-xau-tp1" style="color:var(--cyan)">—</span></span>
+        <span>SL: <span id="cp-xau-sl" style="color:var(--red)">—</span></span>
+        <span id="cp-xau-conf" style="color:var(--gold2)">—</span>
+      </div>
+    </div>
+
+    <!-- XAG/USD -->
+    <div id="cp-xag" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative">
+      <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:5px">
+          <span style="font-size:12px;font-weight:800;color:var(--cyan)">XAG/USD</span>
+          <span style="font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(34,211,238,.1);color:var(--cyan);border:1px solid rgba(34,211,238,.25);font-family:Space Mono,monospace;font-weight:700">STRONGEST</span>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700" id="cp-xag-pr">—</div>
+          <div style="font-family:Space Mono,monospace;font-size:9px" id="cp-xag-chg">—</div>
+        </div>
+      </div>
+      <canvas id="cv-c-xag" style="width:100%;height:110px;display:block"></canvas>
+      <div style="position:absolute;bottom:5px;left:5px;right:5px;background:rgba(6,8,16,.9);border:1px solid var(--border2);border-radius:6px;padding:4px 7px;display:flex;justify-content:space-between;font-family:Space Mono,monospace;font-size:9px">
+        <span id="cp-xag-dir" style="color:var(--text3);font-weight:700">◉ WATCH</span>
+        <span>Corr: <span id="cp-xag-corr" style="color:var(--cyan)">—</span></span>
+        <span id="cp-xag-conf" style="color:var(--text3)">—</span>
+      </div>
+    </div>
+
+    <!-- USD/CHF -->
+    <div id="cp-chf" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative">
+      <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:5px">
+          <span style="font-size:12px;font-weight:800;color:var(--red)">USD/CHF</span>
+          <span style="font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(239,68,68,.1);color:var(--red);border:1px solid rgba(239,68,68,.25);font-family:Space Mono,monospace;font-weight:700">INVERSE</span>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700" id="cp-chf-pr">—</div>
+          <div style="font-family:Space Mono,monospace;font-size:9px" id="cp-chf-chg">—</div>
+        </div>
+      </div>
+      <canvas id="cv-c-chf" style="width:100%;height:110px;display:block"></canvas>
+      <div style="position:absolute;bottom:5px;left:5px;right:5px;background:rgba(6,8,16,.9);border:1px solid var(--border2);border-radius:6px;padding:4px 7px;display:flex;justify-content:space-between;font-family:Space Mono,monospace;font-size:9px">
+        <span id="cp-chf-dir" style="color:var(--text3);font-weight:700">◉ WATCH</span>
+        <span>Corr: <span id="cp-chf-corr" style="color:var(--red)">—</span></span>
+        <span id="cp-chf-conf" style="color:var(--text3)">—</span>
+      </div>
+    </div>
+
+    <!-- AUD/USD -->
+    <div id="cp-aud" style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:relative">
+      <div style="padding:6px 10px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
+        <div style="display:flex;align-items:center;gap:5px">
+          <span style="font-size:12px;font-weight:800;color:var(--green)">AUD/USD</span>
+          <span style="font-size:8px;padding:1px 5px;border-radius:3px;background:rgba(34,197,94,.1);color:var(--green);border:1px solid rgba(34,197,94,.25);font-family:Space Mono,monospace;font-weight:700">POSITIVE</span>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:Space Mono,monospace;font-size:13px;font-weight:700" id="cp-aud-pr">—</div>
+          <div style="font-family:Space Mono,monospace;font-size:9px" id="cp-aud-chg">—</div>
+        </div>
+      </div>
+      <canvas id="cv-c-aud" style="width:100%;height:110px;display:block"></canvas>
+      <div style="position:absolute;bottom:5px;left:5px;right:5px;background:rgba(6,8,16,.9);border:1px solid var(--border2);border-radius:6px;padding:4px 7px;display:flex;justify-content:space-between;font-family:Space Mono,monospace;font-size:9px">
+        <span id="cp-aud-dir" style="color:var(--text3);font-weight:700">◉ WATCH</span>
+        <span>Corr: <span id="cp-aud-corr" style="color:var(--green)">—</span></span>
+        <span id="cp-aud-conf" style="color:var(--text3)">—</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CORRELATION MATRIX TABLE -->
+  <div class="card" style="flex-shrink:0">
+    <div class="card-header">
+      <span class="card-title">📊 Live Correlation Matrix</span>
+      <span style="font-size:9px;color:var(--text3);font-family:Space Mono,monospace">Pearson 20-period</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <thead>
+          <tr>
+            <th style="padding:6px 8px;text-align:left;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-family:Space Mono,monospace">Pair</th>
+            <th style="padding:6px 8px;text-align:right;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-family:Space Mono,monospace">Price</th>
+            <th style="padding:6px 8px;text-align:right;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-family:Space Mono,monospace">Corr</th>
+            <th style="padding:6px 8px;width:60px;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-family:Space Mono,monospace">Bar</th>
+            <th style="padding:6px 8px;text-align:center;font-size:9px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border);font-family:Space Mono,monospace">Signal</th>
+          </tr>
+        </thead>
+        <tbody id="c-corr-tbody">
+          <tr><td colspan="5" style="text-align:center;padding:16px;color:var(--text3);font-family:Space Mono,monospace;font-size:10px"><span style="display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle"></span>Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- AI CORRELATION REASONING -->
+  <div class="card" style="flex-shrink:0">
+    <div class="card-header">
+      <span class="card-title">🤖 AI Correlation Intelligence</span>
+      <span style="display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:10px;background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.25);color:var(--purple);font-size:9px;font-family:Space Mono,monospace;font-weight:700">Claude · Live</span>
+    </div>
+    <div id="c-ai-body" style="padding:10px 12px;display:flex;flex-direction:column;gap:8px">
+      <div style="text-align:center;padding:16px;color:var(--text3);font-family:Space Mono,monospace;font-size:10px">
+        <span style="display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle"></span>Loading live data for AI analysis…
+      </div>
+    </div>
+  </div>
+
+  <!-- ICT + CORRELATION DETAIL CARDS -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;flex-shrink:0">
+    <div class="card">
+      <div class="card-header"><span class="card-title">⏰ AMD Phase</span></div>
+      <div class="card-body" style="padding:8px 12px">
+        <div class="stat-row"><span class="stat-label">Session</span><span class="stat-val" id="c-sess">—</span></div>
+        <div class="stat-row"><span class="stat-label">Phase</span><span class="stat-val gold" id="c-phase">—</span></div>
+        <div class="stat-row"><span class="stat-label">UTC Time</span><span class="stat-val" id="c-utc">—</span></div>
+        <div style="margin-top:6px;padding:6px 8px;background:var(--bg3);border-radius:7px;font-size:10px;color:var(--text2);line-height:1.5;font-family:Space Mono,monospace" id="c-amd-desc">—</div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">📈 Confluence Score</span></div>
+      <div class="card-body" style="padding:8px 12px">
+        <div class="stat-row"><span class="stat-label">T1 Bull</span><span class="stat-val green" id="c-t1bull">—</span></div>
+        <div class="stat-row"><span class="stat-label">T1 Bear</span><span class="stat-val red" id="c-t1bear">—</span></div>
+        <div class="stat-row"><span class="stat-label">Corr Confirms</span><span class="stat-val cyan" id="c-corr-conf">—</span></div>
+        <div class="stat-row"><span class="stat-label">ATR(14)</span><span class="stat-val gold" id="c-atr">—</span></div>
+        <div class="stat-row"><span class="stat-label">MN Bias</span><span class="stat-val" id="c-mnbias">—</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY LEVELS -->
+  <div class="card" style="flex-shrink:0">
+    <div class="card-header"><span class="card-title">🌙 Key Levels (MN + PDH/PDL)</span></div>
+    <div class="card-body" style="padding:8px 12px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+        <div style="text-align:center;padding:6px;background:var(--bg3);border-radius:7px">
+          <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">MN Open</div>
+          <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--gold2);margin-top:2px" id="c-mn-open">—</div>
+        </div>
+        <div style="text-align:center;padding:6px;background:var(--bg3);border-radius:7px">
+          <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">PDH</div>
+          <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--red);margin-top:2px" id="c-pdh">—</div>
+        </div>
+        <div style="text-align:center;padding:6px;background:var(--bg3);border-radius:7px">
+          <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">PDL</div>
+          <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--green);margin-top:2px" id="c-pdl">—</div>
+        </div>
+        <div style="text-align:center;padding:6px;background:var(--bg3);border-radius:7px">
+          <div style="font-size:8px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px">Asian Hi/Lo</div>
+          <div style="font-family:Space Mono,monospace;font-size:11px;font-weight:700;color:var(--cyan);margin-top:2px" id="c-asian">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="font-size:9px;color:var(--text3);font-family:Space Mono,monospace;padding:4px 0;flex-shrink:0;text-align:center">
+    Sources: metals.live · Frankfurter · Yahoo Finance · open.er-api.com · Refresh: 90s
+  </div>
+
+</div><!-- /panel-corr -->
 </div><!-- /main -->
 
 <!-- BOTTOM TABS -->
@@ -670,6 +911,9 @@ html,body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;h
   <button class="tab-btn" onclick="switchTab('news')" id="tab-news">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a4 4 0 0 1-4-4V6"/><line x1="9" y1="9" x2="15" y2="9"/><line x1="9" y1="13" x2="15" y2="13"/></svg>
     News<span class="badge" id="news-badge-count">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('corr')" id="tab-corr">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="9" r="3"/><circle cx="15" cy="15" r="3"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>Corr
   </button>
 </nav>
 
@@ -966,6 +1210,8 @@ function applyLivePrice(p){
   if(badge){badge.textContent=fmt;badge.style.color='var(--gold2)';badge.style.borderColor='var(--gold-dim)';}
   const dot=document.getElementById('ds-dot');if(dot)dot.style.background='var(--green)';
   if(lastH1OHLC){lastH1OHLC[lastH1OHLC.length-1].c=p;computeICTState(lastH1OHLC);const sig=computeSignal();if(sig)applySignalUI(sig);}
+  // Sync to correlation engine
+  if(corrInitDone){applyCorrPrice('xau',p);updateCorrCorrelations();const cs=computeCorrSignal();if(cs)updateCorrSignalUI(cs);drawAllCorrCharts();}
   return true;
 }
 
@@ -1136,6 +1382,7 @@ function switchTab(name){
   if(tb)tb.classList.add('active');if(db)db.classList.add('active');
   if(name==='history')renderHistory();
   if(name==='signal'){setTimeout(()=>{if(lastSignal)drawProjectionRay(lastSignal);},100);}
+  if(name==='corr'){ensureCorrInit();setTimeout(drawAllCorrCharts,100);}
 }
 
 // ── TradingView ───────────────────────────────────
@@ -1164,6 +1411,444 @@ window.addEventListener('load',()=>{
   setInterval(fetchGoldOHLC,300000);
   setInterval(()=>{if(lastH1OHLC){computeICTState(lastH1OHLC);const s=computeSignal();if(s)applySignalUI(s);}},30000);
 });
+
+// ══════════════════════════════════════════════════════════════════════
+// CORRELATION INTELLIGENCE ENGINE — Merged into AURUM ULTRA v10.0
+// ══════════════════════════════════════════════════════════════════════
+
+const corrState = {
+  prices: { xau:0, xag:0, chf:0, aud:0, eur:0, cad:0 },
+  prevPrices: { xau:0, xag:0, chf:0, aud:0, eur:0, cad:0 },
+  priceHistory: { xau:[], xag:[], chf:[], aud:[], eur:[], cad:[] },
+  correlations: { xag:0, chf:0, aud:0, eur:0, cad:0 },
+  signal: null,
+  refreshTimer: 90,
+  lastAIRefresh: 0,
+  aiPending: false,
+  fetching: { xau:false, forex:false, silver:false }
+};
+
+// ── Correlation Pearson ──────────────────────────────────────────────
+function corrPearson(xauHist, pairHist) {
+  const n = Math.min(xauHist.length, pairHist.length, 20);
+  if (n < 5) return 0;
+  const xs = xauHist.slice(-n), ys = pairHist.slice(-n);
+  const mx = xs.reduce((a,b)=>a+b,0)/n, my = ys.reduce((a,b)=>a+b,0)/n;
+  let num=0, dx2=0, dy2=0;
+  for(let i=0;i<n;i++){const ddx=xs[i]-mx,ddy=ys[i]-my;num+=ddx*ddy;dx2+=ddx*ddx;dy2+=ddy*ddy;}
+  const d = Math.sqrt(dx2*dy2);
+  return d===0?0:Math.max(-1,Math.min(1,num/d));
+}
+function updateCorrCorrelations() {
+  const xH = corrState.priceHistory.xau;
+  if (xH.length < 5) return;
+  corrState.correlations.xag = corrPearson(xH, corrState.priceHistory.xag);
+  corrState.correlations.chf = corrPearson(xH, corrState.priceHistory.chf);
+  corrState.correlations.aud = corrPearson(xH, corrState.priceHistory.aud);
+  corrState.correlations.eur = corrPearson(xH, corrState.priceHistory.eur);
+  corrState.correlations.cad = corrPearson(xH, corrState.priceHistory.cad);
+}
+function corrCorrVotes(dir) {
+  let v=0; const c=corrState.correlations;
+  if(dir===1&&c.xag>0.4)v++; if(dir===-1&&c.xag<-0.4)v++;
+  if(dir===1&&c.chf<-0.3)v++; if(dir===-1&&c.chf>0.3)v++;
+  if(dir===1&&c.aud>0.3)v++; if(dir===-1&&c.aud<-0.3)v++;
+  if(dir===1&&c.cad<-0.2)v++; if(dir===-1&&c.cad>0.2)v++;
+  if(dir===1&&c.eur>0.2)v++; if(dir===-1&&c.eur<-0.2)v++;
+  return Math.min(5,v);
+}
+
+// ── Apply Corr Price ─────────────────────────────────────────────────
+function applyCorrPrice(key, price) {
+  if(!price||isNaN(price))return;
+  corrState.prevPrices[key] = corrState.prices[key];
+  corrState.prices[key] = price;
+  if(!corrState.priceHistory[key]) corrState.priceHistory[key]=[];
+  corrState.priceHistory[key].push(price);
+  if(corrState.priceHistory[key].length > 20) corrState.priceHistory[key].shift();
+  // Update corr panel price displays
+  const paneMap = {
+    xau:{pr:'cp-xau-pr',ch:'cp-xau-chg',fmt:n=>'$'+n.toFixed(2)},
+    xag:{pr:'cp-xag-pr',ch:'cp-xag-chg',fmt:n=>'$'+n.toFixed(2)},
+    chf:{pr:'cp-chf-pr',ch:'cp-chf-chg',fmt:n=>n.toFixed(4)},
+    aud:{pr:'cp-aud-pr',ch:'cp-aud-chg',fmt:n=>n.toFixed(4)},
+    eur:{},cad:{}
+  };
+  const m=paneMap[key]; if(!m||!m.pr) return;
+  const prev=corrState.prevPrices[key];
+  const chg=prev?((price-prev)/prev*100):0;
+  const chgStr=(chg>=0?'+':'')+chg.toFixed(3)+'%';
+  const col=chg>=0?'var(--green)':'var(--red)';
+  const pe=document.getElementById(m.pr); if(pe)pe.textContent=m.fmt(price);
+  const ce=document.getElementById(m.ch);
+  if(ce){ce.textContent=(chg>=0?'▲ ':'▼ ')+chgStr; ce.style.color=col;}
+}
+
+// ── Corr Signal (reuses main ICT state) ─────────────────────────────
+function computeCorrSignal() {
+  if(!lastH1OHLC||lastH1OHLC.length<20) return null;
+  const price = livePrice>1000?livePrice:lastH1OHLC[lastH1OHLC.length-1].c;
+  corrState.prices.xau = price;
+  const t1B = countT1Votes(1), t1S = countT1Votes(-1);
+  const vB = countVotes(1), vS = countVotes(-1);
+  const confB = Math.round(vB*100/MAX_VOTES), confS = Math.round(vS*100/MAX_VOTES);
+  const sess = getSession(), thresh = sess==='ASIAN'?33:55;
+  let dir=0, conf=0, t1=0;
+  if(t1B>=2&&confB>=thresh&&t1B>t1S){dir=1;conf=confB;t1=t1B;}
+  else if(t1S>=2&&confS>=thresh&&t1S>t1B){dir=-1;conf=confS;t1=t1S;}
+  const cv = corrCorrVotes(dir);
+  if(dir!==0) conf = Math.min(97, conf+cv*4);
+  const atr=ictState.atr||20, slMult=sess==='ASIAN'?1.2:sess==='LONDON'?1.5:1.8;
+  const slDist=Math.min(5.0,atr*slMult*0.25);
+  const sl=dir===1?price-slDist:price+slDist;
+  const tp1=dir===1?price+slDist*1.2:price-slDist*1.2;
+  const tp2=dir===1?price+slDist*2.0:price-slDist*2.0;
+  const rr=slDist>0?Math.abs(tp2-price)/slDist:0;
+  corrState.signal={dir,conf,t1,price,sl,tp1,tp2,slDist,rr,atr,sess,corrVotes:cv,
+    phaseName:ictState.phaseName,confBull:confB,confBear:confS};
+  return corrState.signal;
+}
+
+// ── Corr UI Update ───────────────────────────────────────────────────
+function updateCorrSignalUI(sig) {
+  if(!sig) return;
+  const p=n=>n.toFixed(2);
+  const dirName=sig.dir===1?'▲ BUY':sig.dir===-1?'▼ SELL':'◉ SCANNING';
+  const dirCol=sig.dir===1?'var(--green)':sig.dir===-1?'var(--red)':'var(--gold2)';
+  const box=document.getElementById('c-dir-box');
+  if(box){box.textContent=sig.dir===1?'↑':sig.dir===-1?'↓':'◉';box.style.background=sig.dir===1?'var(--green-bg)':sig.dir===-1?'var(--red-bg)':'var(--bg4)';}
+  const md=document.getElementById('c-main-dir');if(md){md.textContent=dirName;md.style.color=dirCol;}
+  const mt=document.getElementById('c-meta');
+  if(mt)mt.textContent=`${sig.sess} · AMD: ${sig.phaseName} · T1: ${sig.t1}/6 · Corr: ${sig.corrVotes}/5`;
+  const setText2=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+  if(sig.dir!==0){
+    setText2('c-entry','$'+p(sig.price));setText2('c-tp1','$'+p(sig.tp1));setText2('c-tp2','$'+p(sig.tp2));
+    setText2('c-sl','$'+p(sig.sl));setText2('c-rr','1:'+sig.rr.toFixed(1));
+  }else{['c-entry','c-tp1','c-tp2','c-sl','c-rr'].forEach(id=>setText2(id,'—'));}
+  const pct=sig.dir!==0?sig.conf:0;
+  const fill=document.getElementById('c-conf-fill');
+  if(fill){fill.style.width=pct+'%';fill.style.background=sig.dir===1?'linear-gradient(90deg,#16a34a,var(--green))':sig.dir===-1?'linear-gradient(90deg,#b91c1c,var(--red))':'linear-gradient(90deg,var(--gold-dim),var(--gold))';}
+  setText2('c-conf-pct',pct+'%');setText2('c-corr-votes',sig.corrVotes);setText2('c-t1',sig.t1);
+  // XAU pane signal overlay
+  const xd=document.getElementById('cp-xau-dir');if(xd){xd.textContent=dirName;xd.style.color=dirCol;}
+  setText2('cp-xau-tp1',sig.dir!==0?'$'+p(sig.tp1):'—');
+  setText2('cp-xau-sl',sig.dir!==0?'$'+p(sig.sl):'—');
+  setText2('cp-xau-conf',sig.conf+'%');
+  // XAU pane border
+  const xp=document.getElementById('cp-xau');
+  if(xp)xp.style.borderColor=sig.dir===1?'rgba(34,197,94,.4)':sig.dir===-1?'rgba(239,68,68,.4)':'rgba(212,168,68,.3)';
+  // Corr chips
+  updateCorrChipsUI();
+  updateCorrPanesUI();
+  // ICT cards
+  const amd=getAMDPhase();
+  setText2('c-sess',getSession());setText2('c-phase',amd.name);
+  setText2('c-utc',new Date().toUTCString().slice(17,22)+' UTC');
+  setText2('c-amd-desc',amd.desc);
+  setText2('c-t1bull',countT1Votes(1)+'/8');setText2('c-t1bear',countT1Votes(-1)+'/8');
+  setText2('c-corr-conf',sig.corrVotes+'/5');
+  setText2('c-atr',ictState.atr>0?'$'+ictState.atr.toFixed(2):'—');
+  const biasMap={1:'BULL ↑',-1:'BEAR ↓',0:'NEUTRAL'};
+  const mbe=document.getElementById('c-mnbias');
+  if(mbe){mbe.textContent=biasMap[ictState.mnBias]||'—';mbe.style.color=ictState.mnBias===1?'var(--green)':ictState.mnBias===-1?'var(--red)':'var(--gold2)';}
+  setText2('c-mn-open',ictState.mnOpen>0?'$'+ictState.mnOpen.toFixed(2):'—');
+  setText2('c-pdh',ictState.pdh>0?'$'+ictState.pdh.toFixed(2):'—');
+  setText2('c-pdl',ictState.pdl>0?'$'+ictState.pdl.toFixed(2):'—');
+  setText2('c-asian',ictState.asianHi>0?'$'+ictState.asianHi.toFixed(0)+'/'+ictState.asianLo.toFixed(0):'—');
+  setText2('c-updated',new Date().toTimeString().slice(0,8));
+}
+
+function updateCorrChipsUI() {
+  const c=corrState.correlations, sig=corrState.signal, dir=sig?sig.dir:0;
+  const setChip=(id,corr,isPos)=>{
+    const el=document.getElementById(id);if(!el)return;
+    const confirmed=(dir===1&&isPos&&corr>0.25)||(dir===1&&!isPos&&corr<-0.25)||(dir===-1&&isPos&&corr<-0.25)||(dir===-1&&!isPos&&corr>0.25);
+    const symMap={'cc-xag':'XAG/USD','cc-chf':'USD/CHF','cc-aud':'AUD/USD','cc-cad':'USD/CAD','cc-eur':'EUR/USD'};
+    if(confirmed){el.style.borderColor=dir===1?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)';el.style.color=dir===1?'var(--green)':'var(--red)';el.style.background=dir===1?'rgba(34,197,94,.08)':'rgba(239,68,68,.08)';}else{el.style.borderColor='var(--border2)';el.style.color='var(--text3)';el.style.background='var(--bg3)';}
+    el.textContent=(symMap[id]||id)+': '+corr.toFixed(2)+(confirmed?' ✓':'');
+  };
+  setChip('cc-xag',c.xag,true);setChip('cc-chf',c.chf,false);
+  setChip('cc-aud',c.aud,true);setChip('cc-cad',c.cad,false);setChip('cc-eur',c.eur,true);
+}
+
+function updateCorrPanesUI() {
+  const c=corrState.correlations, sig=corrState.signal, dir=sig?sig.dir:0;
+  const setPane=(paneId,dirId,corrId,confId,corr,isPos)=>{
+    const pane=document.getElementById(paneId);
+    const confirmed=dir!==0&&((dir===1&&isPos&&corr>0.25)||(dir===1&&!isPos&&corr<-0.25)||(dir===-1&&isPos&&corr<-0.25)||(dir===-1&&!isPos&&corr>0.25));
+    if(pane) pane.style.borderColor=confirmed?(dir===1?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)'):'var(--border)';
+    const de=document.getElementById(dirId);
+    if(de){de.textContent=confirmed?(dir===1?'▲ CONFIRMS BUY':'▼ CONFIRMS SELL'):'◉ WATCH';de.style.color=confirmed?(dir===1?'var(--green)':'var(--red)'):'var(--text3)';}
+    const ce=document.getElementById(corrId);if(ce)ce.textContent=corr.toFixed(3);
+    const cf=document.getElementById(confId);if(cf){cf.textContent=confirmed?'✓ YES':'—';cf.style.color=confirmed?'var(--green)':'var(--text3)';}
+  };
+  setPane('cp-xag','cp-xag-dir','cp-xag-corr','cp-xag-conf',c.xag,true);
+  setPane('cp-chf','cp-chf-dir','cp-chf-corr','cp-chf-conf',c.chf,false);
+  setPane('cp-aud','cp-aud-dir','cp-aud-corr','cp-aud-conf',c.aud,true);
+}
+
+// ── Corr Matrix Table ────────────────────────────────────────────────
+function renderCorrMatrix() {
+  const tbody=document.getElementById('c-corr-tbody');if(!tbody)return;
+  const sig=corrState.signal, dir=sig?sig.dir:0;
+  const c=corrState.correlations, pr=corrState.prices;
+  const rows=[
+    {sym:'XAG/USD',key:'xag',corr:c.xag,pr:pr.xag,isPos:true,desc:'Silver — strongest correlator (0.85–0.95)'},
+    {sym:'USD/CHF',key:'chf',corr:c.chf,pr:pr.chf,isPos:false,desc:'Safe-haven inverse (-0.70 to -0.85)'},
+    {sym:'AUD/USD',key:'aud',corr:c.aud,pr:pr.aud,isPos:true,desc:'Commodity currency (+0.60–0.80)'},
+    {sym:'USD/CAD',key:'cad',corr:c.cad,pr:pr.cad,isPos:false,desc:'Oil-linked moderate inverse'},
+    {sym:'EUR/USD',key:'eur',corr:c.eur,pr:pr.eur,isPos:true,desc:'USD proxy — moderate positive'}
+  ];
+  const corrColor=corr=>Math.abs(corr)>0.5?'var(--green)':Math.abs(corr)>0.25?'var(--gold2)':'var(--text3)';
+  const barPct=corr=>Math.round((corr+1)/2*100);
+  const barColor=(corr,isPos)=>{
+    if(isPos) return corr>0.3?'var(--green)':corr<-0.3?'var(--red)':'var(--gold-dim)';
+    return corr<-0.3?'var(--green)':corr>0.3?'var(--red)':'var(--gold-dim)';
+  };
+  const sigTag=(corr,isPos,dir)=>{
+    const conf=(dir===1&&isPos&&corr>0.25)||(dir===1&&!isPos&&corr<-0.25)||(dir===-1&&isPos&&corr<-0.25)||(dir===-1&&!isPos&&corr>0.25);
+    if(conf) return `<span style="font-size:10px;font-family:Space Mono,monospace;padding:2px 5px;border-radius:4px;background:${dir===1?'rgba(34,197,94,.1)':'rgba(239,68,68,.1)'};color:${dir===1?'var(--green)':'var(--red)'}">✓ ${dir===1?'BULL':'BEAR'}</span>`;
+    return `<span style="font-size:10px;font-family:Space Mono,monospace;padding:2px 5px;border-radius:4px;background:var(--bg4);color:var(--text3)">WATCH</span>`;
+  };
+  tbody.innerHTML=rows.map(r=>`<tr>
+    <td style="padding:7px 8px;border-bottom:1px solid var(--border)">
+      <div style="font-weight:700;font-size:12px">${r.sym}</div>
+      <div style="font-size:9px;color:var(--text3);margin-top:1px">${r.desc}</div>
+    </td>
+    <td style="padding:7px 8px;border-bottom:1px solid var(--border);text-align:right;font-family:Space Mono,monospace;font-size:11px;font-weight:700">${r.pr?(r.sym.startsWith('XA')?'$'+r.pr.toFixed(2):r.pr.toFixed(4)):'—'}</td>
+    <td style="padding:7px 8px;border-bottom:1px solid var(--border);text-align:right;font-family:Space Mono,monospace;font-size:12px;font-weight:700;color:${corrColor(r.corr)}">${r.corr.toFixed(3)}</td>
+    <td style="padding:7px 8px;border-bottom:1px solid var(--border);width:60px">
+      <div style="height:4px;background:var(--bg4);border-radius:2px;overflow:hidden">
+        <div style="height:100%;width:${barPct(r.corr)}%;background:${barColor(r.corr,r.isPos)};border-radius:2px"></div>
+      </div>
+    </td>
+    <td style="padding:7px 8px;border-bottom:1px solid var(--border);text-align:center">${sigTag(r.corr,r.isPos,dir)}</td>
+  </tr>`).join('');
+}
+
+// ── Mini chart drawing for corr panes ───────────────────────────────
+function drawCorrChart(canvasId, history, color, sig) {
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const W=canvas.offsetWidth||200, H=110;
+  canvas.width=W*2;canvas.height=H*2;canvas.style.width=W+'px';canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d');ctx.scale(2,2);
+  ctx.fillStyle='#0a0c0f';ctx.fillRect(0,0,W,H);
+  if(!history||history.length<3){
+    ctx.fillStyle='#3a4a60';ctx.font='10px Space Mono,monospace';ctx.textAlign='center';ctx.fillText('Loading…',W/2,H/2);return;
+  }
+  const padT=6,padB=20,padL=4,padR=4;
+  const cH=H-padT-padB,cW=W-padL-padR;
+  const maxV=Math.max(...history),minV=Math.min(...history);
+  const spread=(maxV-minV)||1;
+  const max=maxV+spread*0.05,min=minV-spread*0.05,range=max-min||1;
+  const toX=i=>padL+i*(cW/(history.length-1));
+  const toY=p=>padT+cH*(1-(p-min)/range);
+  const grad=ctx.createLinearGradient(0,padT,0,H-padB);
+  grad.addColorStop(0,color+'50');grad.addColorStop(1,'transparent');
+  ctx.beginPath();history.forEach((p,i)=>i===0?ctx.moveTo(toX(i),toY(p)):ctx.lineTo(toX(i),toY(p)));
+  ctx.lineTo(toX(history.length-1),H-padB);ctx.lineTo(toX(0),H-padB);ctx.closePath();
+  ctx.fillStyle=grad;ctx.fill();
+  ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.setLineDash([]);
+  ctx.beginPath();history.forEach((p,i)=>i===0?ctx.moveTo(toX(i),toY(p)):ctx.lineTo(toX(i),toY(p)));ctx.stroke();
+  if(sig&&sig.dir!==0&&canvasId==='cv-c-xau'){
+    const drawLv=(price2,col)=>{if(price2<min||price2>max)return;const y=toY(price2);ctx.strokeStyle=col;ctx.lineWidth=1;ctx.setLineDash([2,3]);ctx.beginPath();ctx.moveTo(padL,y);ctx.lineTo(W-padR,y);ctx.stroke();ctx.setLineDash([]);};
+    drawLv(sig.sl,'#ef4444');drawLv(sig.tp1,'#22d3ee');drawLv(sig.tp2,'#22c55e');
+  }
+  const lx=toX(history.length-1),ly=toY(history[history.length-1]);
+  ctx.fillStyle=color;ctx.beginPath();ctx.arc(lx,ly,3,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle=color;ctx.font='bold 8px Space Mono,monospace';ctx.textAlign='right';
+  const lbl=canvasId==='cv-c-xau'||canvasId==='cv-c-xag'?'$'+history[history.length-1].toFixed(2):history[history.length-1].toFixed(4);
+  ctx.fillText(lbl,W-padR-1,ly-4);
+}
+function drawAllCorrCharts() {
+  const sig=corrState.signal;
+  drawCorrChart('cv-c-xau',corrState.priceHistory.xau,'#d4a844',sig);
+  drawCorrChart('cv-c-xag',corrState.priceHistory.xag,'#22d3ee',null);
+  drawCorrChart('cv-c-chf',corrState.priceHistory.chf,'#ef4444',null);
+  drawCorrChart('cv-c-aud',corrState.priceHistory.aud,'#22c55e',null);
+}
+
+// ── Fetch helpers (reuse from main) ─────────────────────────────────
+async function corrFetchXAU() {
+  if(corrState.fetching.xau) return; corrState.fetching.xau=true;
+  try {
+    try{const r=await tryFetch('https://api.metals.live/v1/spot/gold',5000);if(r&&r.ok){const d=await r.json();const g=d?.price||d?.gold;if(Number(g)>500){applyCorrPrice('xau',Number(g));return;}}}catch(e){}
+    try{const r=await tryFetch('https://api.metals.live/v1/spot',5000);if(r&&r.ok){const d=await r.json();const arr=Array.isArray(d)?d:[d];const g=arr.find(x=>x.gold)?.gold;if(Number(g)>500){applyCorrPrice('xau',Number(g));return;}}}catch(e){}
+    try{const r=await tryFetch('https://api.frankfurter.app/latest?from=XAU&to=USD',7000);if(r&&r.ok){const d=await r.json();if(Number(d?.rates?.USD)>500){applyCorrPrice('xau',Number(d.rates.USD));return;}}}catch(e){}
+    // Fallback to livePrice from main engine
+    if(livePrice>500) applyCorrPrice('xau',livePrice);
+  } finally { corrState.fetching.xau=false; }
+}
+async function corrFetchSilver() {
+  if(corrState.fetching.silver)return; corrState.fetching.silver=true;
+  try {
+    try{const r=await tryFetch('https://api.metals.live/v1/spot/silver',5000);if(r&&r.ok){const d=await r.json();const s=d?.price||d?.silver;if(Number(s)>0){applyCorrPrice('xag',Number(s));return;}}}catch(e){}
+    try{const r=await tryFetch('https://api.metals.live/v1/spot',5000);if(r&&r.ok){const d=await r.json();const arr=Array.isArray(d)?d:[d];const s=arr.find(x=>x.silver)?.silver;if(Number(s)>0){applyCorrPrice('xag',Number(s));return;}}}catch(e){}
+    try{const r=await tryFetch('https://api.frankfurter.app/latest?from=XAG&to=USD',7000);if(r&&r.ok){const d=await r.json();if(Number(d?.rates?.USD)>0){applyCorrPrice('xag',Number(d.rates.USD));return;}}}catch(e){}
+  } finally { corrState.fetching.silver=false; }
+}
+async function corrFetchForex() {
+  if(corrState.fetching.forex)return; corrState.fetching.forex=true;
+  try {
+    try {
+      const r=await tryFetch('https://open.er-api.com/v6/latest/USD',8000);
+      if(r&&r.ok){const d=await r.json();const rates=d?.rates;
+        if(rates){if(rates.CHF)applyCorrPrice('chf',rates.CHF);if(rates.AUD)applyCorrPrice('aud',1/rates.AUD);if(rates.EUR)applyCorrPrice('eur',1/rates.EUR);if(rates.CAD)applyCorrPrice('cad',rates.CAD);return;}
+      }
+    }catch(e){}
+    try {
+      const r=await tryFetch('https://api.frankfurter.app/latest?from=USD&to=CHF,AUD,EUR,CAD',8000);
+      if(r&&r.ok){const d=await r.json();
+        if(d.rates?.CHF)applyCorrPrice('chf',d.rates.CHF);if(d.rates?.AUD)applyCorrPrice('aud',1/d.rates.AUD);if(d.rates?.EUR)applyCorrPrice('eur',1/d.rates.EUR);if(d.rates?.CAD)applyCorrPrice('cad',d.rates.CAD);
+      }
+    }catch(e){}
+  } finally { corrState.fetching.forex=false; }
+}
+
+// ── Corr full refresh ────────────────────────────────────────────────
+async function corrRefreshAll() {
+  await Promise.all([corrFetchXAU(),corrFetchSilver(),corrFetchForex()]);
+  updateCorrCorrelations();
+  const sig=computeCorrSignal();
+  if(sig) updateCorrSignalUI(sig);
+  renderCorrMatrix();
+  drawAllCorrCharts();
+  if(Date.now()-corrState.lastAIRefresh>180000) triggerCorrAI();
+}
+
+// ── AI Analysis ──────────────────────────────────────────────────────
+async function triggerCorrAI() {
+  if(corrState.aiPending) return;
+  corrState.aiPending=true; corrState.lastAIRefresh=Date.now();
+  const sig=corrState.signal, c=corrState.correlations, p=corrState.prices;
+  const price=p.xau>0?p.xau:'unknown', sess=getSession(), amd=getAMDPhase();
+  const dir=sig?.dir===1?'BUY':sig?.dir===-1?'SELL':'NEUTRAL/SCANNING';
+  const conf=sig?.conf||0;
+  const prompt=`You are AURUM ULTRA's ICT AMD correlation engine. Analyse LIVE XAU/USD data.
+
+LIVE DATA (${new Date().toUTCString()}):
+- XAU/USD: $${typeof price==='number'?price.toFixed(2):price}
+- XAG/USD: $${p.xag>0?p.xag.toFixed(2):'—'} (strongest correlator)
+- Session: ${sess} | AMD Phase: ${amd.name}
+- ICT Signal: ${dir} | Confidence: ${conf}%
+- T1 Votes Bull/Bear: ${countT1Votes(1)}/${countT1Votes(-1)}/8
+- Judas: ${ictState.judasFired?'ACTIVE ('+( ictState.judasDir===1?'BULL':'BEAR')+')':'Not detected'}
+- CHoCH: ${ictState.lastCHoCH===1?'BULL':ictState.lastCHoCH===-1?'BEAR':'None'}
+- MN Bias: ${ictState.mnBias===1?'BULL':ictState.mnBias===-1?'BEAR':'NEUTRAL'} @ $${ictState.mnOpen.toFixed(0)}
+- EMA20/50: ${ictState.ema20.toFixed(0)}/${ictState.ema50.toFixed(0)} | RSI: ${ictState.rsi.toFixed(1)} | ATR: $${ictState.atr.toFixed(2)}
+- PDH: $${ictState.pdh.toFixed(0)} | PDL: $${ictState.pdl.toFixed(0)}
+
+CORRELATIONS (Pearson 20P):
+- XAG: ${c.xag.toFixed(3)} (silver leads gold — STRONGEST)
+- USD/CHF: ${c.chf.toFixed(3)} (inverse)
+- AUD/USD: ${c.aud.toFixed(3)} (positive)
+- USD/CAD: ${c.cad.toFixed(3)} | EUR/USD: ${c.eur.toFixed(3)}
+- Corr votes confirming ${dir}: ${sig?.corrVotes||0}/5
+
+${sig&&sig.dir!==0?`SIGNAL: ${dir} @ $${sig.price.toFixed(2)} | SL: $${sig.sl.toFixed(2)} | TP1: $${sig.tp1.toFixed(2)} | TP2: $${sig.tp2.toFixed(2)} | R:R 1:${sig.rr.toFixed(1)}`:'NO SIGNAL — SCANNING'}
+
+Give 4 short sections:
+1. CORRELATION VERDICT: What XAG/CHF/AUD confirm or diverge.
+2. ICT STRUCTURE: AMD phase, Judas/CHoCH status, key levels.
+3. TRADE ASSESSMENT: Act or wait? Specific price levels.
+4. KEY RISK: One invalidation scenario.
+Be direct, gold-focused, max 60 words per section.`;
+
+  const el=document.getElementById('c-ai-body');
+  if(el) el.innerHTML='<div style="text-align:center;padding:16px;color:var(--text3);font-family:Space Mono,monospace;font-size:10px"><span style="display:inline-block;width:12px;height:12px;border:2px solid var(--border2);border-top-color:var(--gold);border-radius:50%;animation:spin .7s linear infinite;margin-right:5px;vertical-align:middle"></span>Claude analysing correlations…</div>';
+  try {
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+    });
+    const d=await r.json();
+    const txt=d.content?.map(c=>c.text||'').join('')||'';
+    if(txt) renderCorrAI(txt);
+    else renderCorrAIFallback();
+  } catch(e){ renderCorrAIFallback(); }
+  finally { corrState.aiPending=false; }
+}
+
+function renderCorrAI(text) {
+  const el=document.getElementById('c-ai-body');if(!el)return;
+  const sig=corrState.signal;
+  const titleMatch=text.match(/\d\.\s+([A-Z][A-Z\s]+):/g)||[];
+  const sections=text.split(/\d\.\s+[A-Z\s]+:/);
+  const icons=['📊','⏰','🎯','⚠️'];
+  const colors=['var(--cyan)','var(--gold2)',sig?.dir===1?'var(--green)':sig?.dir===-1?'var(--red)':'var(--cyan)','var(--red)'];
+  let html='';
+  if(sections.length>1){
+    sections.slice(1).forEach((sec,i)=>{
+      const title=(titleMatch[i]||'').replace(/\d\.\s+/,'').replace(':','').trim();
+      html+=`<div style="display:flex;align-items:flex-start;gap:7px;padding:8px 10px;background:var(--bg3);border-radius:8px;border-left:2px solid ${colors[i]||'var(--border2)'}">
+        <div style="font-size:14px;flex-shrink:0">${icons[i]||'●'}</div>
+        <div>
+          <div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:3px">${title}</div>
+          <div style="font-size:11px;line-height:1.6;color:var(--text)">${sec.trim().replace(/\n/g,'<br>')}</div>
+        </div>
+      </div>`;
+    });
+  } else {
+    html=`<div style="display:flex;gap:7px;padding:8px 10px;background:var(--bg3);border-radius:8px;border-left:2px solid var(--cyan)"><div>🤖</div><div style="font-size:11px;line-height:1.6;color:var(--text)">${text.replace(/\n/g,'<br>')}</div></div>`;
+  }
+  html+=`<div style="font-size:9px;color:var(--text3);font-family:Space Mono,monospace;text-align:right;padding-top:2px">Claude Sonnet · ${new Date().toTimeString().slice(0,8)}</div>`;
+  el.innerHTML=html;
+}
+
+function renderCorrAIFallback() {
+  const el=document.getElementById('c-ai-body');if(!el)return;
+  const sig=corrState.signal, c=corrState.correlations, dir=sig?.dir||0;
+  const cv=corrCorrVotes(dir);
+  const items=[
+    {col:'var(--cyan)',icon:'📊',title:'CORRELATION VERDICT',txt:`XAG=${c.xag.toFixed(2)} CHF=${c.chf.toFixed(2)} AUD=${c.aud.toFixed(2)} EUR=${c.eur.toFixed(2)}. ${cv}/5 pairs confirming ${dir===1?'BULLISH':dir===-1?'BEARISH':'—'} bias. ${Math.abs(c.xag)>0.4?'Silver '+(c.xag>0?'strongly bullish aligned.':'diverging — caution.'):'Silver neutral.'}`},
+    {col:'var(--gold2)',icon:'⏰',title:'ICT STRUCTURE',txt:`AMD: ${getAMDPhase().name} · ${getSession()}. ${ictState.judasFired?'JUDAS SWEEP '+(ictState.judasDir===1?'BULL':'BEAR')+' ACTIVE.':'No Judas yet — watching Asian range $'+ictState.asianHi.toFixed(0)+'/$'+ictState.asianLo.toFixed(0)+'.'} MN bias: ${ictState.mnBias===1?'BULL':ictState.mnBias===-1?'BEAR':'NEUTRAL'}.`},
+    {col:dir===1?'var(--green)':dir===-1?'var(--red)':'var(--cyan)',icon:'🎯',title:'TRADE ASSESSMENT',txt:sig&&dir!==0?`${dir===1?'BUY':'SELL'} @ $${sig.price.toFixed(2)}. Conf: ${sig.conf}%. SL: $${sig.sl.toFixed(2)}. TP1: $${sig.tp1.toFixed(2)} TP2: $${sig.tp2.toFixed(2)}. R:R 1:${sig.rr.toFixed(1)}. ${cv} corr confirms.`:`No signal — AMD: ${getAMDPhase().name}. ${getSession()==='ASIAN'?'Wait for London Judas.':getSession()==='LONDON'?'Watch for sweep setup.':'Follow confirmed direction.'}`},
+    {col:'var(--red)',icon:'⚠️',title:'KEY RISK',txt:ictState.lastCHoCH===0?'No CHoCH confirmed — structure unvalidated. Min 2 T1 votes + 2 corr confirms required.':ictState.pdh>0&&livePrice>0&&Math.abs(livePrice-ictState.pdh)<ictState.atr?'Price near PDH $'+ictState.pdh.toFixed(0)+' — resistance. TP may be limited.':'EMA stack '+ictState.ema20.toFixed(0)+' vs '+ictState.ema50.toFixed(0)+'. '+(ictState.ema20>ictState.ema50?'Bull aligned.':'Mixed — higher risk.')}
+  ];
+  el.innerHTML=items.map(it=>`<div style="display:flex;align-items:flex-start;gap:7px;padding:8px 10px;background:var(--bg3);border-radius:8px;border-left:2px solid ${it.col}"><div style="font-size:14px;flex-shrink:0">${it.icon}</div><div><div style="font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text3);margin-bottom:3px">${it.title}</div><div style="font-size:11px;line-height:1.6;color:var(--text)">${it.txt}</div></div></div>`).join('')+
+  `<div style="font-size:9px;color:var(--text3);font-family:Space Mono,monospace;text-align:right;padding-top:2px">Live analysis · ${new Date().toTimeString().slice(0,8)}</div>`;
+}
+
+// ── Corr Tab init ────────────────────────────────────────────────────
+function initCorrTab() {
+  // Sync XAU price from main engine
+  if(livePrice>500) applyCorrPrice('xau',livePrice);
+  // Fetch everything
+  corrFetchXAU();
+  setTimeout(corrFetchSilver, 500);
+  setTimeout(corrFetchForex, 1000);
+  setTimeout(()=>{
+    updateCorrCorrelations();
+    const sig=computeCorrSignal();
+    if(sig) updateCorrSignalUI(sig);
+    renderCorrMatrix();
+    drawAllCorrCharts();
+    setTimeout(triggerCorrAI, 1500);
+  }, 2200);
+}
+
+// Periodic corr refresh (always running once init'd)
+let corrInitDone=false;
+function ensureCorrInit() {
+  if(corrInitDone) return;
+  corrInitDone=true;
+  initCorrTab();
+  setInterval(corrFetchXAU, 90000);
+  setInterval(corrFetchSilver, 90000);
+  setInterval(corrFetchForex, 180000);
+  setInterval(()=>{
+    updateCorrCorrelations();
+    const sig=computeCorrSignal();
+    if(sig) updateCorrSignalUI(sig);
+    renderCorrMatrix();
+    updateCorrChipsUI();
+    updateCorrPanesUI();
+    drawAllCorrCharts();
+  }, 15000);
+  setInterval(()=>{if(Date.now()-corrState.lastAIRefresh>300000)triggerCorrAI();},60000);
+}
+
 </script>
 </body>
 </html>
